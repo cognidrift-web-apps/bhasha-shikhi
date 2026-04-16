@@ -2,11 +2,12 @@ import { useVoiceAssistant } from "@livekit/components-react";
 
 interface Props {
   onDisconnect: () => void;
-  fromLang: string;
-  toLang: string;
+  lang: string;
+  mode: string;
+  level: string;
 }
 
-export default function VoiceAgent({ onDisconnect, fromLang, toLang }: Props) {
+export default function VoiceAgent({ onDisconnect, lang, mode, level }: Props) {
   const { state } = useVoiceAssistant();
 
   const orbState =
@@ -21,20 +22,18 @@ export default function VoiceAgent({ onDisconnect, fromLang, toLang }: Props) {
     connecting: "Connecting",
     initializing: "Initializing",
     listening: "Listening",
-    thinking: "Translating",
+    thinking: "Thinking",
     speaking: "Speaking",
   };
 
   return (
     <div className="voice-agent">
-      <p className="voice-agent-title">Voice Translator</p>
+      <p className="voice-agent-title">BhashaShikhi</p>
 
-      <div className="lang-badge-row">
-        <span className="lang-badge from">{fromLang}</span>
-        <svg className="lang-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M5 12h14m0 0l-6-6m6 6l-6 6" />
-        </svg>
-        <span className="lang-badge to">{toLang}</span>
+      <div className="session-badge-row">
+        <span className="session-badge lang">{lang}</span>
+        <span className="session-badge mode">{mode}</span>
+        <span className="session-badge level">{level}</span>
       </div>
 
       <div className="orb-wrapper">
@@ -48,7 +47,7 @@ export default function VoiceAgent({ onDisconnect, fromLang, toLang }: Props) {
       </p>
 
       <button className="disconnect-btn" onClick={onDisconnect}>
-        End session
+        End Lesson
       </button>
     </div>
   );

@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from livekit import api
 
-app = FastAPI(title="Voice Translator Token Server")
+app = FastAPI(title="BhashaShikhi Token Server")
 
 app.add_middleware(
     CORSMiddleware,
@@ -21,11 +21,12 @@ app.add_middleware(
 
 @app.get("/token")
 async def get_token(
-    from_lang: str = "english",
-    to_lang: str = "bengali",
+    lang: str = "english",
+    mode: str = "vocabulary",
+    level: str = "beginner",
     identity: str = "user",
 ):
-    room = f"t-{from_lang}-{to_lang}-{uuid.uuid4().hex[:8]}"
+    room = f"l-{lang}-{mode}-{level}-{uuid.uuid4().hex[:8]}"
 
     lk_api = api.LiveKitAPI(
         url=os.getenv("LIVEKIT_URL"),
