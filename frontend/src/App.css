@@ -612,8 +612,13 @@ body {
 }
 
 .mode-card-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.4rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-secondary);
+}
+
+.mode-card.selected .mode-card-icon {
+  color: #0D9488;
 }
 
 .mode-card-label {
@@ -635,10 +640,12 @@ body {
 
 .level-selector {
   display: flex;
+  justify-content: center;
   background: rgba(168, 162, 158, 0.1);
   border-radius: 100px;
   padding: 4px;
-  margin-bottom: 2.5rem;
+  margin: 0 auto 2.5rem;
+  width: fit-content;
   animation: fadeInUp 0.8s ease-out 0.3s both;
 }
 

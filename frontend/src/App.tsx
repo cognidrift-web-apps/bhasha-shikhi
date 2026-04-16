@@ -4,6 +4,7 @@ import {
   RoomAudioRenderer,
 } from "@livekit/components-react";
 import "@livekit/components-styles";
+import { HiOutlineBookOpen, HiOutlinePencilSquare, HiOutlineChatBubbleLeftRight } from "react-icons/hi2";
 import VoiceAgent from "./components/VoiceAgent";
 import "./App.css";
 
@@ -16,9 +17,9 @@ const LANGUAGES = [
 ];
 
 const MODES = [
-  { code: "vocabulary", label: "Vocabulary", description: "Learn new words & phrases", icon: "\u{1F4DA}" },
-  { code: "grammar", label: "Grammar", description: "Master language rules", icon: "\u{1F4DD}" },
-  { code: "conversation", label: "Conversation", description: "Practice real dialogue", icon: "\u{1F4AC}" },
+  { code: "vocabulary", label: "Vocabulary", description: "Learn new words & phrases", icon: HiOutlineBookOpen },
+  { code: "grammar", label: "Grammar", description: "Master language rules", icon: HiOutlinePencilSquare },
+  { code: "conversation", label: "Conversation", description: "Practice real dialogue", icon: HiOutlineChatBubbleLeftRight },
 ];
 
 const LEVELS = [
@@ -80,7 +81,7 @@ function App() {
                 className={`mode-card ${mode === m.code ? "selected" : ""}`}
                 onClick={() => setMode(m.code)}
               >
-                <span className="mode-card-icon">{m.icon}</span>
+                <m.icon className="mode-card-icon" />
                 <span className="mode-card-label">{m.label}</span>
                 <span className="mode-card-desc">{m.description}</span>
               </button>
