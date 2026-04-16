@@ -1,0 +1,9 @@
+livekit-agents
+livekit-plugins-deepgram
+livekit-plugins-google
+livekit-plugins-elevenlabs
+livekit-plugins-silero
+livekit-api
+python-dotenv
+fastapi
+uvicorn[standard]
