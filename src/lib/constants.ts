@@ -1,56 +1,64 @@
 export const LANGUAGES = [
-  { id: "english", name: "English", namebn: "ইংরেজি", flag: "EN" },
+  { id: "english", name: "English", namebn: "ইংলিশ", flag: "EN" },
   { id: "german", name: "German", namebn: "জার্মান", flag: "DE" },
   { id: "hindi", name: "Hindi", namebn: "হিন্দি", flag: "IN" },
 ] as const;
 
 export const MODES = [
   {
-    id: "vocabulary",
-    name: "Vocabulary",
-    namebn: "শব্দভান্ডার",
-    description: "Learn new words and phrases through guided practice",
-    descriptionbn: "নির্দেশিত অনুশীলনের মাধ্যমে নতুন শব্দ ও বাক্যাংশ শিখুন",
+    id: "word_by_word",
+    name: "Word by Word",
+    namebn: "একটা একটা শব্দ",
+    description: "Learn one word at a time with meaning, pronunciation, and usage",
+    descriptionbn: "একটা একটা করে শব্দ শিখুন, মানে, উচ্চারণ আর ব্যবহার সহ",
+    duration: "3-5 min",
+  },
+  {
+    id: "conversation",
+    name: "Free Conversation",
+    namebn: "আড্ডা",
+    description: "Have a real conversation with your tutor on any topic",
+    descriptionbn: "যেকোনো বিষয়ে আপনার টিউটরের সাথে কথা বলুন",
+    duration: "5-10 min",
+  },
+  {
+    id: "roleplay",
+    name: "Situation Roleplay",
+    namebn: "পরিস্থিতি অভিনয়",
+    description: "Practice real scenarios: job interview, doctor visit, airport, shopping",
+    descriptionbn: "আসল পরিস্থিতি প্র্যাকটিস করুন: ইন্টারভিউ, ডাক্তার, এয়ারপোর্ট",
+    duration: "5-7 min",
+  },
+  {
+    id: "pronunciation",
+    name: "Pronunciation Clinic",
+    namebn: "উচ্চারণ প্র্যাকটিস",
+    description: "Fix the sounds Bengali speakers struggle with most",
+    descriptionbn: "বাংলাভাষীদের কঠিন উচ্চারণগুলো ঠিক করুন",
     duration: "5-7 min",
   },
   {
     id: "grammar",
-    name: "Grammar",
-    namebn: "ব্যাকরণ",
-    description: "Learn grammar rules through examples and exercises",
-    descriptionbn: "উদাহরণ ও অনুশীলনের মাধ্যমে ব্যাকরণ শিখুন",
-    duration: "5-7 min",
-  },
-  {
-    id: "conversation",
-    name: "Conversation",
-    namebn: "কথোপকথন",
-    description: "Practice speaking through guided dialogues and role-play",
-    descriptionbn: "কথোপকথন ও ভূমিকা অভিনয়ের মাধ্যমে কথা বলা অনুশীলন করুন",
-    duration: "5-10 min",
-  },
-  {
-    id: "pronunciation",
-    name: "Pronunciation",
-    namebn: "উচ্চারণ",
-    description: "Improve your accent and pronunciation with focused drills",
-    descriptionbn: "কেন্দ্রীভূত অনুশীলনে আপনার উচ্চারণ উন্নত করুন",
+    name: "Grammar in Conversation",
+    namebn: "কথায় কথায় গ্রামার",
+    description: "Learn grammar naturally through speaking, not rules",
+    descriptionbn: "কথা বলতে বলতে গ্রামার শিখুন, রুল মুখস্থ না করে",
     duration: "5-7 min",
   },
   {
     id: "listening",
-    name: "Listening",
-    namebn: "শ্রবণ",
-    description: "Build comprehension by listening and answering questions",
-    descriptionbn: "শুনে এবং প্রশ্নের উত্তর দিয়ে বোধগম্যতা তৈরি করুন",
+    name: "Listening Challenge",
+    namebn: "শোনার চ্যালেঞ্জ",
+    description: "Listen to a passage and answer comprehension questions",
+    descriptionbn: "একটা কিছু শুনুন আর প্রশ্নের উত্তর দিন",
     duration: "5-7 min",
   },
 ] as const;
 
 export const LEVELS = [
-  { id: "beginner", name: "Beginner", namebn: "প্রাথমিক" },
-  { id: "intermediate", name: "Intermediate", namebn: "মধ্যবর্তী" },
-  { id: "advanced", name: "Advanced", namebn: "উন্নত" },
+  { id: "beginner", name: "Beginner", namebn: "একদম নতুন" },
+  { id: "intermediate", name: "Intermediate", namebn: "মোটামুটি জানি" },
+  { id: "advanced", name: "Advanced", namebn: "ভালো জানি" },
 ] as const;
 
 export const VOICES = [
@@ -59,14 +67,14 @@ export const VOICES = [
     name: "Priya",
     namebn: "প্রিয়া",
     bio: "Warm and patient tutor",
-    biobn: "উষ্ণ এবং ধৈর্যশীল শিক্ষক",
+    biobn: "মায়াবী আর ধৈর্যশীল টিউটর",
   },
   {
     id: "microsoft",
     name: "Nabanita",
     namebn: "নবনীতা",
     bio: "Clear and encouraging guide",
-    biobn: "স্পষ্ট এবং উৎসাহজনক গাইড",
+    biobn: "পরিষ্কার আর উৎসাহী গাইড",
   },
 ] as const;
 

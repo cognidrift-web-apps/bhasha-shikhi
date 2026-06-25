@@ -4,7 +4,7 @@ create table public.sessions (
   started_at timestamptz not null default now(),
   ended_at timestamptz,
   language text not null check (language in ('english', 'german', 'hindi')),
-  mode text not null check (mode in ('vocabulary', 'grammar', 'conversation', 'pronunciation', 'listening')),
+  mode text not null check (mode in ('word_by_word', 'conversation', 'roleplay', 'pronunciation', 'grammar', 'listening')),
   level text not null check (level in ('beginner', 'intermediate', 'advanced')),
   voice_type text not null check (voice_type in ('gemini', 'microsoft')),
   user_name text,
