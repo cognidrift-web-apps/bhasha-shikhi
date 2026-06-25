@@ -15,6 +15,7 @@ import type { Language, Mode, Level } from "@/lib/constants";
 const LANG_NAMES: Record<Language, string> = {
   english: "English",
   german: "German (Deutsch)",
+  arabic: "Arabic (العربية)",
   hindi: "Hindi (हिन्दी)",
 };
 
@@ -295,9 +296,21 @@ BENGALI SPEAKER PROBLEM SOUNDS FOR HINDI:
 - ड़ and ढ़ (flapped retroflexes): Unique to Hindi, not present in Bengali.
 - Gemination (double consonants): "पक्का" vs "पका" — meaningful length difference.`;
 
+const PRONUNCIATION_ARABIC = `
+BENGALI SPEAKER PROBLEM SOUNDS FOR ARABIC:
+- ع (ain): A deep pharyngeal sound that doesn't exist in Bengali. Teach throat constriction.
+- ح (ha): Breathy pharyngeal fricative. Bengali speakers substitute regular হ.
+- خ (kha): Uvular fricative. Bengali speakers substitute ক or খ.
+- غ (ghain): Voiced uvular fricative. No Bengali equivalent. Like gargling.
+- ق (qaf): Deep uvular stop. Bengali speakers substitute ক.
+- ص (saad), ض (daad), ط (taa), ظ (dhaa): Emphatic/pharyngealized consonants. Bengali has no emphatic series.
+- ث (thaa) and ذ (dhaal): Interdental fricatives similar to English th-sounds. Bengali lacks these.
+- Double consonants (shadda): Arabic distinguishes single vs geminate consonants meaningfully. Bengali does not.`;
+
 const PRONUNCIATION_SOUNDS: Record<Language, string> = {
   english: PRONUNCIATION_ENGLISH,
   german: PRONUNCIATION_GERMAN,
+  arabic: PRONUNCIATION_ARABIC,
   hindi: PRONUNCIATION_HINDI,
 };
 
@@ -385,9 +398,20 @@ KEY GRAMMAR CHALLENGES FOR BENGALI SPEAKERS LEARNING HINDI:
 - Compound verbs: Hindi uses them extensively (e.g., "कर लेना", "खा जाना"). Bengali has these but patterns differ.
 - Honorific levels: Hindi has तू/तुम/आप. Bengali has তুই/তুমি/আপনি but usage rules differ.`;
 
+const GRAMMAR_ARABIC = `
+KEY GRAMMAR CHALLENGES FOR BENGALI SPEAKERS LEARNING ARABIC:
+- Root system: Arabic words derive from 3-letter roots (k-t-b = writing). Bengali has no equivalent system.
+- Verb conjugation: Arabic verbs conjugate for person, number, AND gender. Bengali verbs don't change for gender.
+- Dual number: Arabic has singular, dual, plural. Bengali only has singular and plural.
+- Definite article (ال): Rules for sun letters and moon letters. Bengali has no articles.
+- Iʿrab (case endings): Classical Arabic has case endings on nouns. Colloquial Arabic drops these.
+- Broken plurals: Many Arabic nouns have irregular plural forms that must be memorized. Bengali plurals are regular.
+- Verbal forms (أوزان): 10+ verb patterns that change meaning. Nothing equivalent in Bengali.`;
+
 const GRAMMAR_SPECIFICS: Record<Language, string> = {
   english: GRAMMAR_ENGLISH,
   german: GRAMMAR_GERMAN,
+  arabic: GRAMMAR_ARABIC,
   hindi: GRAMMAR_HINDI,
 };
 
@@ -509,6 +533,38 @@ TEACHING APPROACH:
 // Mode dispatch table
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Mode-specific instructions: LIVE TRANSLATION
+// ---------------------------------------------------------------------------
+
+const LIVE_TRANSLATION_PROMPT = (_lang: Language) => `
+MODE: Live Translation (লাইভ অনুবাদ)
+
+You are now a REAL-TIME VOICE TRANSLATOR, not a tutor.
+
+BEHAVIOR:
+1. The user will speak in any language. Auto-detect what language they are speaking.
+2. Translate what they said into the target language they requested.
+3. Say the translation clearly and naturally.
+4. Keep translations accurate and natural-sounding — not word-for-word literal.
+5. If the input is ambiguous, translate the most likely intended meaning.
+6. Do NOT teach, correct, or explain. Just translate.
+7. Do NOT add commentary. Just say the translation.
+8. If the user says something in the target language already, translate it BACK to Bangla.
+
+FLOW:
+- User speaks in Bangla → You say the translation in target language
+- User speaks in target language → You say the translation in Bangla
+- User speaks in any other language → Detect it, translate to the target language, mention what language you detected
+
+Keep translations concise and spoken naturally. This is a live conversation translation tool.`;
+
+const LIVE_TRANSLATION: Record<Level, (lang: Language) => string> = {
+  beginner: LIVE_TRANSLATION_PROMPT,
+  intermediate: LIVE_TRANSLATION_PROMPT,
+  advanced: LIVE_TRANSLATION_PROMPT,
+};
+
 const MODE_PROMPTS: Record<Mode, Record<Level, (lang: Language) => string>> = {
   word_by_word: WORD_BY_WORD,
   conversation: CONVERSATION,
@@ -516,6 +572,7 @@ const MODE_PROMPTS: Record<Mode, Record<Level, (lang: Language) => string>> = {
   pronunciation: PRONUNCIATION,
   grammar: GRAMMAR,
   listening: LISTENING,
+  live_translation: LIVE_TRANSLATION,
 };
 
 // ---------------------------------------------------------------------------

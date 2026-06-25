@@ -1,6 +1,7 @@
 export const LANGUAGES = [
   { id: "english", name: "English", namebn: "ইংলিশ", flag: "EN" },
   { id: "german", name: "German", namebn: "জার্মান", flag: "DE" },
+  { id: "arabic", name: "Arabic", namebn: "আরবি", flag: "AR" },
   { id: "hindi", name: "Hindi", namebn: "হিন্দি", flag: "IN" },
 ] as const;
 
@@ -24,7 +25,7 @@ export const MODES = [
   {
     id: "roleplay",
     name: "Situation Roleplay",
-    namebn: "পরিস্থিতি অভিনয়",
+    namebn: "পরিস্থিতি",
     description: "Practice real scenarios: job interview, doctor visit, airport, shopping",
     descriptionbn: "আসল পরিস্থিতি প্র্যাকটিস করুন: ইন্টারভিউ, ডাক্তার, এয়ারপোর্ট",
     duration: "5-7 min",
@@ -32,7 +33,7 @@ export const MODES = [
   {
     id: "pronunciation",
     name: "Pronunciation Clinic",
-    namebn: "উচ্চারণ প্র্যাকটিস",
+    namebn: "উচ্চারণ ঠিক করি",
     description: "Fix the sounds Bengali speakers struggle with most",
     descriptionbn: "বাংলাভাষীদের কঠিন উচ্চারণগুলো ঠিক করুন",
     duration: "5-7 min",
@@ -48,10 +49,19 @@ export const MODES = [
   {
     id: "listening",
     name: "Listening Challenge",
-    namebn: "শোনার চ্যালেঞ্জ",
+    namebn: "শুনে বুঝি",
     description: "Listen to a passage and answer comprehension questions",
     descriptionbn: "একটা কিছু শুনুন আর প্রশ্নের উত্তর দিন",
     duration: "5-7 min",
+  },
+  {
+    id: "live_translation",
+    name: "Live Translation",
+    namebn: "লাইভ অনুবাদ",
+    description: "Speak in any language, get instant voice translation to any other language",
+    descriptionbn: "যেকোনো ভাষায় বলুন, সাথে সাথে অন্য ভাষায় অনুবাদ পান",
+    duration: "Unlimited",
+    isUtility: true,
   },
 ] as const;
 

@@ -34,6 +34,8 @@ export interface SessionScore {
   strengths: string[];
   improvements: string[];
   suggested_next: string | null;
+  xp: number;
+  bangla_fallback_count: number;
 }
 
 export interface AudioRecording {

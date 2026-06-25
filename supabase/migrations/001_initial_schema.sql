@@ -3,8 +3,8 @@ create table public.sessions (
   id uuid primary key default gen_random_uuid(),
   started_at timestamptz not null default now(),
   ended_at timestamptz,
-  language text not null check (language in ('english', 'german', 'hindi')),
-  mode text not null check (mode in ('word_by_word', 'conversation', 'roleplay', 'pronunciation', 'grammar', 'listening')),
+  language text not null check (language in ('english', 'german', 'arabic', 'hindi')),
+  mode text not null check (mode in ('word_by_word', 'conversation', 'roleplay', 'pronunciation', 'grammar', 'listening', 'live_translation')),
   level text not null check (level in ('beginner', 'intermediate', 'advanced')),
   voice_type text not null check (voice_type in ('gemini', 'microsoft')),
   user_name text,
@@ -38,7 +38,9 @@ create table public.session_scores (
   feedback_text text,
   strengths text[] default '{}',
   improvements text[] default '{}',
-  suggested_next text
+  suggested_next text,
+  xp integer not null default 10 check (xp between 10 and 100),
+  bangla_fallback_count integer not null default 0
 );
 
 create unique index idx_scores_session on public.session_scores(session_id);

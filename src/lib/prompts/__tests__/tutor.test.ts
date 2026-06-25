@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { buildTutorPrompt } from "@/lib/prompts/tutor";
 import type { Language, Mode, Level } from "@/lib/constants";
 
-const LANGUAGES: Language[] = ["english", "german", "hindi"];
+const LANGUAGES: Language[] = ["english", "german", "arabic", "hindi"];
 const MODES: Mode[] = [
   "word_by_word",
   "conversation",
@@ -10,6 +10,7 @@ const MODES: Mode[] = [
   "pronunciation",
   "grammar",
   "listening",
+  "live_translation",
 ];
 const LEVELS: Level[] = ["beginner", "intermediate", "advanced"];
 
@@ -165,6 +166,22 @@ describe("buildTutorPrompt", () => {
       expect(prompt.toLowerCase()).toContain("aspirated");
       expect(prompt.toLowerCase()).toContain("unaspirated");
     });
+
+    it("mentions ain for Arabic", () => {
+      const prompt = buildTutorPrompt("arabic", "pronunciation", "beginner");
+      expect(prompt).toContain("ع");
+      expect(prompt.toLowerCase()).toContain("pharyngeal");
+    });
+
+    it("mentions emphatic consonants for Arabic", () => {
+      const prompt = buildTutorPrompt("arabic", "pronunciation", "beginner");
+      expect(prompt.toLowerCase()).toContain("emphatic");
+    });
+
+    it("mentions shadda/geminate for Arabic", () => {
+      const prompt = buildTutorPrompt("arabic", "pronunciation", "beginner");
+      expect(prompt.toLowerCase()).toContain("shadda");
+    });
   });
 
   describe("grammar mode", () => {
@@ -193,6 +210,16 @@ describe("buildTutorPrompt", () => {
       expect(prompt.toLowerCase()).toContain("word order");
     });
 
+    it("mentions root system for Arabic", () => {
+      const prompt = buildTutorPrompt("arabic", "grammar", "beginner");
+      expect(prompt.toLowerCase()).toContain("root");
+    });
+
+    it("mentions dual number for Arabic", () => {
+      const prompt = buildTutorPrompt("arabic", "grammar", "beginner");
+      expect(prompt.toLowerCase()).toContain("dual");
+    });
+
     it("teaches grammar through conversation, not rules", () => {
       const prompt = buildTutorPrompt("english", "grammar", "beginner");
       expect(prompt).toContain("THROUGH conversation");
@@ -216,6 +243,31 @@ describe("buildTutorPrompt", () => {
       const advanced = buildTutorPrompt("english", "listening", "advanced");
       expect(beginner.toLowerCase()).toContain("slowly");
       expect(advanced.toLowerCase()).toContain("natural speed");
+    });
+  });
+
+  describe("live_translation mode", () => {
+    it("acts as translator, not tutor", () => {
+      const prompt = buildTutorPrompt("english", "live_translation", "beginner");
+      expect(prompt).toContain("TRANSLATOR");
+      expect(prompt.toLowerCase()).toContain("not a tutor");
+    });
+
+    it("mentions auto-detect", () => {
+      const prompt = buildTutorPrompt("english", "live_translation", "beginner");
+      expect(prompt.toLowerCase()).toContain("auto-detect");
+    });
+
+    it("says no teaching or correction", () => {
+      const prompt = buildTutorPrompt("english", "live_translation", "beginner");
+      expect(prompt.toLowerCase()).toContain("do not teach");
+    });
+
+    it("produces same prompt for all levels", () => {
+      const beginner = buildTutorPrompt("english", "live_translation", "beginner");
+      const advanced = buildTutorPrompt("english", "live_translation", "advanced");
+      expect(beginner).toContain("TRANSLATOR");
+      expect(advanced).toContain("TRANSLATOR");
     });
   });
 
