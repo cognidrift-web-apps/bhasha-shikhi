@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { SessionConfig } from "@/lib/constants";
 import { encodePcmToBase64, decodeBase64ToFloat32 } from "@/lib/audio/pcm-worklet";
 
@@ -15,6 +15,7 @@ type AgentState = "idle" | "listening" | "speaking";
 
 export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
+  const statusRef = useRef<ConnectionStatus>("disconnected");
   const [agentState, setAgentState] = useState<AgentState>("idle");
   const [transcripts, setTranscripts] = useState<TranscriptEntry[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
@@ -23,6 +24,11 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
   const streamRef = useRef<MediaStream | null>(null);
   const playBufferRef = useRef<Float32Array<ArrayBuffer>[]>([]);
   const isPlayingRef = useRef(false);
+
+  // Keep statusRef in sync so closures can read the current status without staling
+  useEffect(() => {
+    statusRef.current = status;
+  }, [status]);
 
   const drainPlayBuffer = useCallback((ctx: AudioContext) => {
     const chunk = playBufferRef.current.shift();
@@ -126,12 +132,12 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
 
       ws.onerror = () => setStatus("error");
       ws.onclose = () => {
-        if (status !== "error") setStatus("disconnected");
+        if (statusRef.current !== "error") setStatus("disconnected");
       };
     } catch {
       setStatus("error");
     }
-  }, [sessionId, config, playAudioChunk, status]);
+  }, [sessionId, config, playAudioChunk]);
 
   const disconnect = useCallback(() => {
     wsRef.current?.send(JSON.stringify({ type: "end" }));

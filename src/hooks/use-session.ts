@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useGeminiLive, type TranscriptEntry } from "./use-gemini-live";
 import { useMicrosoftSpeech } from "./use-microsoft-speech";
 import { useAudioRecorder } from "./use-audio-recorder";
@@ -19,6 +19,18 @@ export function useSession(config: SessionConfig) {
 
   const isGemini = config.voice === "gemini";
   const voice = isGemini ? gemini : microsoft;
+
+  // Auto-connect voice pipeline once sessionId is available and session is active.
+  // This avoids the race where the consumer calls connect before setState has flushed.
+  useEffect(() => {
+    if (!sessionId || sessionStatus !== "active") return;
+    if (isGemini) {
+      void gemini.connect();
+    } else {
+      void microsoft.start();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId, sessionStatus]);
 
   const startSession = useCallback(async () => {
     setSessionStatus("connecting");
@@ -95,6 +107,5 @@ export function useSession(config: SessionConfig) {
     agentState: voice.agentState,
     startSession,
     endSession,
-    connectVoice: isGemini ? gemini.connect : microsoft.start,
   };
 }

@@ -58,54 +58,58 @@ export function useMicrosoftSpeech(
           const userText = e.result.text;
           if (!userText.trim()) return;
 
-          setTranscripts((prev) => [
-            ...prev,
-            { role: "user", content: userText, timestamp: Date.now() },
-          ]);
+          try {
+            setTranscripts((prev) => [
+              ...prev,
+              { role: "user", content: userText, timestamp: Date.now() },
+            ]);
 
-          setAgentState("thinking");
-          historyRef.current.push({ role: "user", content: userText });
+            setAgentState("thinking");
+            historyRef.current.push({ role: "user", content: userText });
 
-          const chatRes = await fetch("/api/chat", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              sessionId,
-              message: userText,
-              history: historyRef.current,
-              language: config.language,
-              mode: config.mode,
-              level: config.level,
-            }),
-          });
+            const chatRes = await fetch("/api/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                sessionId,
+                message: userText,
+                history: historyRef.current,
+                language: config.language,
+                mode: config.mode,
+                level: config.level,
+              }),
+            });
 
-          // /api/chat returns a text/plain ReadableStream — accumulate chunks
-          const reader = chatRes.body?.getReader();
-          const decoder = new TextDecoder();
-          let tutorText = "";
-          if (reader) {
-            while (true) {
-              const { done, value } = await reader.read();
-              if (done) break;
-              tutorText += decoder.decode(value, { stream: true });
+            // /api/chat returns a text/plain ReadableStream — accumulate chunks
+            const reader = chatRes.body?.getReader();
+            const decoder = new TextDecoder();
+            let tutorText = "";
+            if (reader) {
+              while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                tutorText += decoder.decode(value, { stream: true });
+              }
+              // Flush any remaining bytes
+              tutorText += decoder.decode();
             }
-            // Flush any remaining bytes
-            tutorText += decoder.decode();
+
+            historyRef.current.push({ role: "tutor", content: tutorText });
+
+            setTranscripts((prev) => [
+              ...prev,
+              { role: "tutor", content: tutorText, timestamp: Date.now() },
+            ]);
+
+            setAgentState("speaking");
+            synthesizer.speakTextAsync(
+              tutorText,
+              () => setAgentState("listening"),
+              () => setAgentState("listening"),
+            );
+          } catch {
+            setStatus("error");
           }
-
-          historyRef.current.push({ role: "tutor", content: tutorText });
-
-          setTranscripts((prev) => [
-            ...prev,
-            { role: "tutor", content: tutorText, timestamp: Date.now() },
-          ]);
-
-          setAgentState("speaking");
-          synthesizer.speakTextAsync(
-            tutorText,
-            () => setAgentState("listening"),
-            () => setAgentState("listening"),
-          );
         }
       };
 
@@ -122,9 +126,13 @@ export function useMicrosoftSpeech(
   }, [sessionId, config, getSpeechSDK]);
 
   const stop = useCallback(() => {
-    recognizerRef.current?.stopContinuousRecognitionAsync();
-    recognizerRef.current?.close();
+    const cleanup = () => {
+      recognizerRef.current?.close();
+      recognizerRef.current = null;
+    };
+    recognizerRef.current?.stopContinuousRecognitionAsync(cleanup, cleanup);
     synthesizerRef.current?.close();
+    synthesizerRef.current = null;
     setStatus("disconnected");
     setAgentState("idle");
   }, []);
