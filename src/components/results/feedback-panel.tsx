@@ -29,7 +29,7 @@ function XpBadge({ xp }: { xp: number }) {
       <span className="font-mono text-base font-bold text-brand-700 tabular-nums">
         +{xp} XP
       </span>
-      <span className="font-bengali text-sm text-brand-600">অর্জিত</span>
+      <span className="font-bengali text-sm text-brand-600">পেয়েছেন</span>
     </div>
   );
 }

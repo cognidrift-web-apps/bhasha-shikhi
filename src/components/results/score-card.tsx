@@ -56,7 +56,7 @@ function CircleProgress({ score }: CircleProgressProps) {
   const offset = circumference - (pct / 100) * circumference;
 
   return (
-    <div className="flex flex-col items-center gap-2">
+    <div className="relative inline-flex items-center justify-center">
       <svg
         width="140"
         height="140"
@@ -87,8 +87,8 @@ function CircleProgress({ score }: CircleProgressProps) {
           className="transition-all duration-700"
         />
       </svg>
-      {/* Score label centred over the SVG */}
-      <div className="absolute flex flex-col items-center">
+      {/* Score label centred inside the ring */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="font-mono text-4xl font-bold text-brand-700 tabular-nums leading-none">
           {pct}
         </span>
@@ -119,9 +119,7 @@ export function ScoreCard({ scores }: Props) {
     <div className="rounded-xl border border-stone-200 bg-white p-6 space-y-6">
       {/* Overall circle */}
       <div className="flex justify-center">
-        <div className="relative flex items-center justify-center">
-          <CircleProgress score={scores.overall} />
-        </div>
+        <CircleProgress score={scores.overall} />
       </div>
 
       {/* Dimension bars */}

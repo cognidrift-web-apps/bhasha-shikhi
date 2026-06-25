@@ -49,7 +49,7 @@ function ResultsContent() {
         <div className="text-center space-y-2">
           <div className="mx-auto h-10 w-10 rounded-full border-4 border-brand-200 border-t-brand-500 animate-spin" />
           <p className="font-bengali text-stone-500 text-sm">
-            আপনার পারফরম্যান্স বিশ্লেষণ করা হচ্ছে...
+            স্কোর হিসাব করা হচ্ছে...
           </p>
         </div>
       </main>
