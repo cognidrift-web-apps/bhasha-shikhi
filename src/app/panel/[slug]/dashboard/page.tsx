@@ -11,6 +11,7 @@ interface DashboardData {
   week: number;
   month: number;
   avgDurationSeconds: number;
+  avgScore: number;
 }
 
 export default function DashboardPage() {
@@ -52,6 +53,9 @@ export default function DashboardPage() {
           <StatsCard label="Total Sessions" value={data.total} />
           <StatsCard label="Today" value={data.today} />
           <StatsCard label="This Week" value={data.week} />
+          <StatsCard label="Avg Score" value={`${data.avgScore}%`} />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <StatsCard label="Avg Duration" value={`${avgMin}m ${avgSec}s`} />
         </div>
       </div>

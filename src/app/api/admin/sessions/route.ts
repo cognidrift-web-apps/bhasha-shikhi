@@ -55,6 +55,8 @@ export async function GET(req: NextRequest) {
   const language = searchParams.get("language");
   const mode = searchParams.get("mode");
   const status = searchParams.get("status");
+  const dateFrom = searchParams.get("dateFrom");
+  const dateTo = searchParams.get("dateTo");
   const page = parseInt(searchParams.get("page") ?? "1", 10);
   const limit = 20;
   const offset = (page - 1) * limit;
@@ -68,6 +70,12 @@ export async function GET(req: NextRequest) {
   if (language) query = query.eq("language", language);
   if (mode) query = query.eq("mode", mode);
   if (status) query = query.eq("status", status);
+  if (dateFrom) query = query.gte("started_at", new Date(dateFrom).toISOString());
+  if (dateTo) {
+    const endOfDay = new Date(dateTo);
+    endOfDay.setHours(23, 59, 59, 999);
+    query = query.lte("started_at", endOfDay.toISOString());
+  }
 
   const { data, count } = await query;
 

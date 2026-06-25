@@ -18,6 +18,7 @@ export function SessionsTable({ sessions, slug }: Props) {
             <th className="pb-2 pr-4">User</th>
             <th className="pb-2 pr-4">Language</th>
             <th className="pb-2 pr-4">Mode</th>
+            <th className="pb-2 pr-4">Level</th>
             <th className="pb-2 pr-4">Voice</th>
             <th className="pb-2 pr-4">Duration</th>
             <th className="pb-2 pr-4">Score</th>
@@ -38,6 +39,7 @@ export function SessionsTable({ sessions, slug }: Props) {
               <td className="py-2 pr-4">{s.user_name ?? "Anonymous"}</td>
               <td className="py-2 pr-4 capitalize">{s.language}</td>
               <td className="py-2 pr-4">{s.mode.replace(/_/g, " ")}</td>
+              <td className="py-2 pr-4 capitalize">{s.level}</td>
               <td className="py-2 pr-4 capitalize">{s.voice_type}</td>
               <td className="py-2 pr-4 font-mono tabular-nums">
                 {s.duration_seconds

@@ -25,12 +25,14 @@ export async function GET(_req: NextRequest) {
     { count: weekSessions },
     { count: monthSessions },
     { data: avgDuration },
+    { data: avgScoreRows },
   ] = await Promise.all([
     supabase.from("sessions").select("*", { count: "exact", head: true }),
     supabase.from("sessions").select("*", { count: "exact", head: true }).gte("started_at", todayStart),
     supabase.from("sessions").select("*", { count: "exact", head: true }).gte("started_at", weekStart),
     supabase.from("sessions").select("*", { count: "exact", head: true }).gte("started_at", monthStart),
     supabase.from("sessions").select("duration_seconds").not("duration_seconds", "is", null),
+    supabase.from("session_scores").select("overall"),
   ]);
 
   const avgDur = avgDuration && avgDuration.length > 0
@@ -43,11 +45,21 @@ export async function GET(_req: NextRequest) {
       )
     : 0;
 
+  const avgScore = avgScoreRows && avgScoreRows.length > 0
+    ? Math.round(
+        avgScoreRows.reduce(
+          (s: number, r: { overall: number }) => s + r.overall,
+          0,
+        ) / avgScoreRows.length,
+      )
+    : 0;
+
   return NextResponse.json({
     total: totalSessions ?? 0,
     today: todaySessions ?? 0,
     week: weekSessions ?? 0,
     month: monthSessions ?? 0,
     avgDurationSeconds: avgDur,
+    avgScore,
   });
 }
