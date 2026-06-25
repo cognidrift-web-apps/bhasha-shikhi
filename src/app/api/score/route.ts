@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { createServerClient } from "@/lib/supabase/server";
+import { MODES } from "@/lib/constants";
 import {
   buildScoringPrompt,
   parseScoringResponse,
@@ -8,6 +9,7 @@ import {
 } from "@/lib/prompts/scoring";
 
 const genai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const VALID_MODES: string[] = MODES.map((m) => m.id);
 
 export async function POST(req: NextRequest) {
   let body: unknown;
@@ -25,6 +27,12 @@ export async function POST(req: NextRequest) {
   }
   if (!mode || typeof mode !== "string") {
     return NextResponse.json({ error: "Missing required field: mode" }, { status: 400 });
+  }
+  if (!VALID_MODES.includes(mode)) {
+    return NextResponse.json(
+      { error: `Invalid mode. Must be one of: ${VALID_MODES.join(", ")}` },
+      { status: 400 },
+    );
   }
 
   const supabase = createServerClient();

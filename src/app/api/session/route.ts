@@ -19,25 +19,25 @@ export async function POST(req: NextRequest) {
     body as Record<string, unknown>;
 
   // Input validation
-  if (!language || !VALID_LANGUAGES.includes(language as string)) {
+  if (!language || typeof language !== "string" || !VALID_LANGUAGES.includes(language)) {
     return NextResponse.json(
       { error: `Invalid language. Must be one of: ${VALID_LANGUAGES.join(", ")}` },
       { status: 400 },
     );
   }
-  if (!mode || !VALID_MODES.includes(mode as string)) {
+  if (!mode || typeof mode !== "string" || !VALID_MODES.includes(mode)) {
     return NextResponse.json(
       { error: `Invalid mode. Must be one of: ${VALID_MODES.join(", ")}` },
       { status: 400 },
     );
   }
-  if (!level || !VALID_LEVELS.includes(level as string)) {
+  if (!level || typeof level !== "string" || !VALID_LEVELS.includes(level)) {
     return NextResponse.json(
       { error: `Invalid level. Must be one of: ${VALID_LEVELS.join(", ")}` },
       { status: 400 },
     );
   }
-  if (voice_type && !VALID_VOICE_TYPES.includes(voice_type as string)) {
+  if (voice_type && (typeof voice_type !== "string" || !VALID_VOICE_TYPES.includes(voice_type))) {
     return NextResponse.json(
       { error: `Invalid voice_type. Must be one of: ${VALID_VOICE_TYPES.join(", ")}` },
       { status: 400 },

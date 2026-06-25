@@ -67,11 +67,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  await supabase.from("audio_recordings").insert({
+  const { error: insertError } = await supabase.from("audio_recordings").insert({
     session_id: sessionId,
     storage_path: path,
     file_size_bytes: file.size,
   });
+
+  if (insertError) {
+    return NextResponse.json(
+      { error: "Failed to save audio recording metadata" },
+      { status: 500 },
+    );
+  }
 
   return NextResponse.json({ path });
 }

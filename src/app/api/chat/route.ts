@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
   contents.push({ role: "user", parts: [{ text: message }] });
 
   try {
-    const response = await genai.models.generateContent({
+    const stream = await genai.models.generateContentStream({
       model: "gemini-2.5-flash-preview-04-17",
       contents,
       config: {
@@ -82,26 +82,54 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    const text = response.text || "";
-
     const supabase = createServerClient();
 
-    const { data: maxSeq } = await supabase
+    // Use count of existing transcripts to avoid sequence number race
+    const { count } = await supabase
       .from("transcripts")
-      .select("sequence_number")
-      .eq("session_id", sessionId)
-      .order("sequence_number", { ascending: false })
-      .limit(1)
-      .single();
+      .select("*", { count: "exact", head: true })
+      .eq("session_id", sessionId);
 
-    const nextSeq = (maxSeq?.sequence_number || 0) + 1;
+    const baseSeq = (count ?? 0) + 1;
 
-    await supabase.from("transcripts").insert([
-      { session_id: sessionId, role: "user", content: message, sequence_number: nextSeq },
-      { session_id: sessionId, role: "tutor", content: text, sequence_number: nextSeq + 1 },
-    ]);
+    const encoder = new TextEncoder();
+    let fullText = "";
 
-    return NextResponse.json({ response: text });
+    const readable = new ReadableStream({
+      async start(controller) {
+        try {
+          for await (const chunk of stream) {
+            const chunkText = chunk.text ?? "";
+            if (chunkText) {
+              fullText += chunkText;
+              controller.enqueue(encoder.encode(chunkText));
+            }
+          }
+
+          // Save transcripts after streaming completes
+          const { error: insertError } = await supabase.from("transcripts").insert([
+            { session_id: sessionId, role: "user", content: message, sequence_number: baseSeq },
+            { session_id: sessionId, role: "tutor", content: fullText, sequence_number: baseSeq + 1 },
+          ]);
+
+          if (insertError) {
+            console.error("[chat] transcript insert failed:", insertError.message);
+          }
+
+          controller.close();
+        } catch (err) {
+          controller.error(err);
+        }
+      },
+    });
+
+    return new Response(readable, {
+      headers: {
+        "Content-Type": "text/plain; charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "X-Content-Type-Options": "nosniff",
+      },
+    });
   } catch (error) {
     const errMsg = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ error: errMsg }, { status: 500 });
