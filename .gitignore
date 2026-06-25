@@ -7,3 +7,14 @@ __pycache__/
 venv/
 .DS_Store
 .superpowers/
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Local env files (but NOT .env.local.example)
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
