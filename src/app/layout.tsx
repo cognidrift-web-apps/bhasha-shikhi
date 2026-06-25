@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BhashaShikhi - IELTS Practice",
-  description: "Practice IELTS speaking and listening with a personal tutor",
+  title: "BhashaShikhi - Your AI Voice Language Tutor",
+  description: "Learn English, German, Arabic or Hindi by actually talking. 7 practice modes, instant feedback, no account needed.",
   robots: { index: false, follow: false },
 };
 

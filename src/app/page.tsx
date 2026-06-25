@@ -1,7 +1,14 @@
+import { Hero } from "@/components/landing/hero";
+import { Features } from "@/components/landing/features";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center">
-      <h1 className="text-4xl font-bold text-brand-700">BhashaShikhi</h1>
+    <main className="min-h-screen">
+      <Hero />
+      <Features />
+      <footer className="py-8 text-center text-sm text-stone-400">
+        BhashaShikhi
+      </footer>
     </main>
   );
 }
