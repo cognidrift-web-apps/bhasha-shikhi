@@ -14,6 +14,10 @@ const GEMINI_VOICE = process.env.GEMINI_VOICE || "Kore";
 // The relay deploys separately to Railway and cannot import from the Next.js app.
 import { buildTutorPrompt } from "./prompts.js";
 
+const VALID_LANGUAGES = new Set(["english", "german", "arabic", "hindi"]);
+const VALID_MODES = new Set(["word_by_word", "conversation", "roleplay", "pronunciation", "grammar", "listening", "live_translation"]);
+const VALID_LEVELS = new Set(["beginner", "intermediate", "advanced"]);
+
 const server = http.createServer((req, res) => {
   if (req.method === "GET" && req.url === "/health") {
     res.writeHead(200, { "Content-Type": "application/json" });
@@ -43,6 +47,11 @@ wss.on("connection", (ws, req) => {
       const msg = JSON.parse(raw.toString());
 
       if (msg.type === "config") {
+        if (!VALID_LANGUAGES.has(msg.language) || !VALID_MODES.has(msg.mode) || !VALID_LEVELS.has(msg.level)) {
+          ws.send(JSON.stringify({ type: "error", message: "Invalid session config" }));
+          ws.close(4001, "Invalid config");
+          return;
+        }
         sessionId = msg.sessionId;
         const prompt = buildTutorPrompt(msg.language, msg.mode, msg.level);
 
