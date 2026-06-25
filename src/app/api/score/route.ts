@@ -19,23 +19,32 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
 
-  const { sessionId, mode } = body as Record<string, unknown>;
+  const { sessionId, mode: modeFromBody } = body as Record<string, unknown>;
 
   // Input validation
   if (!sessionId || typeof sessionId !== "string") {
     return NextResponse.json({ error: "Missing required field: sessionId" }, { status: 400 });
   }
-  if (!mode || typeof mode !== "string") {
-    return NextResponse.json({ error: "Missing required field: mode" }, { status: 400 });
+
+  const supabase = createServerClient();
+
+  // Resolve mode: prefer body param, fall back to the sessions table
+  let mode: string | null = typeof modeFromBody === "string" ? modeFromBody : null;
+  if (!mode) {
+    const { data: sessionRow } = await supabase
+      .from("sessions")
+      .select("mode")
+      .eq("id", sessionId)
+      .single();
+    mode = sessionRow?.mode ?? null;
   }
-  if (!VALID_MODES.includes(mode)) {
+
+  if (!mode || !VALID_MODES.includes(mode)) {
     return NextResponse.json(
-      { error: `Invalid mode. Must be one of: ${VALID_MODES.join(", ")}` },
+      { error: `Could not determine a valid mode. Must be one of: ${VALID_MODES.join(", ")}` },
       { status: 400 },
     );
   }
-
-  const supabase = createServerClient();
 
   const { data: transcripts } = await supabase
     .from("transcripts")
