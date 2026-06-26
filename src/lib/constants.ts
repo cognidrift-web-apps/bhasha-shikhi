@@ -73,14 +73,14 @@ export const LEVELS = [
 
 export const VOICES = [
   {
-    id: "gemini",
+    id: "priya",
     name: "Priya",
     namebn: "প্রিয়া",
     bio: "Warm and patient tutor",
     biobn: "মায়াবী আর ধৈর্যশীল টিউটর",
   },
   {
-    id: "microsoft",
+    id: "nabanita",
     name: "Nabanita",
     namebn: "নবনীতা",
     bio: "Clear and encouraging guide",

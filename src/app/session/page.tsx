@@ -53,7 +53,7 @@ function SessionContent() {
     language: (searchParams.get("language") ?? "english") as Language,
     mode: (searchParams.get("mode") ?? "conversation") as Mode,
     level: (searchParams.get("level") ?? "beginner") as Level,
-    voice: (searchParams.get("voice") ?? "gemini") as VoiceType,
+    voice: (searchParams.get("voice") ?? "priya") as VoiceType,
   };
 
   const { sessionStatus, transcripts, agentState, startSession, endSession } =

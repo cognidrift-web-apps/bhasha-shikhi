@@ -14,7 +14,7 @@ export default function PracticePage() {
   const [language, setLanguage] = useState<Language>("english");
   const [mode, setMode] = useState<Mode>("word_by_word");
   const [level, setLevel] = useState<Level>("beginner");
-  const [voice, setVoice] = useState<VoiceType>("gemini");
+  const [voice, setVoice] = useState<VoiceType>("priya");
 
   const isLiveTranslation = mode === "live_translation";
 
