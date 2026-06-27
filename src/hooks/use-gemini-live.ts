@@ -117,14 +117,21 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
         } else if (msg.type === "audio") {
           playAudioChunk(msg.data as string);
         } else if (msg.type === "transcript") {
-          setTranscripts((prev) => [
-            ...prev,
-            {
-              role: msg.role as "user" | "tutor",
-              content: msg.content as string,
-              timestamp: Date.now(),
-            },
-          ]);
+          const role = msg.role as "user" | "tutor";
+          const content = msg.content as string;
+          setTranscripts((prev) => {
+            const last = prev[prev.length - 1];
+            if (last && last.role === role && Date.now() - last.timestamp < 5000) {
+              const updated = [...prev];
+              updated[updated.length - 1] = {
+                ...last,
+                content: last.content + " " + content,
+                timestamp: Date.now(),
+              };
+              return updated;
+            }
+            return [...prev, { role, content, timestamp: Date.now() }];
+          });
         } else if (msg.type === "error") {
           setStatus("error");
         }

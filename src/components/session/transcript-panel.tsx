@@ -25,7 +25,7 @@ export function TranscriptPanel({ entries }: Props) {
   }
 
   return (
-    <div className="space-y-3 px-4 py-3">
+    <div className="space-y-3 px-4 py-3 overflow-y-auto h-full">
       {entries.map((entry, i) => (
         <div
           key={i}
