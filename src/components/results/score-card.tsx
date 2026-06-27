@@ -7,12 +7,14 @@ function useCountUp(target: number, duration = 1500): number {
   const [value, setValue] = useState(0);
   useEffect(() => {
     const start = performance.now();
+    let raf: number;
     function tick(now: number) {
       const progress = Math.min((now - start) / duration, 1);
       setValue(Math.round(progress * target));
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) raf = requestAnimationFrame(tick);
     }
-    requestAnimationFrame(tick);
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
   }, [target, duration]);
   return value;
 }

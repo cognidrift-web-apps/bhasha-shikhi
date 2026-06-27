@@ -13,11 +13,11 @@ export default function ErrorPage({
           Something went wrong
         </h1>
         <p className="font-bengali text-stone-600 mb-4">
-          কিছু ভুল হয়েছে। আবার চেষ্টা করুন।
+          কিছু ভুল হয়েছে। আবার চেষ্টা করো।
         </p>
         <button
           onClick={reset}
-          className="rounded-lg bg-primary-500 px-6 py-2 text-white hover:bg-primary-600"
+          className="rounded-lg bg-primary-500 px-6 py-2 min-h-[44px] text-white hover:bg-primary-600"
         >
           Try Again
         </button>

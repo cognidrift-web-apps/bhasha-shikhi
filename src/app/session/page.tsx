@@ -96,7 +96,7 @@ function SessionContent() {
           </p>
           <button
             onClick={() => router.push("/practice")}
-            className="rounded-full gradient-button px-6 py-2.5 text-sm font-medium text-white"
+            className="rounded-full gradient-button px-6 py-2.5 min-h-[44px] text-sm font-medium text-white"
           >
             <span className="font-bengali">আবার ট্রাই করো</span>
           </button>
@@ -139,9 +139,9 @@ function SessionContent() {
         <button
           onClick={() => void handleEnd()}
           disabled={sessionStatus === "connecting"}
-          className="rounded-full bg-red-500/80 hover:bg-red-500 backdrop-blur-sm px-6 py-2.5 text-sm font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-full bg-red-500/80 hover:bg-red-500 backdrop-blur-sm px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="font-bengali">সেশন শেষ</span>
+          <span className="font-bengali">সেশন শেষ করো</span>
         </button>
       </footer>
     </main>

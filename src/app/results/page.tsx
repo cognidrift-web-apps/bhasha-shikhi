@@ -60,7 +60,7 @@ function ResultsContent() {
           </p>
           <button
             onClick={() => router.push("/practice")}
-            className="rounded-xl gradient-button px-6 py-2.5 text-sm font-semibold text-white"
+            className="rounded-xl gradient-button px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white"
           >
             <span className="font-bengali">আবার ট্রাই করো</span>
           </button>

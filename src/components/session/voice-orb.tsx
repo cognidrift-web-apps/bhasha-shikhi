@@ -15,6 +15,7 @@ export function VoiceOrb({ state }: Props) {
       {/* Outer ring 1 */}
       {isActive && (
         <div
+          aria-hidden="true"
           className={`absolute inset-0 rounded-full border-2 ${
             isSpeaking
               ? "border-warm-500/30 animate-ring-expand-fast"
@@ -25,6 +26,7 @@ export function VoiceOrb({ state }: Props) {
       {/* Outer ring 2 */}
       {isActive && (
         <div
+          aria-hidden="true"
           className={`absolute inset-[10px] rounded-full border-2 ${
             isSpeaking
               ? "border-warm-500/15 animate-ring-expand-fast"

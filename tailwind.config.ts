@@ -47,9 +47,7 @@ const config: Config = {
         "ring-expand": "ring-expand 2s ease-out infinite",
         "ring-expand-fast": "ring-expand-fast 1s ease-out infinite",
         "slide-up": "slide-up 0.3s ease-out both",
-        "fade-up": "fade-up 0.6s ease-out both",
         "hero-bubble-in": "hero-bubble-in 0.5s ease-out both",
-        "hero-bubble-out": "hero-bubble-out 0.3s ease-out both",
       },
       keyframes: {
         "orb-breathe": {
@@ -76,17 +74,9 @@ const config: Config = {
           from: { opacity: "0", transform: "translateY(12px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
-        "fade-up": {
-          from: { opacity: "0", transform: "translateY(20px)" },
-          to: { opacity: "1", transform: "translateY(0)" },
-        },
         "hero-bubble-in": {
           from: { opacity: "0", transform: "translateY(16px)" },
           to: { opacity: "1", transform: "translateY(0)" },
-        },
-        "hero-bubble-out": {
-          from: { opacity: "1" },
-          to: { opacity: "0" },
         },
       },
     },
