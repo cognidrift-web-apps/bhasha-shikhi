@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const stream = await genai.models.generateContentStream({
-      model: "gemini-2.5-flash-preview-04-17",
+      model: "gemini-3.1-flash",
       contents,
       config: {
         systemInstruction: systemPrompt,

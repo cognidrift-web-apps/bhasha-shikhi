@@ -1,8 +1,10 @@
-# BhashaShikhi
+# BhashaShikhi (February)
 
-A voice-first AI language learning platform for Bangladeshi people. Practice English, German, Arabic, or Hindi by actually talking with an AI tutor who understands Bengali.
+A voice-first language learning platform for Bangladeshi Bengali speakers. Practice English, German, Arabic, or Hindi by actually talking with a tutor who understands Bengali.
 
 **Live**: https://bhasha-shikhi-demo.vercel.app
+
+Built by [CogniDrift](https://cognidrift.com)
 
 ## How to Use
 
@@ -11,7 +13,7 @@ A voice-first AI language learning platform for Bangladeshi people. Practice Eng
 3. Pick a language (English, German, Arabic, or Hindi)
 4. Pick a mode (conversation, pronunciation, grammar, etc.)
 5. Pick your level (beginner, intermediate, advanced)
-6. Pick a voice (Priya for now -- Microsoft voice coming soon)
+6. Pick a tutor voice (Priya or Nabanita)
 7. Click **Start** -- allow microphone access when prompted
 8. Talk! The AI tutor speaks Bengali and your target language
 9. Click **End Session** to see your report card with scores
@@ -20,7 +22,7 @@ No account needed. Just open and talk.
 
 ## What It Does
 
-BhashaShikhi ("Learn Language" in Bangla) pairs Bengali speakers with a conversational AI tutor. Instead of multiple-choice quizzes or typing exercises, learners speak and listen in real time. The tutor responds naturally, catches mistakes rooted in Bengali language interference, and adapts to the learner's level.
+BhashaShikhi ("Learn Language" in Bangla) pairs Bengali speakers with a conversational tutor. Instead of multiple-choice quizzes or typing exercises, learners speak and listen in real time. The tutor responds naturally, catches mistakes rooted in Bengali language interference, and adapts to the learner's level.
 
 ### 7 Practice Modes
 
@@ -86,13 +88,13 @@ See [docs/architecture.md](docs/architecture.md) for detailed diagrams.
 | What | URL |
 |------|-----|
 | Live App | https://bhasha-shikhi-demo.vercel.app |
-| Admin Panel | https://bhasha-shikhi-demo.vercel.app/panel/bhasha-panel-x7k9m2 |
+| Admin Panel | `https://bhasha-shikhi-demo.vercel.app/panel/<ADMIN_ROUTE_SLUG>` |
 | Relay Health | https://bhasha-shikhi-relay-demo-production.up.railway.app/health |
 | Supabase Dashboard | https://supabase.com/dashboard/project/hstqzvhawnokvethhdla |
 | Vercel Dashboard | https://vercel.com/ratulalahy/bhasha-shikhi-demo |
 | Railway Dashboard | https://railway.com/project/0b03a7ea-cbd9-4be6-982b-f4e4b20ace43 |
 | GitHub Repo | https://github.com/cognidrift-web-apps/bhasha-shikhi |
-| PR | https://github.com/cognidrift-web-apps/bhasha-shikhi/pull/1 |
+| PR | https://github.com/cognidrift-web-apps/bhasha-shikhi/pull/2 |
 
 ### Database
 
@@ -236,7 +238,7 @@ bhasha-shikhi/
 
 ## Admin Panel
 
-Access at: https://bhasha-shikhi-demo.vercel.app/panel/bhasha-panel-x7k9m2
+Access at: `https://bhasha-shikhi-demo.vercel.app/panel/<ADMIN_ROUTE_SLUG>`
 
 Features:
 - Total session count, today/this week stats

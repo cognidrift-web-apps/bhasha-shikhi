@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await genai.models.generateContent({
-      model: "gemini-2.5-flash-preview-04-17",
+      model: "gemini-3.1-flash",
       contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
 

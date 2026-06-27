@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) {
+    console.error("Supabase insert error:", error.message, error.code, error.details);
     return NextResponse.json({ error: "Failed to create session" }, { status: 500 });
   }
 

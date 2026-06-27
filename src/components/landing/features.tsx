@@ -68,7 +68,7 @@ export function Features() {
           {FEATURES.map((feature) => (
             <div
               key={feature.title}
-              className="glass-card glass-card-hover rounded-2xl p-5 transition-all duration-200"
+              className="glass-card glass-card-hover rounded-3xl p-5 transition-all duration-200"
             >
               <div className={`flex h-9 w-9 items-center justify-center rounded-xl ${feature.badgeColor} text-white mb-4`}>
                 {feature.icon}

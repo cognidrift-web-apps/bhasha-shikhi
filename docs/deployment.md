@@ -48,7 +48,7 @@ Set up in order: Supabase first (both others need its URL/keys), then Railway (V
 | `NEXT_PUBLIC_WS_RELAY_URL` | Public | `wss://bhasha-shikhi-relay-demo-production.up.railway.app` | Yes |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server | Supabase service role key | Yes |
 | `GEMINI_API_KEY` | Server | Google Gemini API key | Yes |
-| `ADMIN_ROUTE_SLUG` | Server | `bhasha-panel-x7k9m2` | Yes |
+| `ADMIN_ROUTE_SLUG` | Server | Hidden admin URL path | Yes |
 | `ADMIN_PASSWORD_HASH` | Server | bcrypt hash | Yes |
 | `AZURE_SPEECH_KEY` | Server | Azure Speech key | Not yet |
 | `AZURE_SPEECH_REGION` | Server | Azure region (e.g., eastus) | Not yet |
@@ -204,7 +204,7 @@ To remove the demo deployment:
 
 ### Admin Login Fails
 
-1. Verify URL matches `ADMIN_ROUTE_SLUG` (`bhasha-panel-x7k9m2` for demo)
+1. Verify URL matches `ADMIN_ROUTE_SLUG` (set in Vercel env vars)
 2. Verify `ADMIN_PASSWORD_HASH` was generated with bcryptjs
 3. Try regenerating: `node -e "require('bcryptjs').hash('your-password',10).then(console.log)"`
 

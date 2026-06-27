@@ -25,14 +25,14 @@ export function TranscriptPanel({ entries }: Props) {
   }
 
   return (
-    <div className="space-y-3 px-4 py-3">
+    <div className="space-y-3 px-4 py-3 overflow-y-auto h-full">
       {entries.map((entry, i) => (
         <div
           key={i}
           className={`flex animate-slide-up ${entry.role === "user" ? "justify-end" : "justify-start"}`}
         >
           <div
-            className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+            className={`max-w-[80%] rounded-3xl px-4 py-2.5 text-sm leading-relaxed ${
               entry.role === "user"
                 ? "bg-primary-600 text-white rounded-br-sm"
                 : "glass-card text-slate-800 rounded-bl-sm"

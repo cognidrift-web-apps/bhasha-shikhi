@@ -8,6 +8,7 @@ export interface GeminiSessionConfig {
   model: string;
   systemPrompt: string;
   voiceName: string;
+  onReady: () => void;
   onAudio: (base64Audio: string) => void;
   onTranscript: (role: "user" | "tutor", text: string) => void;
   onError: (error: string) => void;
@@ -27,12 +28,19 @@ export class GeminiLiveSession {
     this.ws = new WebSocket(url);
 
     this.ws.on("open", () => {
+      console.log(`[gemini] WebSocket open, sending setup for model ${this.config.model}`);
       this.sendSetup();
     });
 
     this.ws.on("message", (data) => {
       try {
         const msg = JSON.parse(data.toString());
+        if (msg.setupComplete) {
+          console.log("[gemini] Setup complete — session ready");
+          this.sendGreetingKick();
+          this.config.onReady();
+          return;
+        }
         this.handleMessage(msg);
       } catch {
         // ignore unparseable messages
@@ -40,10 +48,12 @@ export class GeminiLiveSession {
     });
 
     this.ws.on("error", (err) => {
+      console.error("[gemini] WebSocket error:", err.message);
       this.config.onError(err.message);
     });
 
-    this.ws.on("close", () => {
+    this.ws.on("close", (code, reason) => {
+      console.log(`[gemini] WebSocket closed: ${code} ${reason?.toString()}`);
       this.config.onClose();
     });
   }
@@ -61,15 +71,33 @@ export class GeminiLiveSession {
               },
             },
           },
-          inputAudioTranscription: {},
-          outputAudioTranscription: {},
         },
+        inputAudioTranscription: {},
+        outputAudioTranscription: {},
         systemInstruction: {
           parts: [{ text: this.config.systemPrompt }],
         },
       },
     };
     this.ws?.send(JSON.stringify(setup));
+  }
+
+  private sendGreetingKick(): void {
+    if (this.ws?.readyState !== WebSocket.OPEN) return;
+    this.ws.send(
+      JSON.stringify({
+        clientContent: {
+          turns: [
+            {
+              role: "user",
+              parts: [{ text: "Hi" }],
+            },
+          ],
+          turnComplete: true,
+        },
+      }),
+    );
+    console.log("[gemini] Sent greeting kick");
   }
 
   sendAudio(base64Pcm: string): void {
