@@ -4,16 +4,17 @@ function DecorativeOrb() {
   return (
     <div className="relative flex items-center justify-center">
       <div
-        className="h-28 w-28 md:h-36 md:w-36 rounded-full animate-orb-breathe"
+        className="h-28 w-28 md:h-36 md:w-36 rounded-full animate-pulse"
         style={{
-          background: "var(--gradient-orb-idle)",
-          boxShadow: "0 0 40px 10px rgba(229, 57, 53, 0.25)",
+          background: "radial-gradient(circle at 35% 35%, #818CF8, #3B82F6)",
+          boxShadow: "0 0 40px 10px rgba(99,102,241,0.25)",
         }}
       >
         <div
           className="absolute top-[15%] left-[20%] h-[30%] w-[30%] rounded-full opacity-40"
           style={{
-            background: "radial-gradient(circle, rgba(255,255,255,0.8), transparent)",
+            background:
+              "radial-gradient(circle, rgba(255,255,255,0.8), transparent)",
           }}
         />
       </div>

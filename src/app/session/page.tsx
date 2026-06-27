@@ -16,17 +16,17 @@ import {
 } from "@/lib/constants";
 
 const STATE_LABELS: Record<string, { text: string; color: string }> = {
-  idle: { text: "অপেক্ষায়...", color: "text-orb-red" },
-  listening: { text: "শুনছি...", color: "text-green-600" },
+  idle: { text: "অপেক্ষায়...", color: "text-purple-500" },
+  listening: { text: "শুনছি...", color: "text-cyan-500" },
   thinking: { text: "ভাবছি...", color: "text-slate-400" },
-  speaking: { text: "বলছি...", color: "text-amber-500" },
+  speaking: { text: "বলছি...", color: "text-blue-500" },
 };
 
 const STATE_GLOWS: Record<string, string> = {
-  idle: "0 0 12px rgba(229,57,53,0.3)",
-  listening: "0 0 12px rgba(22,163,74,0.3)",
+  idle: "0 0 12px rgba(139,92,246,0.3)",
+  listening: "0 0 12px rgba(6,182,212,0.3)",
   thinking: "none",
-  speaking: "0 0 12px rgba(255,179,0,0.3)",
+  speaking: "0 0 12px rgba(59,130,246,0.3)",
 };
 
 function SessionTimer({ startTime }: { startTime: number }) {
