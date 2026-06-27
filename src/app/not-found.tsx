@@ -6,7 +6,7 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 export default function NotFound() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-      <div className="glass-panel rounded-2xl p-8 text-center">
+      <div className="glass-panel rounded-3xl p-8 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-slate-500 text-white mx-auto mb-4">
           <MagnifyingGlass size={24} weight="fill" />
         </div>

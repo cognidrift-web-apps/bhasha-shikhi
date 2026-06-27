@@ -10,7 +10,7 @@ export default function ErrorPage({
 }) {
   return (
     <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-      <div className="glass-panel rounded-2xl p-8 text-center">
+      <div className="glass-panel rounded-3xl p-8 text-center">
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-500 text-white mx-auto mb-4">
           <WarningCircle size={24} weight="fill" />
         </div>

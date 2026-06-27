@@ -99,7 +99,7 @@ npm run test:watch # Watch mode
 
 ## Design System
 
-- **Colors**: primary (blue #2563EB), surface (page #F8F9FC, card, border, divider)
+- **Colors**: primary (blue #2563EB), surface (page #E0E4F3, card, border, divider)
 - **Fonts**: Inter (English), Noto Sans Bengali (Bengali), JetBrains Mono (mono)
 - **Voice orb**: WebGL shader (cognidrift port) -- purple idle, cyan listening, blue speaking
 - **All pages**: Light surface-page background (including session)
