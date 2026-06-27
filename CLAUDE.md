@@ -1,6 +1,6 @@
-# BhashaShikhi v0.1 (Demo)
+# February v0.1 (Demo)
 
-Voice-first AI language learning platform for Bangladeshi Bengali speakers. Practice English, German, Arabic, or Hindi by speaking with an AI tutor.
+Voice-first language learning platform for Bangladeshi Bengali speakers. Practice English, German, Arabic, or Hindi by speaking with a tutor.
 
 **Live**: https://bhasha-shikhi-demo.vercel.app
 

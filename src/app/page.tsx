@@ -7,7 +7,7 @@ export default function Home() {
       <Hero />
       <Features />
       <footer className="bg-page-mesh py-8 text-center text-sm text-stone-400">
-        BhashaShikhi
+        February
       </footer>
     </main>
   );

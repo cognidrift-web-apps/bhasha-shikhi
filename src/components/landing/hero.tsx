@@ -33,7 +33,7 @@ export function Hero() {
           <DecorativeOrb />
           <div className="space-y-4">
             <p className="font-bengali text-2xl font-bold text-primary-300 tracking-wide">
-              ভাষাশিখি
+              ফেব্রুয়ারি
             </p>
             <h1 className="font-bengali text-3xl md:text-5xl font-bold text-white leading-tight">
               কথা বলে

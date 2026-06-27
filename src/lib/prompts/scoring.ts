@@ -1,5 +1,5 @@
 /**
- * Scoring prompt builder and response parser for BhashaShikhi
+ * Scoring prompt builder and response parser for February
  *
  * Analyzes full session transcripts and produces structured scores
  * across 5 dimensions plus actionable feedback.
@@ -61,7 +61,7 @@ export function buildScoringPrompt(
     .map((line) => `[${line.role.toUpperCase()}]: ${line.text}`)
     .join("\n");
 
-  return `You are a language learning evaluator for BhashaShikhi, a voice-first language learning platform for Bangladeshi Bengali speakers.
+  return `You are a language learning evaluator for February, a voice-first language learning platform for Bangladeshi Bengali speakers.
 
 Analyze the following session transcript from a "${mode}" practice session and provide a detailed evaluation.
 

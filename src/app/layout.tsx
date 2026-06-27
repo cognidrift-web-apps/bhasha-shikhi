@@ -8,9 +8,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BhashaShikhi - Your AI Voice Language Tutor",
+  title: "February - Learn Languages by Talking",
   description: "Learn English, German, Arabic or Hindi by actually talking. 7 practice modes, instant feedback, no account needed.",
   robots: { index: false, follow: false },
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({
