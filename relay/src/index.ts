@@ -60,6 +60,11 @@ wss.on("connection", (ws, req) => {
           model: GEMINI_MODEL,
           systemPrompt: prompt,
           voiceName: GEMINI_VOICE,
+          onReady: () => {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ type: "ready" }));
+            }
+          },
           onAudio: (data) => {
             if (ws.readyState === WebSocket.OPEN) {
               ws.send(JSON.stringify({ type: "audio", data }));
@@ -97,7 +102,6 @@ wss.on("connection", (ws, req) => {
         });
 
         gemini.connect();
-        ws.send(JSON.stringify({ type: "ready" }));
       } else if (msg.type === "audio" && gemini) {
         gemini.sendAudio(msg.data);
       } else if (msg.type === "end") {
