@@ -152,7 +152,7 @@ export default function SetupWizard() {
         </div>
       </div>
 
-      <footer className="fixed bottom-0 inset-x-0 bg-white/60 backdrop-blur-xl border-t border-white/20 px-4 py-4">
+      <footer className="fixed bottom-0 inset-x-0 bg-white/40 backdrop-blur-xl border-t border-white/40 px-4 py-4">
         <div className="mx-auto max-w-lg flex items-center justify-between gap-3">
           {step > 0 ? (
             <button

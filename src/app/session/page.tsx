@@ -98,7 +98,7 @@ function SessionContent() {
   if (sessionStatus === "error") {
     return (
       <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-        <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg shadow-blue-500/[0.03] p-8 text-center">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/40 shadow-lg shadow-indigo-500/10 p-8 text-center">
           <p className="font-bengali text-slate-600 mb-4">
             কানেকশনে প্রবলেম হয়েছে
           </p>
@@ -115,7 +115,7 @@ function SessionContent() {
 
   return (
     <main className="flex min-h-dvh flex-col bg-page-mesh">
-      <header className="flex items-center justify-between bg-white/60 backdrop-blur-xl border-b border-white/20 px-4 py-3 shrink-0">
+      <header className="flex items-center justify-between bg-white/40 backdrop-blur-xl border-b border-white/40 px-4 py-3 shrink-0">
         <span className="font-bengali text-sm text-slate-600">
           {modeInfo?.namebn ?? config.mode}
         </span>
@@ -135,7 +135,7 @@ function SessionContent() {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto min-h-0 bg-white/70 backdrop-blur-xl rounded-t-3xl border-t border-white/30">
+      <div className="flex-1 overflow-y-auto min-h-0 bg-white/50 backdrop-blur-xl rounded-t-3xl border-t border-white/40">
         <TranscriptPanel entries={transcripts} />
       </div>
 

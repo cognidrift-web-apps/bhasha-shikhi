@@ -55,7 +55,7 @@ function ResultsContent() {
   if (error || !scores) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-        <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg shadow-blue-500/[0.03] p-8 text-center space-y-4">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/40 shadow-lg shadow-indigo-500/10 p-8 text-center space-y-4">
           <p className="font-bengali text-slate-600">
             {error ?? "স্কোর পাওয়া যায়নি।"}
           </p>
@@ -88,7 +88,7 @@ function ResultsContent() {
 
         <ScoreCard scores={scores} />
 
-        <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg shadow-blue-500/[0.03] p-6">
+        <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/40 shadow-lg shadow-indigo-500/10 p-6">
           <FeedbackPanel scores={scores} />
         </div>
 
@@ -103,7 +103,7 @@ function ResultsContent() {
           </button>
           <button
             onClick={() => router.push("/practice")}
-            className="flex-1 rounded-2xl bg-white/60 backdrop-blur-lg border border-white/30 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-white/80 transition-all duration-300 min-h-[52px]"
+            className="flex-1 rounded-2xl bg-white/40 backdrop-blur-lg border border-white/50 shadow-md shadow-indigo-500/5 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-white/60 transition-all duration-300 min-h-[52px]"
           >
             <span className="font-bengali">অন্য মোড ট্রাই করো</span>
             <span className="text-slate-300 mx-1.5">|</span>

@@ -6,7 +6,7 @@ import { MagnifyingGlass } from "@phosphor-icons/react";
 export default function NotFound() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-      <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg shadow-blue-500/[0.03] p-8 text-center">
+      <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/40 shadow-lg shadow-indigo-500/10 p-8 text-center">
         <MagnifyingGlass size={48} weight="duotone" className="text-primary-400 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-stone-900 mb-2">
           Page not found

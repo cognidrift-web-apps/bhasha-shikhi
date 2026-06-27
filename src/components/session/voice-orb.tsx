@@ -171,8 +171,7 @@ const STATE_CONFIG: Record<
   speaking: { hue: 240, rotSpeed: 0.5, opacity: 1.0 },
 };
 
-// #F8F9FC = surface-page token from tailwind.config.ts
-const BG_COLOR: [number, number, number] = [0.973, 0.976, 0.988];
+const BG_COLOR: [number, number, number] = [0.933, 0.941, 0.973];
 
 function createShader(
   gl: WebGLRenderingContext,
