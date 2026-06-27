@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactElement } from "react";
+import { type ReactElement } from "react";
 import { MODES, type Mode } from "@/lib/constants";
 
 interface Props {
@@ -52,37 +52,41 @@ export function ModeSelector({ value, onChange }: Props) {
 
   return (
     <div>
-      <h2 className="font-bengali text-lg font-semibold text-stone-900">
+      <h2 className="font-bengali text-xl font-bold text-[#1E1B4B] mb-1">
         কী করতে চাও?
       </h2>
-      <p className="text-sm text-stone-400 mt-0.5 mb-3">Choose a mode</p>
+      <p className="text-sm text-slate-500 mb-5">Choose a mode</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {regularModes.map((mode) => {
-          const selected = value === mode.id;
+        {regularModes.map((m) => {
+          const selected = value === m.id;
           return (
             <button
-              key={mode.id}
-              onClick={() => onChange(mode.id)}
-              className={`relative min-h-[80px] rounded-xl p-4 text-left transition-all overflow-hidden ${
+              key={m.id}
+              onClick={() => onChange(m.id)}
+              className={`min-h-[80px] rounded-xl p-4 text-left transition-all ${
                 selected
-                  ? "border-2 border-primary-500 bg-primary-50 shadow-sm"
-                  : "border border-stone-200 bg-white hover:border-primary-200"
+                  ? "border-2 border-blue-500 bg-white"
+                  : "border border-slate-200 bg-white hover:-translate-y-0.5"
               }`}
+              style={{ boxShadow: selected ? "0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(59,130,246,0.08)" : "var(--shadow-card)" }}
             >
-              <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r ${
-                selected ? "bg-gradient-to-b from-primary-500 to-accent-500" : "bg-stone-200"
-              }`} />
-              <div className="flex items-start gap-3 pl-2">
-                <div className={`mt-0.5 shrink-0 ${selected ? "text-primary-500" : "text-stone-400"}`}>
-                  {MODE_ICONS[mode.id]}
+              <div className="flex items-start gap-3">
+                <div
+                  className={`mt-0.5 shrink-0 flex h-9 w-9 items-center justify-center rounded-full ${
+                    selected ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-400"
+                  }`}
+                >
+                  {MODE_ICONS[m.id]}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
-                    <span className="font-bengali font-semibold text-stone-800">{mode.namebn}</span>
-                    <span className="text-xs bg-stone-100 text-stone-500 rounded-full px-2 py-0.5 shrink-0 ml-2">{mode.duration}</span>
+                    <span className="font-bengali font-semibold text-[#1E1B4B]">{m.namebn}</span>
+                    <span className="text-xs bg-slate-100 text-slate-500 rounded-full px-2 py-0.5 shrink-0 ml-2">
+                      {m.duration}
+                    </span>
                   </div>
-                  <p className="font-bengali text-sm text-stone-500 mt-1 leading-snug">
-                    {mode.descriptionbn}
+                  <p className="font-bengali text-sm text-slate-500 mt-1 leading-snug">
+                    {m.descriptionbn}
                   </p>
                 </div>
               </div>
@@ -92,35 +96,39 @@ export function ModeSelector({ value, onChange }: Props) {
       </div>
 
       {utilityModes.length > 0 && (
-        <div className="mt-3">
-          <p className="font-bengali text-xs text-stone-400 mb-2">টুলস</p>
+        <div className="mt-4">
+          <p className="font-bengali text-xs text-slate-400 mb-2">টুলস</p>
           <div className="grid grid-cols-1 gap-3">
-            {utilityModes.map((mode) => {
-              const selected = value === mode.id;
+            {utilityModes.map((m) => {
+              const selected = value === m.id;
               return (
                 <button
-                  key={mode.id}
-                  onClick={() => onChange(mode.id)}
-                  className={`relative min-h-[80px] rounded-xl p-4 text-left transition-all overflow-hidden ${
+                  key={m.id}
+                  onClick={() => onChange(m.id)}
+                  className={`min-h-[80px] rounded-xl p-4 text-left transition-all ${
                     selected
-                      ? "border-2 border-accent-500 bg-cyan-50 shadow-sm"
-                      : "border border-stone-200 bg-white hover:border-accent-400"
+                      ? "border-2 border-blue-500 bg-white"
+                      : "border border-slate-200 bg-white hover:-translate-y-0.5"
                   }`}
+                  style={{ boxShadow: selected ? "0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(59,130,246,0.08)" : "var(--shadow-card)" }}
                 >
-                  <div className={`absolute left-0 top-0 bottom-0 w-1 rounded-r ${
-                    selected ? "bg-gradient-to-b from-accent-500 to-accent-300" : "bg-stone-200"
-                  }`} />
-                  <div className="flex items-start gap-3 pl-2">
-                    <div className={`mt-0.5 shrink-0 ${selected ? "text-accent-500" : "text-stone-400"}`}>
-                      {MODE_ICONS[mode.id]}
+                  <div className="flex items-start gap-3">
+                    <div
+                      className={`mt-0.5 shrink-0 flex h-9 w-9 items-center justify-center rounded-full ${
+                        selected ? "bg-blue-50 text-blue-600" : "bg-slate-100 text-slate-400"
+                      }`}
+                    >
+                      {MODE_ICONS[m.id]}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <span className="font-bengali font-semibold text-stone-800">{mode.namebn}</span>
-                        <span className="text-xs bg-stone-100 text-stone-500 rounded-full px-2 py-0.5 shrink-0 ml-2">{mode.duration}</span>
+                        <span className="font-bengali font-semibold text-[#1E1B4B]">{m.namebn}</span>
+                        <span className="text-xs bg-slate-100 text-slate-500 rounded-full px-2 py-0.5 shrink-0 ml-2">
+                          {m.duration}
+                        </span>
                       </div>
-                      <p className="font-bengali text-sm text-stone-500 mt-1 leading-snug">
-                        {mode.descriptionbn}
+                      <p className="font-bengali text-sm text-slate-500 mt-1 leading-snug">
+                        {m.descriptionbn}
                       </p>
                     </div>
                   </div>

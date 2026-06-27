@@ -4,28 +4,30 @@ import { LEVELS, type Level } from "@/lib/constants";
 
 interface Props {
   value: Level;
-  onChange: (v: Level) => void;
+  onSelect: (v: Level) => void;
 }
 
-export function LevelSelector({ value, onChange }: Props) {
+export function LevelSelector({ value, onSelect }: Props) {
   return (
     <div>
-      <h2 className="font-bengali text-lg font-semibold text-stone-900">
+      <h2 className="font-bengali text-xl font-bold text-[#1E1B4B] mb-1">
         তোমার লেভেল কোনটা?
       </h2>
-      <p className="text-sm text-stone-400 mt-0.5 mb-3">Your level</p>
-      <div className="flex flex-wrap gap-3">
+      <p className="text-sm text-slate-500 mb-5">Your level</p>
+      <div className="flex flex-col gap-3">
         {LEVELS.map((level) => (
           <button
             key={level.id}
-            onClick={() => onChange(level.id)}
-            className={`min-h-[44px] rounded-full px-6 py-3 text-sm font-semibold transition-all ${
+            onClick={() => onSelect(level.id)}
+            className={`min-h-[52px] w-full rounded-lg px-5 py-3 text-left text-sm font-semibold transition-all ${
               value === level.id
-                ? "bg-gradient-to-r from-primary-500 to-accent-500 text-white shadow-sm"
-                : "border border-stone-200 bg-white text-stone-700 hover:border-primary-300"
+                ? "bg-primary-600 text-white"
+                : "border border-slate-200 bg-white text-slate-700 hover:-translate-y-0.5"
             }`}
           >
             <span className="font-bengali">{level.namebn}</span>
+            <span className="opacity-50 mx-2">|</span>
+            <span>{level.name}</span>
           </button>
         ))}
       </div>
