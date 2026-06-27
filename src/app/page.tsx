@@ -6,7 +6,7 @@ export default function Home() {
     <main className="min-h-screen">
       <Hero />
       <Features />
-      <footer className="py-8 text-center text-sm text-stone-400">
+      <footer className="bg-page-mesh py-8 text-center text-sm text-stone-400">
         BhashaShikhi
       </footer>
     </main>
