@@ -11,20 +11,30 @@
   .font-bengali {
     font-family: "Noto Sans Bengali", sans-serif;
   }
+
+  :root {
+    --gradient-primary: linear-gradient(135deg, #6366F1, #06B6D4);
+    --gradient-hero: linear-gradient(135deg, #1E1B4B 0%, #312E81 40%, #4338CA 100%);
+    --gradient-button: linear-gradient(135deg, #6366F1, #4F46E5);
+    --gradient-orb-listen: radial-gradient(circle at 35% 35%, #67E8F9, #06B6D4);
+    --gradient-orb-speak: radial-gradient(circle at 35% 35%, #FBBF24, #F59E0B);
+    --gradient-orb-idle: radial-gradient(circle at 35% 35%, #A5B4FC, #6366F1);
+  }
 }
 
 @layer components {
-  .waveform-bar {
-    animation: waveform 1.2s ease-in-out infinite;
+  .gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 
-  .waveform-bar:nth-child(2) { animation-delay: 0.1s; }
-  .waveform-bar:nth-child(3) { animation-delay: 0.2s; }
-  .waveform-bar:nth-child(4) { animation-delay: 0.3s; }
-  .waveform-bar:nth-child(5) { animation-delay: 0.4s; }
-}
+  .gradient-button {
+    background: var(--gradient-button);
+  }
 
-@keyframes waveform {
-  0%, 100% { height: 4px; }
-  50% { height: 20px; }
+  .gradient-button:hover {
+    background: linear-gradient(135deg, #4F46E5, #4338CA);
+  }
 }
