@@ -1,4 +1,15 @@
-const FEATURES = [
+"use client";
+
+import { type ReactElement } from "react";
+
+interface Feature {
+  title: string;
+  titlebn: string;
+  description: string;
+  icon: ReactElement;
+}
+
+const FEATURES: Feature[] = [
   {
     title: "7 Ways to Practice",
     titlebn: "৭ রকম প্র্যাকটিস",
@@ -58,22 +69,31 @@ const FEATURES = [
 
 export function Features() {
   return (
-    <section className="bg-surface-50 py-20 px-4">
+    <section className="bg-surface-page py-20 px-4">
       <div className="mx-auto max-w-5xl">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURES.map((feature) => (
+          {FEATURES.map((feature, i) => (
             <div
               key={feature.title}
-              className="rounded-2xl bg-white p-6 shadow-md transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5"
+              className={`rounded-2xl bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 ${
+                i >= 3 ? "sm:col-span-1 lg:col-span-1" : ""
+              }`}
+              style={{ boxShadow: "var(--shadow-card)" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = "var(--shadow-card-hover)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = "var(--shadow-card)";
+              }}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary-50 text-primary-500 mb-4">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-50 text-blue-600 mb-4">
                 {feature.icon}
               </div>
-              <h3 className="font-bengali text-lg font-bold text-stone-900">
+              <h3 className="font-bengali text-lg font-bold text-[#1E1B4B]">
                 {feature.titlebn}
               </h3>
-              <p className="text-sm text-stone-500 mt-0.5 mb-2">{feature.title}</p>
-              <p className="text-sm text-stone-600 leading-relaxed">
+              <p className="text-sm text-slate-500 mt-0.5 mb-2">{feature.title}</p>
+              <p className="text-sm text-slate-600 leading-relaxed">
                 {feature.description}
               </p>
             </div>
