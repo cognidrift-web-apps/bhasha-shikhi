@@ -15,9 +15,6 @@
   :root {
     --gradient-cta: linear-gradient(135deg, #2563EB, #3B82F6);
     --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
-    --gradient-orb-idle: radial-gradient(circle at 35% 35%, #E53935, #8B1A1A);
-    --gradient-orb-listen: radial-gradient(circle at 35% 35%, #22C55E, #16A34A);
-    --gradient-orb-speak: radial-gradient(circle at 35% 35%, #FFB300, #F59E0B);
     --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(59,130,246,0.04);
     --shadow-card-hover: 0 1px 3px rgba(0,0,0,0.04), 0 12px 32px rgba(59,130,246,0.08);
   }
