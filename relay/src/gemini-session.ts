@@ -37,6 +37,7 @@ export class GeminiLiveSession {
         const msg = JSON.parse(data.toString());
         if (msg.setupComplete) {
           console.log("[gemini] Setup complete — session ready");
+          this.sendGreetingKick();
           this.config.onReady();
           return;
         }
@@ -79,6 +80,24 @@ export class GeminiLiveSession {
       },
     };
     this.ws?.send(JSON.stringify(setup));
+  }
+
+  private sendGreetingKick(): void {
+    if (this.ws?.readyState !== WebSocket.OPEN) return;
+    this.ws.send(
+      JSON.stringify({
+        clientContent: {
+          turns: [
+            {
+              role: "user",
+              parts: [{ text: "Hi" }],
+            },
+          ],
+          turnComplete: true,
+        },
+      }),
+    );
+    console.log("[gemini] Sent greeting kick");
   }
 
   sendAudio(base64Pcm: string): void {
