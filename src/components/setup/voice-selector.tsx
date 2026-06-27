@@ -21,15 +21,14 @@ export function VoiceSelector({ value, onChange }: Props) {
             <button
               key={voice.id}
               onClick={() => onChange(voice.id)}
-              className={`min-h-[72px] rounded-xl p-4 text-left transition-all ${
+              className={`min-h-[72px] rounded-2xl p-4 text-left transition-all duration-300 ${
                 selected
-                  ? "border-2 border-blue-500 bg-white"
-                  : "border border-slate-200 bg-white hover:-translate-y-0.5"
+                  ? "bg-white/80 backdrop-blur-xl border-2 border-primary-400 shadow-lg shadow-primary-500/10"
+                  : "bg-white/60 backdrop-blur-lg border border-white/30 hover:bg-white/80 hover:-translate-y-0.5"
               }`}
-              style={{ boxShadow: "var(--shadow-card)" }}
             >
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 text-lg font-bold">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100/70 backdrop-blur-sm text-blue-600 text-lg font-bold">
                   {voice.name[0]}
                 </div>
                 <div>

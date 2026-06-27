@@ -19,10 +19,10 @@ export function LevelSelector({ value, onSelect }: Props) {
           <button
             key={level.id}
             onClick={() => onSelect(level.id)}
-            className={`min-h-[52px] w-full rounded-lg px-5 py-3 text-left text-sm font-semibold transition-all ${
+            className={`min-h-[52px] w-full rounded-2xl px-5 py-3 text-left text-sm font-semibold transition-all duration-300 ${
               value === level.id
                 ? "bg-primary-600 text-white"
-                : "border border-slate-200 bg-white text-slate-700 hover:-translate-y-0.5"
+                : "bg-white/60 backdrop-blur-lg border border-white/30 text-slate-700 hover:bg-white/80 hover:-translate-y-0.5"
             }`}
           >
             <span className="font-bengali">{level.namebn}</span>

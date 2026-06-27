@@ -21,16 +21,11 @@ export function LanguageSelector({ value, onSelect }: Props) {
             <button
               key={lang.id}
               onClick={() => onSelect(lang.id)}
-              className={`min-h-[80px] rounded-xl p-4 text-left transition-all ${
+              className={`min-h-[80px] rounded-2xl p-4 text-left transition-all duration-300 ${
                 selected
-                  ? "border-2 border-blue-500 bg-white"
-                  : "border border-slate-200 bg-white hover:-translate-y-0.5"
+                  ? "bg-white/80 backdrop-blur-xl border-2 border-primary-400 shadow-lg shadow-primary-500/10"
+                  : "bg-white/60 backdrop-blur-lg border border-white/30 hover:bg-white/80 hover:-translate-y-0.5"
               }`}
-              style={{
-                boxShadow: selected
-                  ? "0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(59,130,246,0.08)"
-                  : "var(--shadow-card)",
-              }}
             >
               <span className="block text-xs font-bold text-slate-400 mb-1">{lang.flag}</span>
               <span className="font-semibold text-[#1E1B4B] text-sm">{lang.name}</span>

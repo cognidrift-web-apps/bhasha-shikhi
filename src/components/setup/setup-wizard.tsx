@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { LanguageSelector } from "./language-selector";
 import { ModeSelector } from "./mode-selector";
 import { LevelSelector } from "./level-selector";
@@ -125,7 +126,7 @@ export default function SetupWizard() {
     (effectiveStep === 3 && voice);
 
   return (
-    <main className="flex min-h-dvh flex-col bg-surface-page">
+    <main className="flex min-h-dvh flex-col bg-page-mesh">
       <ProgressTrack currentStep={effectiveStep} completedSteps={effectiveStep} />
 
       <div className="flex-1 flex items-start justify-center px-4 pt-4 pb-24 overflow-y-auto">
@@ -151,16 +152,14 @@ export default function SetupWizard() {
         </div>
       </div>
 
-      <footer className="fixed bottom-0 inset-x-0 bg-surface-page border-t border-surface-border px-4 py-4">
+      <footer className="fixed bottom-0 inset-x-0 bg-white/60 backdrop-blur-xl border-t border-white/20 px-4 py-4">
         <div className="mx-auto max-w-lg flex items-center justify-between gap-3">
           {step > 0 ? (
             <button
               onClick={goBack}
-              className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition-colors min-h-[44px] px-2"
+              className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition-colors duration-300 min-h-[44px] px-2"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
+              <CaretLeft size={18} weight="duotone" />
               <span className="font-bengali">পিছনে</span>
             </button>
           ) : (
@@ -171,8 +170,7 @@ export default function SetupWizard() {
             <button
               onClick={handleStart}
               disabled={!hasSelection}
-              className="flex-1 max-w-xs rounded-xl bg-primary-600 py-3.5 text-center font-semibold text-white transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 min-h-[56px]"
-              style={{ boxShadow: "0 4px 14px rgba(59,130,246,0.25)" }}
+              className="btn-primary flex-1 max-w-xs rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 py-3.5 text-center font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 min-h-[56px]"
             >
               <span className="font-bengali">শুরু করো</span>
               <span className="text-white/50 mx-2">|</span>
@@ -182,12 +180,10 @@ export default function SetupWizard() {
             <button
               onClick={goNext}
               disabled={!hasSelection}
-              className="flex items-center gap-1 rounded-xl bg-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 min-h-[44px]"
+              className="btn-primary flex items-center gap-1 rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 min-h-[44px]"
             >
               <span className="font-bengali">পরেরটা</span>
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
+              <CaretRight size={18} weight="duotone" />
             </button>
           )}
         </div>
