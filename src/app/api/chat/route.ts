@@ -75,7 +75,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const stream = await genai.models.generateContentStream({
-      model: "gemini-3.1-flash",
+      model: "gemini-3.5-flash",
       contents,
       config: {
         systemInstruction: systemPrompt,
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch (error) {
-    const errMsg = error instanceof Error ? error.message : "Unknown error";
-    return NextResponse.json({ error: errMsg }, { status: 500 });
+    console.error("[chat]", error instanceof Error ? error.message : error);
+    return NextResponse.json({ error: "Service unavailable" }, { status: 500 });
   }
 }

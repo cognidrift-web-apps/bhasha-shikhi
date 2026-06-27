@@ -48,8 +48,8 @@ wss.on("connection", (ws, req) => {
 
       if (msg.type === "config") {
         if (!VALID_LANGUAGES.has(msg.language) || !VALID_MODES.has(msg.mode) || !VALID_LEVELS.has(msg.level)) {
-          ws.send(JSON.stringify({ type: "error", message: "Invalid session config" }));
-          ws.close(4001, "Invalid config");
+          ws.send(JSON.stringify({ type: "error", message: "Invalid config" }));
+          ws.close(4001);
           return;
         }
         sessionId = msg.sessionId;
@@ -89,9 +89,10 @@ wss.on("connection", (ws, req) => {
               }
             }
           },
-          onError: (message) => {
+          onError: (detail) => {
+            console.error("[relay] session error:", detail);
             if (ws.readyState === WebSocket.OPEN) {
-              ws.send(JSON.stringify({ type: "error", message }));
+              ws.send(JSON.stringify({ type: "error", message: "Session error" }));
             }
           },
           onClose: () => {

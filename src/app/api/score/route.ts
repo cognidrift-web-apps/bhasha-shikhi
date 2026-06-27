@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const response = await genai.models.generateContent({
-      model: "gemini-3.1-flash",
+      model: "gemini-3.5-flash",
       contents: [{ role: "user", parts: [{ text: prompt }] }],
     });
 
@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(scores);
   } catch (error) {
-    const errMsg = error instanceof Error ? error.message : "Scoring failed";
-    return NextResponse.json({ error: errMsg }, { status: 500 });
+    console.error("[score]", error instanceof Error ? error.message : error);
+    return NextResponse.json({ error: "Scoring unavailable" }, { status: 500 });
   }
 }
