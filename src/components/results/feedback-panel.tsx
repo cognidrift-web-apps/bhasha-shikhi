@@ -1,7 +1,7 @@
 import type { ScoreResult } from "@/lib/prompts/scoring";
 
 function toBengaliNumerals(n: number): string {
-  const digits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+  const digits = ["০", "১", "२", "३", "४", "५", "६", "७", "८", "९"];
   return String(n)
     .split("")
     .map((ch) => digits[parseInt(ch, 10)] ?? ch)
@@ -10,7 +10,7 @@ function toBengaliNumerals(n: number): string {
 
 function XpBadge({ xp }: { xp: number }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-primary-50 border border-primary-200 px-5 py-2">
+    <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-5 py-2">
       <span className="font-mono text-xl font-bold text-primary-600 tabular-nums">
         +{xp} XP
       </span>
@@ -23,7 +23,7 @@ function BanglaFallbackBadge({ count }: { count: number }) {
   if (count === 0) return null;
 
   return (
-    <p className="font-bengali text-sm text-warm-600">
+    <p className="font-bengali text-sm text-amber-600">
       {toBengaliNumerals(count)} বার বাংলায় চলে গেছো
     </p>
   );
@@ -42,7 +42,7 @@ export function FeedbackPanel({ scores }: Props) {
       </div>
 
       {scores.feedback && (
-        <p className="font-bengali text-stone-700 leading-relaxed">{scores.feedback}</p>
+        <p className="font-bengali text-slate-700 leading-relaxed">{scores.feedback}</p>
       )}
 
       {scores.strengths.length > 0 && (
@@ -53,7 +53,7 @@ export function FeedbackPanel({ scores }: Props) {
           </h3>
           <ul className="space-y-2">
             {scores.strengths.map((item, i) => (
-              <li key={i} className="text-sm text-stone-600 flex items-start gap-2">
+              <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
                 <span className="text-emerald-500 font-bold mt-0.5 shrink-0">+</span>
                 <span>{item}</span>
               </li>
@@ -70,7 +70,7 @@ export function FeedbackPanel({ scores }: Props) {
           </h3>
           <ul className="space-y-2">
             {scores.improvements.map((item, i) => (
-              <li key={i} className="text-sm text-stone-600 flex items-start gap-2">
+              <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
                 <span className="text-amber-500 font-bold mt-0.5 shrink-0">!</span>
                 <span>{item}</span>
               </li>
@@ -80,12 +80,12 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.suggested_next && (
-        <div className="rounded-xl bg-primary-50 border border-primary-200 px-4 py-3">
-          <p className="text-xs text-primary-400 uppercase tracking-wide mb-1">
+        <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3">
+          <p className="text-xs text-blue-500 uppercase tracking-wide mb-1">
             <span className="font-bengali normal-case">পরের ধাপ</span>
             <span className="ml-1">(Next Step)</span>
           </p>
-          <p className="text-sm font-medium text-stone-700">{scores.suggested_next}</p>
+          <p className="text-sm font-medium text-slate-700">{scores.suggested_next}</p>
         </div>
       )}
     </div>

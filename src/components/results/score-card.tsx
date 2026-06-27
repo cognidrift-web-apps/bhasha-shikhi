@@ -39,16 +39,16 @@ function DimensionBar({ labelEn, labelBn, score, delay }: DimensionBarProps) {
     <div className="space-y-1">
       <div className="flex items-baseline justify-between">
         <div className="flex items-baseline gap-2">
-          <span className="text-sm font-medium text-stone-700">{labelEn}</span>
-          <span className="font-bengali text-xs text-stone-400">{labelBn}</span>
+          <span className="text-sm font-medium text-slate-700">{labelEn}</span>
+          <span className="font-bengali text-xs text-slate-400">{labelBn}</span>
         </div>
-        <span className="font-mono text-sm font-semibold text-primary-700 tabular-nums">
+        <span className="font-mono text-sm font-semibold text-primary-600 tabular-nums">
           {pct}%
         </span>
       </div>
-      <div className="h-2.5 rounded-full bg-stone-100">
+      <div className="h-2.5 rounded-full bg-slate-100">
         <div
-          className="h-2.5 rounded-full bg-gradient-to-r from-primary-500 to-accent-400 transition-all duration-[800ms] ease-out"
+          className="h-2.5 rounded-full bg-primary-600 transition-all duration-[800ms] ease-out"
           style={{ width: `${width}%` }}
         />
       </div>
@@ -77,11 +77,11 @@ function CircleProgress({ score }: CircleProgressProps) {
       >
         <defs>
           <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6366F1" />
-            <stop offset="100%" stopColor="#06B6D4" />
+            <stop offset="0%" stopColor="#2563EB" />
+            <stop offset="100%" stopColor="#3B82F6" />
           </linearGradient>
         </defs>
-        <circle cx="80" cy="80" r={radius} fill="none" stroke="#e7e5e4" strokeWidth="10" />
+        <circle cx="80" cy="80" r={radius} fill="none" stroke="#E2E8F0" strokeWidth="10" />
         <circle
           cx="80"
           cy="80"
@@ -96,11 +96,11 @@ function CircleProgress({ score }: CircleProgressProps) {
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-mono text-4xl font-bold text-stone-900 tabular-nums leading-none">
+        <span className="font-mono text-4xl font-bold text-[#1E1B4B] tabular-nums leading-none">
           {displayScore}
         </span>
-        <span className="text-lg text-stone-500 mt-0.5">%</span>
-        <span className="font-bengali text-sm text-stone-400 mt-1">ওভারঅল</span>
+        <span className="text-lg text-slate-500 mt-0.5">%</span>
+        <span className="font-bengali text-sm text-slate-400 mt-1">ওভারঅল</span>
       </div>
     </div>
   );
@@ -119,7 +119,10 @@ const DIMENSIONS: { key: keyof ScoreResult; labelEn: string; labelBn: string }[]
 
 export function ScoreCard({ scores }: Props) {
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-6 space-y-6">
+    <div
+      className="rounded-2xl bg-white p-6 space-y-6"
+      style={{ boxShadow: "var(--shadow-card)" }}
+    >
       <div className="flex justify-center">
         <CircleProgress score={scores.overall} />
       </div>
