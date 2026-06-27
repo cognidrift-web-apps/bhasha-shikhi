@@ -10,7 +10,7 @@ function toBengaliNumerals(n: number): string {
 
 function XpBadge({ xp }: { xp: number }) {
   return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-5 py-2">
+    <div className="inline-flex items-center gap-2 rounded-full bg-blue-50/60 backdrop-blur-sm border border-blue-200/50 px-5 py-2">
       <span className="font-mono text-xl font-bold text-primary-600 tabular-nums">
         +{xp} XP
       </span>
@@ -46,7 +46,7 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.strengths.length > 0 && (
-        <div className="rounded-xl border-l-[3px] border-emerald-500 bg-white pl-4 pr-3 py-3">
+        <div className="rounded-xl border-l-[3px] border-emerald-500 bg-white/50 backdrop-blur-sm pl-4 pr-3 py-3">
           <h3 className="text-sm font-semibold text-emerald-700 mb-3">
             <span className="font-bengali">ভালো করেছো</span>
             <span className="text-emerald-500 ml-1.5">(Strengths)</span>
@@ -63,7 +63,7 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.improvements.length > 0 && (
-        <div className="rounded-xl border-l-[3px] border-amber-500 bg-white pl-4 pr-3 py-3">
+        <div className="rounded-xl border-l-[3px] border-amber-500 bg-white/50 backdrop-blur-sm pl-4 pr-3 py-3">
           <h3 className="text-sm font-semibold text-amber-700 mb-3">
             <span className="font-bengali">আরো ভালো করতে পারো</span>
             <span className="text-amber-500 ml-1.5">(To Improve)</span>
@@ -80,7 +80,7 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.suggested_next && (
-        <div className="rounded-xl bg-blue-50 border border-blue-200 px-4 py-3">
+        <div className="rounded-xl bg-blue-50/60 backdrop-blur-sm border border-blue-200/50 px-4 py-3">
           <p className="text-xs text-blue-500 uppercase tracking-wide mb-1">
             <span className="font-bengali normal-case">পরের ধাপ</span>
             <span className="ml-1">(Next Step)</span>
