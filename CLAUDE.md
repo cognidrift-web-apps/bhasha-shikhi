@@ -99,10 +99,13 @@ npm run test:watch # Watch mode
 
 ## Design System
 
-- **Colors**: primary (indigo), accent (cyan), warm (amber), surface (stone)
+- **Colors**: primary (blue #2563EB), surface (page #F8F9FC, card, border, divider)
 - **Fonts**: Inter (English), Noto Sans Bengali (Bengali), JetBrains Mono (mono)
-- **Session page**: Dark immersive theme (only dark page in the app)
-- **All other pages**: Light surface-50 background
+- **Voice orb**: WebGL shader (cognidrift port) -- purple idle, cyan listening, blue speaking
+- **All pages**: Light surface-page background (including session)
+- **Setup flow**: 4-step wizard (Language, Mode, Level, Voice)
+- **Shadows**: Blue-tinted via CSS vars (--shadow-card, --shadow-card-hover)
+- **Text**: #1E1B4B primary (never pure black), slate-500 secondary, slate-400 muted
 
 ## CI/CD
 
