@@ -21,7 +21,6 @@ function ProgressTrack({ currentStep, completedSteps }: { currentStep: number; c
       {STEPS.map((step, i) => {
         const isCompleted = i < completedSteps;
         const isActive = i === currentStep;
-        const isUpcoming = i > currentStep;
 
         return (
           <div key={step.key} className="flex items-center">
@@ -127,7 +126,7 @@ export default function SetupWizard() {
 
   return (
     <main className="flex min-h-dvh flex-col bg-surface-page">
-      <ProgressTrack currentStep={step} completedSteps={step} />
+      <ProgressTrack currentStep={effectiveStep} completedSteps={effectiveStep} />
 
       <div className="flex-1 flex items-start justify-center px-4 pt-4 pb-24 overflow-y-auto">
         <div
