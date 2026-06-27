@@ -1,5 +1,7 @@
 "use client";
 
+import { WarningCircle } from "@phosphor-icons/react";
+
 export default function ErrorPage({
   reset,
 }: {
@@ -7,8 +9,9 @@ export default function ErrorPage({
   reset: () => void;
 }) {
   return (
-    <main className="flex min-h-screen items-center justify-center px-4">
-      <div className="text-center">
+    <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
+      <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg shadow-blue-500/[0.03] p-8 text-center">
+        <WarningCircle size={48} weight="duotone" className="text-primary-400 mx-auto mb-4" />
         <h1 className="text-2xl font-bold text-stone-900 mb-2">
           Something went wrong
         </h1>
@@ -17,7 +20,7 @@ export default function ErrorPage({
         </p>
         <button
           onClick={reset}
-          className="rounded-lg bg-primary-500 px-6 py-2 min-h-[44px] text-white hover:bg-primary-600"
+          className="btn-primary rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 min-h-[44px] text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98]"
         >
           Try Again
         </button>

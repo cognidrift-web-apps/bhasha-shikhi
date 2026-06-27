@@ -15,8 +15,6 @@
   :root {
     --gradient-cta: linear-gradient(135deg, #2563EB, #3B82F6);
     --gradient-hero: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
-    --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 8px 24px rgba(59,130,246,0.04);
-    --shadow-card-hover: 0 1px 3px rgba(0,0,0,0.04), 0 12px 32px rgba(59,130,246,0.08);
   }
 }
 
