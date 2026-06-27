@@ -38,12 +38,13 @@ export default function PracticePage() {
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
           </svg>
-          <span>ফিরে যান</span>
+          <span className="font-bengali">পিছনে যাও</span>
         </Link>
 
-        <h1 className="font-bengali text-2xl font-bold text-stone-900 mb-8">
-          কী প্র্যাকটিস করবেন?
+        <h1 className="font-bengali text-2xl font-bold text-stone-900 mb-1">
+          কী প্র্যাকটিস করবে?
         </h1>
+        <p className="text-sm text-stone-400 mb-8">Set up your practice session</p>
 
         <div className="space-y-8">
           <LanguageSelector value={language} onChange={setLanguage} />
@@ -56,10 +57,10 @@ export default function PracticePage() {
 
         <button
           onClick={handleStart}
-          className="mt-10 w-full min-h-[52px] rounded-lg bg-brand-600 px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-brand-700 active:bg-brand-800"
+          className="mt-10 w-full min-h-[56px] rounded-xl gradient-button px-8 py-4 text-lg font-semibold text-white transition-all hover:scale-[1.01] shadow-lg shadow-primary-500/25"
         >
-          <span className="font-bengali">শুরু করুন</span>
-          <span className="text-brand-200 mx-2">|</span>
+          <span className="font-bengali">শুরু করো</span>
+          <span className="text-white/50 mx-2">|</span>
           <span>Start</span>
         </button>
       </div>
