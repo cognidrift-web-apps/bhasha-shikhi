@@ -11,6 +11,7 @@ export interface GeminiSessionConfig {
   onReady: () => void;
   onAudio: (base64Audio: string) => void;
   onTranscript: (role: "user" | "tutor", text: string) => void;
+  onTurnComplete: () => void;
   onError: (error: string) => void;
   onClose: () => void;
 }
@@ -117,6 +118,11 @@ export class GeminiLiveSession {
     const serverContent = msg.serverContent as Record<string, unknown> | undefined;
     if (!serverContent) return;
 
+    if (serverContent.turnComplete) {
+      this.config.onTurnComplete();
+      return;
+    }
+
     const modelTurn = serverContent.modelTurn as Record<string, unknown> | undefined;
     if (modelTurn?.parts && Array.isArray(modelTurn.parts)) {
       for (const part of modelTurn.parts) {
@@ -127,13 +133,9 @@ export class GeminiLiveSession {
             this.config.onAudio(inlineData.data);
           }
         }
-        if (typeof p.text === "string" && p.text.trim()) {
-          this.config.onTranscript("tutor", p.text.trim());
-        }
       }
     }
 
-    // New transcription format (Gemini 3.x)
     const outputTranscription = serverContent.outputTranscription as { text?: string } | undefined;
     if (outputTranscription?.text?.trim()) {
       this.config.onTranscript("tutor", outputTranscription.text.trim());
@@ -144,7 +146,6 @@ export class GeminiLiveSession {
       this.config.onTranscript("user", inputTranscription.text.trim());
     }
 
-    // Legacy format fallback
     const inputTranscript = serverContent.inputTranscript as string | undefined;
     if (inputTranscript?.trim()) {
       this.config.onTranscript("user", inputTranscript.trim());

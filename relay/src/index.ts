@@ -89,6 +89,11 @@ wss.on("connection", (ws, req) => {
               }
             }
           },
+          onTurnComplete: () => {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ type: "turn_complete" }));
+            }
+          },
           onError: (detail) => {
             console.error("[relay] session error:", detail);
             if (ws.readyState === WebSocket.OPEN) {

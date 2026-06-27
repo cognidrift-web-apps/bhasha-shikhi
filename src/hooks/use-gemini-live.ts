@@ -24,6 +24,8 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
   const streamRef = useRef<MediaStream | null>(null);
   const playBufferRef = useRef<Float32Array<ArrayBuffer>[]>([]);
   const isPlayingRef = useRef(false);
+  const pendingTutorTextRef = useRef<string[]>([]);
+  const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Keep statusRef in sync so closures can read the current status without staling
   useEffect(() => {
@@ -46,6 +48,29 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
     source.start();
   }, []);
 
+  const flushPendingTranscripts = useCallback(() => {
+    if (pendingTutorTextRef.current.length === 0) return;
+    const text = pendingTutorTextRef.current.join(" ");
+    pendingTutorTextRef.current = [];
+    if (flushTimerRef.current) {
+      clearTimeout(flushTimerRef.current);
+      flushTimerRef.current = null;
+    }
+    setTranscripts((prev) => {
+      const last = prev[prev.length - 1];
+      if (last && last.role === "tutor" && Date.now() - last.timestamp < 5000) {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          ...last,
+          content: last.content + " " + text,
+          timestamp: Date.now(),
+        };
+        return updated;
+      }
+      return [...prev, { role: "tutor", content: text, timestamp: Date.now() }];
+    });
+  }, []);
+
   const playAudioChunk = useCallback(
     (base64: string) => {
       if (!audioContextRef.current) return;
@@ -53,13 +78,15 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
       const float32 = decodeBase64ToFloat32(base64);
       playBufferRef.current.push(float32);
 
+      flushPendingTranscripts();
+
       if (!isPlayingRef.current) {
         isPlayingRef.current = true;
         setAgentState("speaking");
         drainPlayBuffer(ctx);
       }
     },
-    [drainPlayBuffer],
+    [drainPlayBuffer, flushPendingTranscripts],
   );
 
   const connect = useCallback(async () => {
@@ -119,19 +146,27 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
         } else if (msg.type === "transcript") {
           const role = msg.role as "user" | "tutor";
           const content = msg.content as string;
-          setTranscripts((prev) => {
-            const last = prev[prev.length - 1];
-            if (last && last.role === role && Date.now() - last.timestamp < 5000) {
-              const updated = [...prev];
-              updated[updated.length - 1] = {
-                ...last,
-                content: last.content + " " + content,
-                timestamp: Date.now(),
-              };
-              return updated;
-            }
-            return [...prev, { role, content, timestamp: Date.now() }];
-          });
+          if (role === "tutor") {
+            pendingTutorTextRef.current.push(content);
+            if (flushTimerRef.current) clearTimeout(flushTimerRef.current);
+            flushTimerRef.current = setTimeout(flushPendingTranscripts, 3000);
+          } else {
+            setTranscripts((prev) => {
+              const last = prev[prev.length - 1];
+              if (last && last.role === "user" && Date.now() - last.timestamp < 5000) {
+                const updated = [...prev];
+                updated[updated.length - 1] = {
+                  ...last,
+                  content: last.content + " " + content,
+                  timestamp: Date.now(),
+                };
+                return updated;
+              }
+              return [...prev, { role: "user", content, timestamp: Date.now() }];
+            });
+          }
+        } else if (msg.type === "turn_complete") {
+          flushPendingTranscripts();
         } else if (msg.type === "error") {
           setStatus("error");
         }
