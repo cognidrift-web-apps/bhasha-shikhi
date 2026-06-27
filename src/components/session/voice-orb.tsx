@@ -190,18 +190,6 @@ function createShader(
   return shader;
 }
 
-function FallbackOrb() {
-  return (
-    <div
-      className="absolute inset-0 rounded-full animate-pulse"
-      style={{
-        background: "radial-gradient(circle at 35% 35%, #6366F1, #3B82F6)",
-        boxShadow: "0 0 40px 10px rgba(99,102,241,0.25)",
-      }}
-    />
-  );
-}
-
 export function VoiceOrb({ state }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [glReady, setGlReady] = useState(false);
@@ -332,9 +320,8 @@ export function VoiceOrb({ state }: Props) {
     <div className="relative flex items-center justify-center h-[200px] w-[200px] md:h-[240px] md:w-[240px]">
       <div
         ref={containerRef}
-        className="absolute inset-0 rounded-full overflow-hidden"
+        className={`absolute inset-0 rounded-full overflow-hidden transition-opacity duration-500 ${glReady ? "opacity-100" : "opacity-0"}`}
       />
-      {!glReady && <FallbackOrb />}
     </div>
   );
 }
