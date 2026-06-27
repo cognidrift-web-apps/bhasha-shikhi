@@ -60,7 +60,7 @@ export default function SessionsListPage() {
           </h1>
           <Link
             href={`/panel/${params.slug}/dashboard`}
-            className="text-sm text-brand-600 hover:underline"
+            className="text-sm text-primary-500 hover:underline"
           >
             Back to Dashboard
           </Link>

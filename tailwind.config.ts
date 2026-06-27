@@ -18,21 +18,6 @@ const config: Config = {
           900: "#312E81",
           950: "#1E1B4B",
         },
-        // brand is an alias for primary (indigo) so existing brand-* references
-        // keep resolving during migration. Will be removed in the final task.
-        brand: {
-          50: "#EEF2FF",
-          100: "#E0E7FF",
-          200: "#C7D2FE",
-          300: "#A5B4FC",
-          400: "#818CF8",
-          500: "#6366F1",
-          600: "#4F46E5",
-          700: "#4338CA",
-          800: "#3730A3",
-          900: "#312E81",
-          950: "#1E1B4B",
-        },
         accent: {
           300: "#67E8F9",
           400: "#22D3EE",
