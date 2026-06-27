@@ -87,7 +87,7 @@ The core table. One row per practice session.
 language IN ('english', 'german', 'arabic', 'hindi')
 mode IN ('word_by_word', 'conversation', 'roleplay', 'pronunciation', 'grammar', 'listening', 'live_translation')
 level IN ('beginner', 'intermediate', 'advanced')
-voice_type IN ('gemini', 'microsoft')
+voice_type IN ('priya', 'nabanita', 'gemini', 'microsoft')
 status IN ('active', 'completed', 'abandoned')
 ```
 
