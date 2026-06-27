@@ -17,8 +17,8 @@ export function TranscriptPanel({ entries }: Props) {
   if (entries.length === 0) {
     return (
       <div className="flex h-full items-center justify-center px-4">
-        <p className="font-bengali text-center text-stone-400 text-sm">
-          কথোপকথন এখানে দেখাবে
+        <p className="font-bengali text-center text-slate-400 text-sm">
+          কথাবার্তা এখানে দেখাবে
         </p>
       </div>
     );
@@ -29,13 +29,13 @@ export function TranscriptPanel({ entries }: Props) {
       {entries.map((entry, i) => (
         <div
           key={i}
-          className={`flex ${entry.role === "user" ? "justify-end" : "justify-start"}`}
+          className={`flex animate-slide-up ${entry.role === "user" ? "justify-end" : "justify-start"}`}
         >
           <div
             className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
               entry.role === "user"
-                ? "bg-brand-600 text-white rounded-br-sm"
-                : "bg-white text-stone-800 shadow-sm border border-stone-100 rounded-bl-sm"
+                ? "bg-primary-600 text-white rounded-br-sm"
+                : "glass-card text-slate-800 rounded-bl-sm"
             }`}
           >
             {entry.content}

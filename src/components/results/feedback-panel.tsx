@@ -1,15 +1,4 @@
-/**
- * FeedbackPanel - Feedback text, strengths, improvements, XP badge, and Bangla fallback count.
- *
- * All Bengali text uses casual Dhaka Bangla.
- * No emoji, no emdash.
- */
-
 import type { ScoreResult } from "@/lib/prompts/scoring";
-
-// ---------------------------------------------------------------------------
-// Bengali numeral helper (0-9 only; for small counts)
-// ---------------------------------------------------------------------------
 
 function toBengaliNumerals(n: number): string {
   const digits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
@@ -19,34 +8,15 @@ function toBengaliNumerals(n: number): string {
     .join("");
 }
 
-// ---------------------------------------------------------------------------
-// Sub-components
-// ---------------------------------------------------------------------------
-
-function XpBadge({ xp }: { xp: number }) {
-  return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-brand-50 border border-brand-200 px-4 py-1.5">
-      <span className="font-mono text-base font-bold text-brand-700 tabular-nums">
-        +{xp} XP
-      </span>
-      <span className="font-bengali text-sm text-brand-600">পেয়েছেন</span>
-    </div>
-  );
-}
-
 function BanglaFallbackBadge({ count }: { count: number }) {
   if (count === 0) return null;
 
   return (
-    <p className="font-bengali text-sm text-accent-600">
+    <p className="font-bengali text-sm text-amber-600">
       {toBengaliNumerals(count)} বার বাংলায় চলে গেছেন
     </p>
   );
 }
-
-// ---------------------------------------------------------------------------
-// FeedbackPanel (exported)
-// ---------------------------------------------------------------------------
 
 interface Props {
   scores: ScoreResult;
@@ -55,30 +25,28 @@ interface Props {
 export function FeedbackPanel({ scores }: Props) {
   return (
     <div className="space-y-6">
-      {/* XP + fallback row */}
       <div className="flex flex-wrap items-center gap-3">
-        <XpBadge xp={scores.xp} />
+        <span className="text-sm font-medium text-primary-600 tabular-nums">
+          {scores.xp} XP
+        </span>
+        <span className="font-bengali text-sm text-primary-500">পেয়েছেন</span>
         <BanglaFallbackBadge count={scores.bangla_fallback_count} />
       </div>
 
-      {/* Overall feedback */}
       {scores.feedback && (
-        <p className="font-bengali text-stone-700 leading-relaxed">{scores.feedback}</p>
+        <p className="font-bengali text-slate-700 leading-relaxed">{scores.feedback}</p>
       )}
 
-      {/* Strengths */}
       {scores.strengths.length > 0 && (
-        <div>
-          <h3 className="text-sm font-semibold text-brand-700 uppercase tracking-wide mb-3">
-            Strengths{" "}
-            <span className="font-bengali normal-case text-brand-500">
-              (ভালো করেছেন)
-            </span>
+        <div className="glass-card rounded-xl p-4">
+          <h3 className="text-sm font-medium text-emerald-700 mb-3">
+            <span className="font-bengali">ভালো করেছেন</span>
+            <span className="text-emerald-500 ml-1.5 text-xs">(Strengths)</span>
           </h3>
           <ul className="space-y-2">
             {scores.strengths.map((item, i) => (
-              <li key={i} className="text-sm text-stone-600 flex items-start gap-2">
-                <span className="text-brand-500 font-bold mt-0.5 shrink-0">+</span>
+              <li key={i} className="text-sm text-slate-600 flex items-start gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
                 <span>{item}</span>
               </li>
             ))}
@@ -86,22 +54,16 @@ export function FeedbackPanel({ scores }: Props) {
         </div>
       )}
 
-      {/* Improvements */}
       {scores.improvements.length > 0 && (
-        <div>
-          <h3 className="text-sm font-semibold text-accent-700 uppercase tracking-wide mb-3">
-            To Improve{" "}
-            <span className="font-bengali normal-case text-accent-500">
-              (উন্নতি করুন)
-            </span>
+        <div className="glass-card rounded-xl p-4">
+          <h3 className="text-sm font-medium text-amber-700 mb-3">
+            <span className="font-bengali">আরো ভালো করতে পারেন</span>
+            <span className="text-amber-500 ml-1.5 text-xs">(To Improve)</span>
           </h3>
           <ul className="space-y-2">
             {scores.improvements.map((item, i) => (
-              <li
-                key={i}
-                className="text-sm text-stone-600 flex items-start gap-2 rounded-md bg-accent-50 px-3 py-2"
-              >
-                <span className="text-accent-500 font-bold mt-0.5 shrink-0">!</span>
+              <li key={i} className="text-sm text-slate-600 flex items-start gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 shrink-0" />
                 <span>{item}</span>
               </li>
             ))}
@@ -109,14 +71,13 @@ export function FeedbackPanel({ scores }: Props) {
         </div>
       )}
 
-      {/* Suggested next */}
       {scores.suggested_next && (
-        <div className="rounded-md border border-stone-200 bg-surface-50 px-4 py-3">
-          <p className="text-xs text-stone-400 uppercase tracking-wide mb-1">
-            Next step{" "}
-            <span className="font-bengali normal-case">পরের ধাপ</span>
+        <div className="glass-card rounded-xl px-4 py-3">
+          <p className="text-xs text-primary-500 mb-1">
+            <span className="font-bengali">পরের ধাপ</span>
+            <span className="ml-1 text-xs">(Next Step)</span>
           </p>
-          <p className="text-sm font-medium text-stone-700">{scores.suggested_next}</p>
+          <p className="text-sm font-medium text-slate-700">{scores.suggested_next}</p>
         </div>
       )}
     </div>

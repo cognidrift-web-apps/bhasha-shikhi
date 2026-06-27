@@ -31,7 +31,7 @@ export function SessionsTable({ sessions, slug }: Props) {
               <td className="py-2 pr-4">
                 <Link
                   href={`/panel/${slug}/sessions/${s.id}`}
-                  className="text-brand-600 hover:underline"
+                  className="text-primary-500 hover:underline"
                 >
                   {new Date(s.started_at).toLocaleDateString()}
                 </Link>

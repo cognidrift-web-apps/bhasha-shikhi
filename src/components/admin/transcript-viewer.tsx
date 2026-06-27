@@ -11,7 +11,7 @@ export function TranscriptViewer({ transcripts }: Props) {
         <div
           key={t.id}
           className={`rounded-lg px-3 py-2 text-sm ${
-            t.role === "user" ? "bg-brand-50 ml-8" : "bg-stone-50 mr-8"
+            t.role === "user" ? "bg-primary-50 ml-8" : "bg-stone-50 mr-8"
           }`}
         >
           <div className="flex items-center gap-2 mb-1">

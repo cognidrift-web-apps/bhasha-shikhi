@@ -51,7 +51,7 @@ export async function POST(req: NextRequest) {
       language,
       mode,
       level,
-      voice_type: voice_type ?? "gemini",
+      voice_type: voice_type ?? "priya",
       device_info: (device_info as Record<string, unknown>) || {},
       browser_fingerprint: (browser_fingerprint as string) || null,
     })

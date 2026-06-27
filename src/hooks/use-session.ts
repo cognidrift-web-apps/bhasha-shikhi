@@ -17,7 +17,7 @@ export function useSession(config: SessionConfig) {
   const microsoft = useMicrosoftSpeech(sessionId, config);
   const recorder = useAudioRecorder();
 
-  const isGemini = config.voice === "gemini";
+  const isGemini = config.voice === "priya";
   const voice = isGemini ? gemini : microsoft;
 
   // Auto-connect voice pipeline once sessionId is available and session is active.

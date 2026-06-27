@@ -4,33 +4,36 @@ import { LANGUAGES, type Language } from "@/lib/constants";
 
 interface Props {
   value: Language;
-  onChange: (v: Language) => void;
+  onSelect: (v: Language) => void;
 }
 
-export function LanguageSelector({ value, onChange }: Props) {
+export function LanguageSelector({ value, onSelect }: Props) {
   return (
     <div>
-      <h2 className="text-base font-semibold text-stone-800 mb-3">
+      <h2 className="font-bengali text-2xl font-semibold text-[#1E1B4B] mb-2 text-center">
         কোন ভাষা শিখবেন?
       </h2>
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        {LANGUAGES.map((lang) => (
-          <button
-            key={lang.id}
-            onClick={() => onChange(lang.id)}
-            className={`min-h-[56px] rounded-lg border-2 p-4 text-left transition-all ${
-              value === lang.id
-                ? "border-brand-500 bg-brand-50 shadow-sm"
-                : "border-stone-200 bg-white hover:border-brand-300"
-            }`}
-          >
-            <span className="block text-xs font-bold text-stone-400 mb-1">{lang.flag}</span>
-            <span className="font-semibold text-stone-800 text-sm">{lang.name}</span>
-            <span className="font-bengali block text-sm text-stone-500 mt-0.5">
-              {lang.namebn}
-            </span>
-          </button>
-        ))}
+      <p className="text-sm text-slate-500 mb-8 text-center tracking-[-0.03em]">Which language?</p>
+      <div className="grid grid-cols-2 gap-4">
+        {LANGUAGES.map((lang) => {
+          const selected = value === lang.id;
+          return (
+            <button
+              key={lang.id}
+              onClick={() => onSelect(lang.id)}
+              className={`min-h-[90px] rounded-3xl p-6 text-center transition-all duration-200 ${
+                selected
+                  ? "glass-card-selected"
+                  : "glass-card glass-card-hover"
+              }`}
+            >
+              <span className="font-semibold text-[#1E1B4B] block tracking-[-0.03em]">{lang.name}</span>
+              <span className="font-bengali text-sm text-slate-500 block mt-1">
+                {lang.namebn}
+              </span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

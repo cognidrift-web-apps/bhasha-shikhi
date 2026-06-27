@@ -11,56 +11,48 @@ export function ModeSelector({ value, onChange }: Props) {
   const regularModes = MODES.filter((m) => !("isUtility" in m && m.isUtility));
   const utilityModes = MODES.filter((m) => "isUtility" in m && m.isUtility);
 
+  function renderCard(m: (typeof MODES)[number]) {
+    const selected = value === m.id;
+    return (
+      <button
+        key={m.id}
+        onClick={() => onChange(m.id)}
+        className={`min-h-[100px] rounded-3xl p-6 text-center transition-all duration-200 ${
+          selected
+            ? "glass-card-selected"
+            : "glass-card glass-card-hover"
+        }`}
+      >
+        <span className="font-bengali font-medium text-[#1E1B4B] block">
+          {m.namebn}
+        </span>
+        <p className="font-bengali text-sm text-slate-500 mt-2 leading-snug">
+          {m.descriptionbn}
+        </p>
+        <span className="inline-block text-xs text-slate-400 mt-3">
+          {m.duration}
+        </span>
+      </button>
+    );
+  }
+
   return (
     <div>
-      <h2 className="text-base font-semibold text-stone-800 mb-3">
+      <h2 className="font-bengali text-2xl font-semibold text-[#1E1B4B] mb-2 text-center">
         কী করতে চান?
       </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {regularModes.map((mode) => (
-          <button
-            key={mode.id}
-            onClick={() => onChange(mode.id)}
-            className={`min-h-[44px] rounded-lg border-2 p-4 text-left transition-all ${
-              value === mode.id
-                ? "border-brand-500 bg-brand-50 shadow-sm"
-                : "border-stone-200 bg-white hover:border-brand-300"
-            }`}
-          >
-            <div className="flex items-center justify-between">
-              <span className="font-bengali font-semibold text-stone-800">{mode.namebn}</span>
-              <span className="text-xs text-stone-400 shrink-0 ml-2">{mode.duration}</span>
-            </div>
-            <p className="font-bengali text-sm text-stone-500 mt-1 leading-snug">
-              {mode.descriptionbn}
-            </p>
-          </button>
-        ))}
+      <p className="text-sm text-slate-500 mb-8 text-center tracking-[-0.03em]">Choose a mode</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {regularModes.map(renderCard)}
       </div>
 
       {utilityModes.length > 0 && (
-        <div className="mt-3">
-          <p className="font-bengali text-xs text-stone-400 mb-2">টুল</p>
-          <div className="grid grid-cols-1 gap-3">
-            {utilityModes.map((mode) => (
-              <button
-                key={mode.id}
-                onClick={() => onChange(mode.id)}
-                className={`min-h-[44px] rounded-lg border-2 p-4 text-left transition-all ${
-                  value === mode.id
-                    ? "border-accent-500 bg-accent-50 shadow-sm"
-                    : "border-stone-200 bg-white hover:border-accent-300"
-                }`}
-              >
-                <div className="flex items-center justify-between">
-                  <span className="font-bengali font-semibold text-stone-800">{mode.namebn}</span>
-                  <span className="text-xs text-stone-400 shrink-0 ml-2">{mode.duration}</span>
-                </div>
-                <p className="font-bengali text-sm text-stone-500 mt-1 leading-snug">
-                  {mode.descriptionbn}
-                </p>
-              </button>
-            ))}
+        <div className="mt-6">
+          <p className="text-xs text-slate-400 mb-3 text-center tracking-wide uppercase">
+            Tools
+          </p>
+          <div className="grid grid-cols-1 gap-4">
+            {utilityModes.map(renderCard)}
           </div>
         </div>
       )}

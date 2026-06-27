@@ -1,107 +1,110 @@
-/**
- * ScoreCard - Overall score circle + 4 dimension bars
- *
- * Scores are 0-100 percentages (not band scores).
- * Bengali labels use transliterated everyday Bangladeshi Bangla.
- */
+"use client";
 
+import { useEffect, useState } from "react";
 import type { ScoreResult } from "@/lib/prompts/scoring";
 
-// ---------------------------------------------------------------------------
-// Dimension bar
-// ---------------------------------------------------------------------------
+function useCountUp(target: number, duration = 1500): number {
+  const [value, setValue] = useState(0);
+  useEffect(() => {
+    const start = performance.now();
+    let raf: number;
+    function tick(now: number) {
+      const progress = Math.min((now - start) / duration, 1);
+      setValue(Math.round(progress * target));
+      if (progress < 1) raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [target, duration]);
+  return value;
+}
 
 interface DimensionBarProps {
   labelEn: string;
   labelBn: string;
   score: number;
+  delay: number;
 }
 
-function DimensionBar({ labelEn, labelBn, score }: DimensionBarProps) {
+function DimensionBar({ labelEn, labelBn, score, delay }: DimensionBarProps) {
   const pct = Math.round(score);
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setWidth(pct), delay);
+    return () => clearTimeout(timer);
+  }, [pct, delay]);
 
   return (
     <div className="space-y-1">
       <div className="flex items-baseline justify-between">
         <div className="flex items-baseline gap-2">
-          <span className="text-sm font-medium text-stone-700">{labelEn}</span>
-          <span className="font-bengali text-xs text-stone-400">{labelBn}</span>
+          <span className="text-sm font-medium text-slate-700">{labelEn}</span>
+          <span className="font-bengali text-xs text-slate-400">{labelBn}</span>
         </div>
-        <span className="font-mono text-sm font-semibold text-brand-700 tabular-nums">
+        <span className="font-mono text-sm font-semibold text-primary-600 tabular-nums">
           {pct}%
         </span>
       </div>
-      <div className="h-2 rounded-full bg-stone-100">
+      <div className="h-2.5 rounded-full bg-slate-100">
         <div
-          className="h-2 rounded-full bg-brand-500 transition-all duration-700"
-          style={{ width: `${pct}%` }}
+          className="h-2.5 rounded-full bg-primary-600 transition-all duration-[800ms] ease-out"
+          style={{ width: `${width}%` }}
         />
       </div>
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// SVG circular progress
-// ---------------------------------------------------------------------------
 
 interface CircleProgressProps {
   score: number;
 }
 
 function CircleProgress({ score }: CircleProgressProps) {
-  const radius = 54;
+  const radius = 62;
   const circumference = 2 * Math.PI * radius;
-  const pct = Math.round(score);
-  const offset = circumference - (pct / 100) * circumference;
+  const displayScore = useCountUp(Math.round(score));
+  const offset = circumference - (displayScore / 100) * circumference;
 
   return (
     <div className="relative inline-flex items-center justify-center">
       <svg
-        width="140"
-        height="140"
-        viewBox="0 0 140 140"
+        width="160"
+        height="160"
+        viewBox="0 0 160 160"
         className="rotate-[-90deg]"
         aria-hidden="true"
       >
-        {/* Track */}
+        <defs>
+          <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#2563EB" />
+            <stop offset="100%" stopColor="#3B82F6" />
+          </linearGradient>
+        </defs>
+        <circle cx="80" cy="80" r={radius} fill="none" stroke="#E2E8F0" strokeWidth="7" />
         <circle
-          cx="70"
-          cy="70"
+          cx="80"
+          cy="80"
           r={radius}
           fill="none"
-          stroke="#e7e5e4"
-          strokeWidth="12"
-        />
-        {/* Progress */}
-        <circle
-          cx="70"
-          cy="70"
-          r={radius}
-          fill="none"
-          stroke="#14b8a6"
-          strokeWidth="12"
+          stroke="url(#scoreGradient)"
+          strokeWidth="7"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
-          className="transition-all duration-700"
+          className="transition-all duration-[1500ms] ease-out"
         />
       </svg>
-      {/* Score label centred inside the ring */}
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-mono text-4xl font-bold text-brand-700 tabular-nums leading-none">
-          {pct}
+        <span className="font-mono text-4xl font-bold text-[#1E1B4B] tabular-nums leading-none">
+          {displayScore}
         </span>
-        <span className="text-xs text-stone-400 mt-0.5">%</span>
-        <span className="font-bengali text-xs text-stone-500 mt-1">ওভারঅল</span>
+        <span className="text-lg text-slate-500 mt-0.5">%</span>
+        <span className="font-bengali text-sm text-slate-400 mt-1">ওভারঅল</span>
       </div>
     </div>
   );
 }
-
-// ---------------------------------------------------------------------------
-// ScoreCard (exported)
-// ---------------------------------------------------------------------------
 
 interface Props {
   scores: ScoreResult;
@@ -116,20 +119,18 @@ const DIMENSIONS: { key: keyof ScoreResult; labelEn: string; labelBn: string }[]
 
 export function ScoreCard({ scores }: Props) {
   return (
-    <div className="rounded-xl border border-stone-200 bg-white p-6 space-y-6">
-      {/* Overall circle */}
+    <div className="glass-panel rounded-3xl p-8 space-y-8">
       <div className="flex justify-center">
         <CircleProgress score={scores.overall} />
       </div>
-
-      {/* Dimension bars */}
       <div className="space-y-4">
-        {DIMENSIONS.map(({ key, labelEn, labelBn }) => (
+        {DIMENSIONS.map(({ key, labelEn, labelBn }, i) => (
           <DimensionBar
             key={key}
             labelEn={labelEn}
             labelBn={labelBn}
             score={scores[key] as number}
+            delay={i * 150}
           />
         ))}
       </div>

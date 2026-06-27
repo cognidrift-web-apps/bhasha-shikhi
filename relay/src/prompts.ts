@@ -1,5 +1,5 @@
 /**
- * Tutor prompt builder for BhashaShikhi
+ * Tutor prompt builder for February
  *
  * Builds system prompts for the AI tutor across 7 modes x 3 levels x 4 languages.
  * Every prompt includes: Bengali persona, name extraction, code-switch detection,

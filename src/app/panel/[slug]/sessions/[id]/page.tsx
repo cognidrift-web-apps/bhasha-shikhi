@@ -65,7 +65,7 @@ export default function SessionDetailPage() {
       <div className="mx-auto max-w-4xl">
         <Link
           href={`/panel/${params.slug}/sessions`}
-          className="text-sm text-brand-600 hover:underline"
+          className="text-sm text-primary-500 hover:underline"
         >
           Back to Sessions
         </Link>

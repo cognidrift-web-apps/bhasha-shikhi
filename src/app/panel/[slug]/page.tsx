@@ -38,13 +38,13 @@ export default function AdminLoginPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
-          className="w-full rounded-lg border border-stone-300 px-4 py-3 text-stone-800 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+          className="w-full rounded-lg border border-stone-300 px-4 py-3 text-stone-800 focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500"
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-brand-600 py-3 font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
+          className="w-full rounded-lg bg-primary-500 py-3 font-semibold text-white hover:bg-primary-600 disabled:opacity-50"
         >
           {loading ? "Verifying..." : "Enter"}
         </button>

@@ -61,6 +61,8 @@ export class GeminiLiveSession {
               },
             },
           },
+          inputAudioTranscription: {},
+          outputAudioTranscription: {},
         },
         systemInstruction: {
           parts: [{ text: this.config.systemPrompt }],
@@ -74,12 +76,10 @@ export class GeminiLiveSession {
     if (this.ws?.readyState !== WebSocket.OPEN) return;
     const msg = {
       realtimeInput: {
-        mediaChunks: [
-          {
-            mimeType: "audio/pcm;rate=16000",
-            data: base64Pcm,
-          },
-        ],
+        audio: {
+          mimeType: "audio/pcm;rate=16000",
+          data: base64Pcm,
+        },
       },
     };
     this.ws.send(JSON.stringify(msg));
@@ -105,6 +105,18 @@ export class GeminiLiveSession {
       }
     }
 
+    // New transcription format (Gemini 3.x)
+    const outputTranscription = serverContent.outputTranscription as { text?: string } | undefined;
+    if (outputTranscription?.text?.trim()) {
+      this.config.onTranscript("tutor", outputTranscription.text.trim());
+    }
+
+    const inputTranscription = serverContent.inputTranscription as { text?: string } | undefined;
+    if (inputTranscription?.text?.trim()) {
+      this.config.onTranscript("user", inputTranscription.text.trim());
+    }
+
+    // Legacy format fallback
     const inputTranscript = serverContent.inputTranscript as string | undefined;
     if (inputTranscript?.trim()) {
       this.config.onTranscript("user", inputTranscript.trim());

@@ -1,18 +1,31 @@
-# BhashaShikhi v2
+# February v0.1 (Demo)
 
-Voice-first AI language learning platform for Bangladeshi Bengali speakers. Practice English, German, Arabic, or Hindi by speaking with an AI tutor.
+Voice-first language learning platform for Bangladeshi Bengali speakers. Practice English, German, Arabic, or Hindi by speaking with a tutor.
+
+**Live**: https://bhasha-shikhi-demo.vercel.app
 
 ## Architecture
 
 Three services:
 
-- **Next.js 15 App** (`src/`): Frontend, API routes, admin panel. Deploys to Vercel.
-- **WebSocket Relay** (`relay/`): Node.js server bridging browser audio to Gemini Live API. Deploys to Railway.
+- **Next.js 15 App** (`src/`): Frontend, API routes, admin panel. Deployed to Vercel.
+- **WebSocket Relay** (`relay/`): Node.js server bridging browser audio to Gemini Live API. Deployed to Railway.
 - **Supabase**: PostgreSQL database + Storage for audio recordings.
 
 Two voice pipelines:
-- **Path A (Gemini)**: Browser mic -> AudioWorklet PCM -> WebSocket -> Relay -> Gemini Live API
-- **Path B (Microsoft)**: Azure Speech SDK (browser STT/TTS) -> /api/chat -> Gemini Flash text
+- **Path A (Gemini)**: Browser mic -> AudioWorklet PCM -> WebSocket -> Relay -> Gemini Live API (active)
+- **Path B (Microsoft)**: Azure Speech SDK (browser STT/TTS) -> /api/chat -> Gemini Flash text (not yet configured)
+
+## Deployment
+
+| Service | Account | Project | URL |
+|---------|---------|---------|-----|
+| Vercel | ratul.kuet@gmail.com | bhasha-shikhi-demo | https://bhasha-shikhi-demo.vercel.app |
+| Railway | qratul@uvu.edu | bhasha-shikhi-relay-demo | https://bhasha-shikhi-relay-demo-production.up.railway.app |
+| Supabase | -- | bhasha-shikhi-demo-v01 | ref: hstqzvhawnokvethhdla |
+| GitHub | cognidrift-web-apps | bhasha-shikhi | branch: feat/v2-rebuild |
+
+Admin panel: `/panel/bhasha-panel-x7k9m2`
 
 ## Running Locally
 
@@ -50,8 +63,8 @@ Copy `.env.local.example` to `.env.local` and `relay/.env.example` to `relay/.en
 | `SUPABASE_SERVICE_ROLE_KEY` | Server | Supabase service role key |
 | `NEXT_PUBLIC_WS_RELAY_URL` | Public | WebSocket relay URL (wss://...) |
 | `GEMINI_API_KEY` | Server | Google Gemini API key |
-| `AZURE_SPEECH_KEY` | Server | Azure Speech key |
-| `AZURE_SPEECH_REGION` | Server | Azure region (e.g., eastus) |
+| `AZURE_SPEECH_KEY` | Server | Azure Speech key (not yet set) |
+| `AZURE_SPEECH_REGION` | Server | Azure region (not yet set) |
 | `ADMIN_ROUTE_SLUG` | Server | Hidden admin URL path |
 | `ADMIN_PASSWORD_HASH` | Server | bcrypt hash of admin password |
 
@@ -60,12 +73,12 @@ Copy `.env.local.example` to `.env.local` and `relay/.env.example` to `relay/.en
 | Variable | Description |
 |----------|-------------|
 | `GEMINI_API_KEY` | Google Gemini API key |
-| `GEMINI_MODEL` | Model ID (default: gemini-2.5-flash-preview-native-audio-dialog) |
-| `GEMINI_VOICE` | Voice name (default: Kore) |
+| `GEMINI_MODEL` | Model ID (gemini-3.1-flash-live-preview) |
+| `GEMINI_VOICE` | Voice name (Kore) |
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
 | `ALLOWED_ORIGINS` | CORS allowed origins (comma-separated) |
-| `PORT` | Server port (default: 8081) |
+| `PORT` | Server port (8081) |
 
 ## Constraints
 
@@ -83,6 +96,24 @@ Copy `.env.local.example` to `.env.local` and `relay/.env.example` to `relay/.en
 npm test           # 255 tests across tutor prompts + scoring
 npm run test:watch # Watch mode
 ```
+
+## Design System
+
+- **Colors**: primary (blue #2563EB), surface (page #F8F9FC, card, border, divider)
+- **Fonts**: Inter (English), Noto Sans Bengali (Bengali), JetBrains Mono (mono)
+- **Voice orb**: WebGL shader (cognidrift port) -- purple idle, cyan listening, blue speaking
+- **All pages**: Light surface-page background (including session)
+- **Setup flow**: 4-step wizard (Language, Mode, Level, Voice)
+- **Shadows**: Blue-tinted via CSS vars (--shadow-card, --shadow-card-hover)
+- **Text**: #1E1B4B primary (never pure black), slate-500 secondary, slate-400 muted
+
+## CI/CD
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on push to `feat/v2-rebuild`:
+- Test (255 tests)
+- Next.js build
+- Relay build
+- Auto-deploy to Vercel (requires `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` GitHub secrets)
 
 ## Documentation
 
