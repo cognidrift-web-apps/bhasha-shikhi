@@ -15,9 +15,8 @@ import {
   type SessionConfig,
 } from "@/lib/constants";
 
-// Bangla status labels for each agent state (casual Dhaka style)
 const STATE_LABELS: Record<string, string> = {
-  idle: "অপেক্ষায় আছি",
+  idle: "অপেক্ষায়...",
   listening: "শুনছি...",
   thinking: "ভাবছি...",
   speaking: "বলছি...",
@@ -37,7 +36,7 @@ function SessionTimer({ startTime }: { startTime: number }) {
   const seconds = elapsed % 60;
 
   return (
-    <span className="font-mono text-sm text-stone-500 tabular-nums">
+    <span className="font-mono text-sm text-white/80 tabular-nums">
       {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
     </span>
   );
@@ -59,7 +58,6 @@ function SessionContent() {
   const { sessionStatus, transcripts, agentState, startSession, endSession } =
     useSession(config);
 
-  // Start session on mount
   useEffect(() => {
     void startSession().then(() => {
       const now = Date.now();
@@ -83,24 +81,24 @@ function SessionContent() {
 
   if (sessionStatus === "ending") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-surface-50">
-        <p className="font-bengali text-stone-500">সেশন শেষ হচ্ছে...</p>
+      <main className="flex min-h-screen items-center justify-center bg-primary-950">
+        <p className="font-bengali text-white/60">সেশন শেষ হচ্ছে...</p>
       </main>
     );
   }
 
   if (sessionStatus === "error") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-surface-50 px-4">
+      <main className="flex min-h-screen items-center justify-center bg-primary-950 px-4">
         <div className="text-center">
-          <p className="font-bengali text-stone-600 mb-4">
-            সংযোগে সমস্যা হয়েছে।
+          <p className="font-bengali text-white/70 mb-4">
+            কানেকশনে প্রবলেম হয়েছে
           </p>
           <button
             onClick={() => router.push("/practice")}
-            className="rounded-lg bg-brand-600 px-6 py-2 text-sm font-medium text-white hover:bg-brand-700"
+            className="rounded-full gradient-button px-6 py-2.5 text-sm font-medium text-white"
           >
-            <span className="font-bengali">আবার চেষ্টা করুন</span>
+            <span className="font-bengali">আবার ট্রাই করো</span>
           </button>
         </div>
       </main>
@@ -108,41 +106,42 @@ function SessionContent() {
   }
 
   return (
-    <main className="flex min-h-dvh flex-col bg-surface-50">
+    <main className="flex min-h-dvh flex-col bg-gradient-to-b from-primary-950 via-primary-900 to-primary-950">
       {/* Top bar */}
-      <header className="flex items-center justify-between border-b border-stone-200 bg-white px-4 py-3 shrink-0">
-        <div className="flex flex-col">
-          <span className="font-bengali text-xs text-stone-400">
-            {modeInfo?.namebn ?? config.mode}
-          </span>
-          <span className="text-sm font-semibold text-stone-800">
-            {langInfo?.name ?? config.language}
-          </span>
-        </div>
+      <header className="flex items-center justify-between bg-white/5 backdrop-blur-sm px-4 py-3 shrink-0">
+        <span className="font-bengali text-sm text-white/80">
+          {modeInfo?.namebn ?? config.mode}
+        </span>
+        <span className="text-sm text-white/60">
+          {langInfo?.name ?? config.language}
+        </span>
         {startTime > 0 && <SessionTimer startTime={startTime} />}
       </header>
 
       {/* Orb area */}
-      <div className="flex flex-col items-center gap-4 py-10 shrink-0">
+      <div className="flex flex-col items-center gap-4 py-8 shrink-0">
         <VoiceOrb state={agentState as "idle" | "listening" | "thinking" | "speaking"} />
-        <p className="font-bengali text-sm text-stone-500">
+        <p
+          className="font-bengali text-base text-white/90"
+          style={{ textShadow: "0 0 20px rgba(99, 102, 241, 0.4)" }}
+        >
           {STATE_LABELS[agentState] ?? STATE_LABELS.idle}
         </p>
       </div>
 
-      {/* Transcript - scrollable */}
-      <div className="flex-1 overflow-y-auto min-h-0 bg-surface-100 rounded-t-2xl">
+      {/* Transcript - glassmorphism */}
+      <div className="flex-1 overflow-y-auto min-h-0 bg-white/5 backdrop-blur-md rounded-t-3xl">
         <TranscriptPanel entries={transcripts} />
       </div>
 
-      {/* Bottom controls */}
-      <footer className="shrink-0 border-t border-stone-200 bg-white px-4 py-4">
+      {/* End button - small pill */}
+      <footer className="shrink-0 flex justify-center py-4 bg-transparent">
         <button
           onClick={() => void handleEnd()}
           disabled={sessionStatus === "connecting"}
-          className="w-full rounded-lg bg-red-500 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-red-600 active:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-full bg-red-500/80 hover:bg-red-500 backdrop-blur-sm px-6 py-2.5 text-sm font-semibold text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="font-bengali">সেশন শেষ করুন</span>
+          <span className="font-bengali">সেশন শেষ</span>
         </button>
       </footer>
     </main>
@@ -153,8 +152,8 @@ export default function SessionPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-surface-50">
-          <p className="font-bengali text-stone-500">লোড হচ্ছে...</p>
+        <main className="flex min-h-screen items-center justify-center bg-primary-950">
+          <p className="font-bengali text-white/60">লোড হচ্ছে...</p>
         </main>
       }
     >
