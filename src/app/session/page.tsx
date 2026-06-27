@@ -23,10 +23,10 @@ const STATE_LABELS: Record<string, { text: string; color: string }> = {
 };
 
 const STATE_GLOWS: Record<string, string> = {
-  idle: "0 0 12px rgba(139,92,246,0.3)",
-  listening: "0 0 12px rgba(6,182,212,0.3)",
+  idle: "none",
+  listening: "none",
   thinking: "none",
-  speaking: "0 0 12px rgba(59,130,246,0.3)",
+  speaking: "none",
 };
 
 function SessionTimer({ startTime }: { startTime: number }) {
@@ -98,7 +98,7 @@ function SessionContent() {
   if (sessionStatus === "error") {
     return (
       <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-        <div className="glass-panel rounded-2xl p-8 text-center">
+        <div className="glass-panel rounded-3xl p-8 text-center">
           <p className="font-bengali text-slate-600 mb-4">
             কানেকশনে সমস্যা হয়েছে
           </p>

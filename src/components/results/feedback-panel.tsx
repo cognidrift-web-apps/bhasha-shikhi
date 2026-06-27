@@ -8,17 +8,6 @@ function toBengaliNumerals(n: number): string {
     .join("");
 }
 
-function XpBadge({ xp }: { xp: number }) {
-  return (
-    <div className="inline-flex items-center gap-2 rounded-full bg-blue-50/60 backdrop-blur-sm border border-blue-200/50 px-5 py-2">
-      <span className="font-mono text-xl font-bold text-primary-600 tabular-nums">
-        +{xp} XP
-      </span>
-      <span className="font-bengali text-sm text-primary-500">পেয়েছেন</span>
-    </div>
-  );
-}
-
 function BanglaFallbackBadge({ count }: { count: number }) {
   if (count === 0) return null;
 
@@ -37,7 +26,10 @@ export function FeedbackPanel({ scores }: Props) {
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center gap-3">
-        <XpBadge xp={scores.xp} />
+        <span className="text-sm font-medium text-primary-600 tabular-nums">
+          {scores.xp} XP
+        </span>
+        <span className="font-bengali text-sm text-primary-500">পেয়েছেন</span>
         <BanglaFallbackBadge count={scores.bangla_fallback_count} />
       </div>
 
@@ -46,15 +38,15 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.strengths.length > 0 && (
-        <div className="rounded-xl border-l-[3px] border-emerald-500 glass-card pl-4 pr-3 py-3">
-          <h3 className="text-sm font-semibold text-emerald-700 mb-3">
+        <div className="glass-card rounded-xl p-4">
+          <h3 className="text-sm font-medium text-emerald-700 mb-3">
             <span className="font-bengali">ভালো করেছেন</span>
-            <span className="text-emerald-500 ml-1.5">(Strengths)</span>
+            <span className="text-emerald-500 ml-1.5 text-xs">(Strengths)</span>
           </h3>
           <ul className="space-y-2">
             {scores.strengths.map((item, i) => (
-              <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
-                <span className="text-emerald-500 font-bold mt-0.5 shrink-0">+</span>
+              <li key={i} className="text-sm text-slate-600 flex items-start gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 mt-2 shrink-0" />
                 <span>{item}</span>
               </li>
             ))}
@@ -63,15 +55,15 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.improvements.length > 0 && (
-        <div className="rounded-xl border-l-[3px] border-amber-500 glass-card pl-4 pr-3 py-3">
-          <h3 className="text-sm font-semibold text-amber-700 mb-3">
+        <div className="glass-card rounded-xl p-4">
+          <h3 className="text-sm font-medium text-amber-700 mb-3">
             <span className="font-bengali">আরো ভালো করতে পারেন</span>
-            <span className="text-amber-500 ml-1.5">(To Improve)</span>
+            <span className="text-amber-500 ml-1.5 text-xs">(To Improve)</span>
           </h3>
           <ul className="space-y-2">
             {scores.improvements.map((item, i) => (
-              <li key={i} className="text-sm text-slate-600 flex items-start gap-2">
-                <span className="text-amber-500 font-bold mt-0.5 shrink-0">!</span>
+              <li key={i} className="text-sm text-slate-600 flex items-start gap-2.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 mt-2 shrink-0" />
                 <span>{item}</span>
               </li>
             ))}
@@ -80,10 +72,10 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.suggested_next && (
-        <div className="rounded-xl bg-blue-50/60 backdrop-blur-sm border border-blue-200/50 px-4 py-3">
-          <p className="text-xs text-blue-500 uppercase tracking-wide mb-1">
-            <span className="font-bengali normal-case">পরের ধাপ</span>
-            <span className="ml-1">(Next Step)</span>
+        <div className="glass-card rounded-xl px-4 py-3">
+          <p className="text-xs text-primary-500 mb-1">
+            <span className="font-bengali">পরের ধাপ</span>
+            <span className="ml-1 text-xs">(Next Step)</span>
           </p>
           <p className="text-sm font-medium text-slate-700">{scores.suggested_next}</p>
         </div>

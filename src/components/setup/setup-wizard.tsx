@@ -18,7 +18,7 @@ const STEPS = [
 
 function ProgressTrack({ currentStep, completedSteps }: { currentStep: number; completedSteps: number }) {
   return (
-    <div className="flex items-center justify-center gap-0 px-8 py-6">
+    <div className="flex items-center justify-center gap-0 px-8 py-8">
       {STEPS.map((step, i) => {
         const isCompleted = i < completedSteps;
         const isActive = i === currentStep;
@@ -29,16 +29,15 @@ function ProgressTrack({ currentStep, completedSteps }: { currentStep: number; c
               <div
                 className={`h-3 w-3 rounded-full transition-all duration-300 ${
                   isActive
-                    ? "bg-[#D4A017] scale-[1.15]"
+                    ? "bg-primary-500 ring-4 ring-primary-200 scale-[1.15]"
                     : isCompleted
                     ? "bg-primary-600"
                     : "border-2 border-slate-300 bg-white"
                 }`}
-                style={isActive ? { boxShadow: "0 0 8px 2px rgba(212, 160, 23, 0.3)" } : undefined}
               />
               <span
                 className={`font-bengali text-xs ${
-                  isActive ? "text-[#D4A017] font-medium" : isCompleted ? "text-primary-600" : "text-slate-400"
+                  isActive ? "text-primary-600 font-medium" : isCompleted ? "text-primary-600" : "text-slate-400"
                 }`}
               >
                 {step.label}
@@ -129,7 +128,7 @@ export default function SetupWizard() {
     <main className="flex min-h-dvh flex-col bg-page-mesh">
       <ProgressTrack currentStep={effectiveStep} completedSteps={effectiveStep} />
 
-      <div className="flex-1 flex items-start justify-center px-4 pt-4 pb-24 overflow-y-auto">
+      <div className="flex-1 flex items-start justify-center px-4 pt-8 pb-24 overflow-y-auto">
         <div
           key={step}
           className="w-full max-w-lg animate-step-slide"
@@ -159,7 +158,7 @@ export default function SetupWizard() {
               onClick={goBack}
               className="flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-primary-600 transition-colors duration-200 min-h-[44px] px-2"
             >
-              <CaretLeft size={18} weight="fill" />
+              <CaretLeft size={18} weight="regular" />
               <span className="font-bengali">পিছনে</span>
             </button>
           ) : (
@@ -170,11 +169,10 @@ export default function SetupWizard() {
             <button
               onClick={handleStart}
               disabled={!hasSelection}
-              className="btn-primary flex-1 max-w-xs rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 py-3.5 text-center font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 min-h-[56px]"
+              className="btn-primary flex-1 max-w-xs rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 py-3.5 text-center font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 min-h-[56px] flex flex-col items-center justify-center"
             >
               <span className="font-bengali">শুরু করুন</span>
-              <span className="text-white/50 mx-2">|</span>
-              <span>Start</span>
+              <span className="text-white/50 text-xs">Start</span>
             </button>
           ) : (
             <button
@@ -183,7 +181,7 @@ export default function SetupWizard() {
               className="btn-primary flex items-center gap-1 rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 min-h-[44px]"
             >
               <span className="font-bengali">পরেরটায় যান</span>
-              <CaretRight size={18} weight="fill" />
+              <CaretRight size={18} weight="regular" />
             </button>
           )}
         </div>

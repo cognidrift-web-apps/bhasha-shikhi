@@ -55,7 +55,7 @@ function ResultsContent() {
   if (error || !scores) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-        <div className="glass-panel rounded-2xl p-8 text-center space-y-4">
+        <div className="glass-panel rounded-3xl p-8 text-center space-y-4">
           <p className="font-bengali text-slate-600">
             {error ?? "স্কোর পাওয়া যায়নি।"}
           </p>
@@ -72,42 +72,42 @@ function ResultsContent() {
 
   return (
     <main className="min-h-screen bg-page-mesh px-4 py-8">
-      <div className="mx-auto max-w-lg space-y-8">
+      <div className="mx-auto max-w-lg space-y-10">
         <Link
           href="/practice"
           className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-primary-600 transition-colors duration-200"
         >
-          <ArrowLeft size={18} weight="fill" />
+          <ArrowLeft size={18} weight="regular" />
           <span className="font-bengali">প্র্যাকটিস পেজে ফিরে যান</span>
         </Link>
 
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#1E1B4B]">Session Report Card</h1>
-          <p className="font-bengali text-primary-500 mt-0.5">সেশন রিপোর্ট কার্ড</p>
+          <h1 className="font-bengali text-2xl font-semibold text-[#1E1B4B] tracking-[-0.03em]">
+            সেশন রিপোর্ট কার্ড
+          </h1>
+          <p className="text-primary-500 mt-1 text-sm tracking-[-0.03em]">Session Report Card</p>
         </div>
 
         <ScoreCard scores={scores} />
 
-        <div className="glass-panel rounded-2xl p-6">
+        <div className="glass-panel rounded-3xl p-8">
           <FeedbackPanel scores={scores} />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
           <button
             onClick={() => router.push("/practice")}
-            className="btn-primary flex-1 rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 py-3 text-center text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 min-h-[52px]"
+            className="btn-primary flex-1 rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 py-3 text-center font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 min-h-[52px] flex flex-col items-center justify-center"
           >
             <span className="font-bengali">আবার প্র্যাকটিস করুন</span>
-            <span className="text-white/50 mx-1.5">|</span>
-            <span>Practice Again</span>
+            <span className="text-white/50 text-xs">Practice Again</span>
           </button>
           <button
             onClick={() => router.push("/practice")}
-            className="flex-1 glass-card glass-card-hover rounded-xl py-3 text-center text-sm font-semibold text-slate-700 transition-all duration-200 min-h-[52px]"
+            className="flex-1 glass-card glass-card-hover rounded-xl py-3 text-center font-medium text-slate-700 transition-all duration-200 min-h-[52px] flex flex-col items-center justify-center"
           >
             <span className="font-bengali">অন্য মোড ট্রাই করুন</span>
-            <span className="text-slate-300 mx-1.5">|</span>
-            <span>Try Different Mode</span>
+            <span className="text-slate-400 text-xs">Try Different Mode</span>
           </button>
         </div>
       </div>

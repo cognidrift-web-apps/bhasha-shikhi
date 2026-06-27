@@ -81,14 +81,14 @@ function CircleProgress({ score }: CircleProgressProps) {
             <stop offset="100%" stopColor="#3B82F6" />
           </linearGradient>
         </defs>
-        <circle cx="80" cy="80" r={radius} fill="none" stroke="#E2E8F0" strokeWidth="10" />
+        <circle cx="80" cy="80" r={radius} fill="none" stroke="#E2E8F0" strokeWidth="7" />
         <circle
           cx="80"
           cy="80"
           r={radius}
           fill="none"
           stroke="url(#scoreGradient)"
-          strokeWidth="10"
+          strokeWidth="7"
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={offset}
@@ -119,7 +119,7 @@ const DIMENSIONS: { key: keyof ScoreResult; labelEn: string; labelBn: string }[]
 
 export function ScoreCard({ scores }: Props) {
   return (
-    <div className="glass-panel rounded-2xl p-6 space-y-6">
+    <div className="glass-panel rounded-3xl p-8 space-y-8">
       <div className="flex justify-center">
         <CircleProgress score={scores.overall} />
       </div>
