@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type AgentState = "idle" | "listening" | "thinking" | "speaking";
 
@@ -171,6 +171,7 @@ const STATE_CONFIG: Record<
   speaking: { hue: 240, rotSpeed: 0.5, opacity: 1.0 },
 };
 
+// #F8F9FC = surface-page token from tailwind.config.ts
 const BG_COLOR: [number, number, number] = [0.973, 0.976, 0.988];
 
 function createShader(
@@ -203,7 +204,7 @@ function FallbackOrb() {
 
 export function VoiceOrb({ state }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const glReadyRef = useRef(false);
+  const [glReady, setGlReady] = useState(false);
   const stateRef = useRef(state);
   stateRef.current = state;
 
@@ -215,6 +216,8 @@ export function VoiceOrb({ state }: Props) {
     canvas.style.width = "100%";
     canvas.style.height = "100%";
     container.appendChild(canvas);
+
+    let rafId = 0; // cancelAnimationFrame(0) is a no-op
 
     // Define cleanup function that always removes canvas and loses GL context
     const cleanup = () => {
@@ -249,8 +252,8 @@ export function VoiceOrb({ state }: Props) {
 
     gl.useProgram(program);
 
-    // Set glReadyRef to true only after program is successfully linked and used
-    glReadyRef.current = true;
+    // Set glReady to true only after program is successfully linked and used
+    setGlReady(true);
 
     const vertices = new Float32Array([-1, -1, 3, -1, -1, 3]);
     const buffer = gl.createBuffer();
@@ -292,7 +295,6 @@ export function VoiceOrb({ state }: Props) {
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
-    let rafId: number;
     const render = (t: number) => {
       rafId = requestAnimationFrame(render);
       const dt = (t - lastTime) * 0.001;
@@ -314,7 +316,7 @@ export function VoiceOrb({ state }: Props) {
         canvas.width / canvas.height
       );
       gl.uniform1f(uniforms.hue, currentHue);
-      gl.uniform1f(uniforms.hover, 0);
+      gl.uniform1f(uniforms.hover, 0); // no hover interaction on mobile voice orb
       gl.uniform1f(uniforms.rot, currentRot);
       gl.uniform1f(uniforms.hoverIntensity, 0.2);
       gl.uniform3f(uniforms.backgroundColor, BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]);
@@ -332,7 +334,7 @@ export function VoiceOrb({ state }: Props) {
         ref={containerRef}
         className="absolute inset-0 rounded-full overflow-hidden"
       />
-      {!glReadyRef.current && <FallbackOrb />}
+      {!glReady && <FallbackOrb />}
     </div>
   );
 }
