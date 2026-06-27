@@ -6,63 +6,71 @@ interface Props {
   state: AgentState;
 }
 
+const ORB_STYLES: Record<AgentState, { gradient: string; glow: string }> = {
+  idle: {
+    gradient: "var(--gradient-orb-idle)",
+    glow: "0 0 40px 10px rgba(229,57,53,0.25)",
+  },
+  listening: {
+    gradient: "var(--gradient-orb-listen)",
+    glow: "0 0 50px 14px rgba(22,163,74,0.3)",
+  },
+  thinking: {
+    gradient: "var(--gradient-orb-idle)",
+    glow: "0 0 30px 8px rgba(229,57,53,0.15)",
+  },
+  speaking: {
+    gradient: "var(--gradient-orb-speak)",
+    glow: "0 0 60px 18px rgba(249,168,37,0.35)",
+  },
+};
+
+const RING_COLORS: Record<string, string> = {
+  listening: "border-green-500/30",
+  speaking: "border-amber-500/30",
+};
+
 export function VoiceOrb({ state }: Props) {
   const isActive = state === "listening" || state === "speaking";
   const isSpeaking = state === "speaking";
+  const style = ORB_STYLES[state];
 
   return (
-    <div className="relative flex items-center justify-center h-[240px] w-[240px] md:h-[280px] md:w-[280px]">
-      {/* Outer ring 1 */}
+    <div className="relative flex items-center justify-center h-[200px] w-[200px] md:h-[240px] md:w-[240px]">
       {isActive && (
         <div
           aria-hidden="true"
-          className={`absolute inset-0 rounded-full border-2 ${
-            isSpeaking
-              ? "border-warm-500/30 animate-ring-expand-fast"
-              : "border-accent-400/30 animate-ring-expand"
+          className={`absolute inset-0 rounded-full border-2 ${RING_COLORS[state]} ${
+            isSpeaking ? "animate-ring-expand-fast" : "animate-ring-expand"
           }`}
         />
       )}
-      {/* Outer ring 2 */}
-      {isActive && (
+      {isSpeaking && (
         <div
           aria-hidden="true"
-          className={`absolute inset-[10px] rounded-full border-2 ${
-            isSpeaking
-              ? "border-warm-500/15 animate-ring-expand-fast"
-              : "border-accent-400/15 animate-ring-expand"
-          }`}
-          style={{ animationDelay: isSpeaking ? "0.3s" : "0.5s" }}
+          className="absolute inset-[10px] rounded-full border-2 border-amber-500/15 animate-ring-expand-fast"
+          style={{ animationDelay: "0.3s" }}
         />
       )}
-      {/* Main orb */}
       <div
-        className={`relative z-10 h-[180px] w-[180px] md:h-[220px] md:w-[220px] rounded-full transition-all duration-500 ${
-          state === "idle" ? "animate-orb-breathe" :
-          state === "listening" ? "animate-orb-pulse" :
-          state === "thinking" ? "animate-orb-breathe opacity-75" :
-          "animate-orb-energetic"
+        className={`relative z-10 h-[160px] w-[160px] md:h-[200px] md:w-[200px] rounded-full transition-all duration-500 ${
+          state === "idle"
+            ? "animate-orb-breathe"
+            : state === "listening"
+            ? "animate-orb-pulse"
+            : state === "thinking"
+            ? "animate-orb-breathe opacity-60"
+            : "animate-orb-energetic"
         }`}
         style={{
-          background:
-            state === "speaking"
-              ? "radial-gradient(circle at 35% 35%, #FBBF24, #F59E0B)"
-              : state === "listening"
-              ? "radial-gradient(circle at 35% 35%, #67E8F9, #06B6D4)"
-              : "radial-gradient(circle at 35% 35%, #A5B4FC, #6366F1)",
-          boxShadow:
-            state === "speaking"
-              ? "0 0 70px 24px rgba(245, 158, 11, 0.45)"
-              : state === "listening"
-              ? "0 0 60px 20px rgba(6, 182, 212, 0.4)"
-              : "0 0 40px 10px rgba(99, 102, 241, 0.3)",
+          background: style.gradient,
+          boxShadow: style.glow,
         }}
       >
-        {/* Inner highlight for 3D depth */}
         <div
-          className="absolute top-[15%] left-[20%] h-[30%] w-[30%] rounded-full opacity-30"
+          className="absolute top-[15%] left-[20%] h-[30%] w-[30%] rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(255,255,255,0.8), transparent)",
+            background: "radial-gradient(circle, rgba(255,255,255,0.6), transparent)",
           }}
         />
       </div>

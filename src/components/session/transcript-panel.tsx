@@ -17,7 +17,7 @@ export function TranscriptPanel({ entries }: Props) {
   if (entries.length === 0) {
     return (
       <div className="flex h-full items-center justify-center px-4">
-        <p className="font-bengali text-center text-white/40 text-sm">
+        <p className="font-bengali text-center text-slate-400 text-sm">
           কথাবার্তা এখানে দেখাবে
         </p>
       </div>
@@ -34,8 +34,8 @@ export function TranscriptPanel({ entries }: Props) {
           <div
             className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
               entry.role === "user"
-                ? "bg-gradient-to-r from-primary-500 to-accent-500 text-white rounded-br-sm"
-                : "bg-white/10 text-white/90 backdrop-blur-sm rounded-bl-sm"
+                ? "bg-primary-600 text-white rounded-br-sm"
+                : "bg-slate-100 text-slate-800 rounded-bl-sm"
             }`}
           >
             {entry.content}
