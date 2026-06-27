@@ -7,7 +7,7 @@ import { insertTranscript, updateSessionUserName } from "./supabase.js";
 const PORT = parseInt(process.env.PORT || "8081", 10);
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "http://localhost:3000").split(",");
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-preview-native-audio-dialog";
+const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.1-flash-live-preview";
 const GEMINI_VOICE = process.env.GEMINI_VOICE || "Kore";
 
 // Tutor prompts are duplicated here to keep the relay self-contained.

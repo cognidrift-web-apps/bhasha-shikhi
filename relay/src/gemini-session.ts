@@ -61,9 +61,9 @@ export class GeminiLiveSession {
               },
             },
           },
-          inputAudioTranscription: {},
-          outputAudioTranscription: {},
         },
+        inputAudioTranscription: {},
+        outputAudioTranscription: {},
         systemInstruction: {
           parts: [{ text: this.config.systemPrompt }],
         },
