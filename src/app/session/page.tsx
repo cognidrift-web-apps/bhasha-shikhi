@@ -89,7 +89,7 @@ function SessionContent() {
 
   if (sessionStatus === "ending") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-surface-page">
+      <main className="flex min-h-screen items-center justify-center bg-page-mesh">
         <p className="font-bengali text-slate-500">সেশন শেষ হচ্ছে...</p>
       </main>
     );
@@ -97,14 +97,14 @@ function SessionContent() {
 
   if (sessionStatus === "error") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-surface-page px-4">
-        <div className="text-center">
+      <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
+        <div className="rounded-2xl bg-white/70 backdrop-blur-xl border border-white/20 shadow-lg shadow-blue-500/[0.03] p-8 text-center">
           <p className="font-bengali text-slate-600 mb-4">
             কানেকশনে প্রবলেম হয়েছে
           </p>
           <button
             onClick={() => router.push("/practice")}
-            className="rounded-full bg-primary-600 px-6 py-2.5 min-h-[44px] text-sm font-medium text-white hover:-translate-y-0.5 active:scale-[0.98] transition-all"
+            className="btn-primary rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 min-h-[44px] text-sm font-medium text-white hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
           >
             <span className="font-bengali">আবার ট্রাই করো</span>
           </button>
@@ -114,8 +114,8 @@ function SessionContent() {
   }
 
   return (
-    <main className="flex min-h-dvh flex-col bg-surface-page">
-      <header className="flex items-center justify-between bg-white border-b border-surface-border px-4 py-3 shrink-0">
+    <main className="flex min-h-dvh flex-col bg-page-mesh">
+      <header className="flex items-center justify-between bg-white/60 backdrop-blur-xl border-b border-white/20 px-4 py-3 shrink-0">
         <span className="font-bengali text-sm text-slate-600">
           {modeInfo?.namebn ?? config.mode}
         </span>
@@ -125,28 +125,25 @@ function SessionContent() {
         {startTime > 0 && <SessionTimer startTime={startTime} />}
       </header>
 
-      <div className="flex flex-col items-center gap-4 py-8 shrink-0">
+      <div className="flex flex-col items-center gap-4 py-10 shrink-0">
         <VoiceOrb state={agentState as "idle" | "listening" | "thinking" | "speaking"} />
         <p
-          className={`font-bengali text-base font-medium ${stateInfo.color}`}
+          className={`font-bengali text-base font-medium transition-colors duration-500 ${stateInfo.color}`}
           style={{ textShadow: STATE_GLOWS[agentState] ?? "none" }}
         >
           {stateInfo.text}
         </p>
       </div>
 
-      <div
-        className="flex-1 overflow-y-auto min-h-0 bg-white rounded-t-2xl"
-        style={{ boxShadow: "var(--shadow-card)" }}
-      >
+      <div className="flex-1 overflow-y-auto min-h-0 bg-white/70 backdrop-blur-xl rounded-t-3xl border-t border-white/30">
         <TranscriptPanel entries={transcripts} />
       </div>
 
-      <footer className="shrink-0 flex justify-center py-4 bg-surface-page">
+      <footer className="shrink-0 flex justify-center py-4 bg-page-mesh">
         <button
           onClick={() => void handleEnd()}
           disabled={sessionStatus === "connecting"}
-          className="rounded-full bg-red-500 hover:bg-red-600 px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white transition-colors active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-danger rounded-2xl bg-gradient-to-b from-red-400 to-red-500 px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <span className="font-bengali">সেশন শেষ করো</span>
         </button>
@@ -159,7 +156,7 @@ export default function SessionPage() {
   return (
     <Suspense
       fallback={
-        <main className="flex min-h-screen items-center justify-center bg-surface-page">
+        <main className="flex min-h-screen items-center justify-center bg-page-mesh">
           <p className="font-bengali text-slate-500">লোড হচ্ছে...</p>
         </main>
       }
