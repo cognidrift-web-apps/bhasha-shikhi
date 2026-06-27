@@ -216,25 +216,41 @@ export function VoiceOrb({ state }: Props) {
     canvas.style.height = "100%";
     container.appendChild(canvas);
 
+    // Define cleanup function that always removes canvas and loses GL context
+    const cleanup = () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", resize);
+      container.removeChild(canvas);
+      const ext = gl?.getExtension("WEBGL_lose_context");
+      if (ext) ext.loseContext();
+    };
+
     const gl = canvas.getContext("webgl", {
       alpha: true,
       premultipliedAlpha: false,
     });
-    if (!gl) return;
+    if (!gl) return cleanup;
 
-    glReadyRef.current = true;
     gl.clearColor(0, 0, 0, 0);
 
     const vs = createShader(gl, gl.VERTEX_SHADER, VERT);
     const fs = createShader(gl, gl.FRAGMENT_SHADER, FRAG);
-    if (!vs || !fs) return;
+    if (!vs || !fs) return cleanup;
 
     const program = gl.createProgram();
-    if (!program) return;
+    if (!program) return cleanup;
     gl.attachShader(program, vs);
     gl.attachShader(program, fs);
     gl.linkProgram(program);
+
+    // Check link status before using program
+    const linkStatus = gl.getProgramParameter(program, gl.LINK_STATUS);
+    if (!linkStatus) return cleanup;
+
     gl.useProgram(program);
+
+    // Set glReadyRef to true only after program is successfully linked and used
+    glReadyRef.current = true;
 
     const vertices = new Float32Array([-1, -1, 3, -1, -1, 3]);
     const buffer = gl.createBuffer();
@@ -290,29 +306,24 @@ export function VoiceOrb({ state }: Props) {
 
       container.style.opacity = String(currentOpacity);
 
-      gl!.uniform1f(uniforms.iTime, t * 0.001);
-      gl!.uniform3f(
+      gl.uniform1f(uniforms.iTime, t * 0.001);
+      gl.uniform3f(
         uniforms.iResolution,
         canvas.width,
         canvas.height,
         canvas.width / canvas.height
       );
-      gl!.uniform1f(uniforms.hue, currentHue);
-      gl!.uniform1f(uniforms.hover, 0);
-      gl!.uniform1f(uniforms.rot, currentRot);
-      gl!.uniform1f(uniforms.hoverIntensity, 0.2);
-      gl!.uniform3f(uniforms.backgroundColor, BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]);
+      gl.uniform1f(uniforms.hue, currentHue);
+      gl.uniform1f(uniforms.hover, 0);
+      gl.uniform1f(uniforms.rot, currentRot);
+      gl.uniform1f(uniforms.hoverIntensity, 0.2);
+      gl.uniform3f(uniforms.backgroundColor, BG_COLOR[0], BG_COLOR[1], BG_COLOR[2]);
 
-      gl!.drawArrays(gl!.TRIANGLES, 0, 3);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
     rafId = requestAnimationFrame(render);
 
-    return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", resize);
-      container.removeChild(canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
-    };
+    return cleanup;
   }, []);
 
   return (
