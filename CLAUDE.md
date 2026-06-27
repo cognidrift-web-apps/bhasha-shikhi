@@ -73,7 +73,7 @@ Copy `.env.local.example` to `.env.local` and `relay/.env.example` to `relay/.en
 | Variable | Description |
 |----------|-------------|
 | `GEMINI_API_KEY` | Google Gemini API key |
-| `GEMINI_MODEL` | Model ID (gemini-2.5-flash-preview-native-audio-dialog) |
+| `GEMINI_MODEL` | Model ID (gemini-3.1-flash-live-preview) |
 | `GEMINI_VOICE` | Voice name (Kore) |
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
@@ -97,14 +97,20 @@ npm test           # 255 tests across tutor prompts + scoring
 npm run test:watch # Watch mode
 ```
 
+## Design System
+
+- **Colors**: primary (indigo), accent (cyan), warm (amber), surface (stone)
+- **Fonts**: Inter (English), Noto Sans Bengali (Bengali), JetBrains Mono (mono)
+- **Session page**: Dark immersive theme (only dark page in the app)
+- **All other pages**: Light surface-50 background
+
 ## CI/CD
 
-GitHub Actions (`.github/workflows/ci.yml`) runs on push/PR:
+GitHub Actions (`.github/workflows/ci.yml`) runs on push to `feat/v2-rebuild`:
 - Test (255 tests)
 - Next.js build
 - Relay build
-
-Vercel deploy is manual (`vercel deploy --prod`) since GitHub integration requires Pro plan for org repos.
+- Auto-deploy to Vercel (requires `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` GitHub secrets)
 
 ## Documentation
 

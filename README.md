@@ -28,11 +28,11 @@ BhashaShikhi ("Learn Language" in Bangla) pairs Bengali speakers with a conversa
 |------|--------|-------------|
 | Word by Word | একটা একটা শব্দ | Learn one word at a time with meaning, pronunciation, usage |
 | Free Conversation | আড্ডা | Open conversation on any topic |
-| Situation Roleplay | পরিস্থিতি | Practice real scenarios: interviews, doctors, airports |
-| Pronunciation Clinic | উচ্চারণ ঠিক করি | Fix sounds Bengali speakers struggle with |
-| Grammar in Conversation | কথায় কথায় গ্রামার | Learn grammar through speaking, not rules |
-| Listening Challenge | শুনে বুঝি | Listen to passages and answer questions |
-| Live Translation | লাইভ অনুবাদ | Speak any language, get instant translation |
+| Situation Roleplay | সিচুয়েশন প্র্যাকটিস | Practice real scenarios: interviews, doctors, airports |
+| Pronunciation Clinic | উচ্চারণ ফিক্স | Fix sounds Bengali speakers struggle with |
+| Grammar in Conversation | গ্রামার ইন কথাবার্তা | Learn grammar through speaking, not rules |
+| Listening Challenge | লিসেনিং চ্যালেঞ্জ | Listen to passages and answer questions |
+| Live Translation | লাইভ ট্রান্সলেশন | Speak any language, get instant translation |
 
 ### 4 Target Languages
 
@@ -133,9 +133,9 @@ See [docs/architecture.md](docs/architecture.md) for detailed diagrams.
 | Database | Supabase PostgreSQL with RLS |
 | Storage | Supabase Storage (private bucket for audio recordings) |
 | Auth (Admin) | bcryptjs, HTTP-only cookies |
-| AI Model | Gemini 2.5 Flash Preview (native audio dialog) |
+| AI Model | Gemini 3.1 Flash Live Preview |
 | Testing | Vitest (255 tests) |
-| CI/CD | GitHub Actions (test + build + relay build on push/PR) |
+| CI/CD | GitHub Actions (test + build + relay build + auto-deploy to Vercel on push) |
 | Deployment | Vercel (frontend), Railway (relay), Supabase (database) |
 
 ## Getting Started (Local Development)
@@ -260,11 +260,10 @@ Features:
 **v0.1 -- Demo Build**
 
 This is a demo deployment. To move to production:
-1. Upgrade Vercel to Pro (enables GitHub integration for org repos)
-2. Add custom domain
-3. Add Azure Speech keys for Path B (Microsoft voice)
-4. Set up monitoring and alerting
-5. Review and tighten RLS policies for production traffic
+1. Add custom domain on Vercel
+2. Add Azure Speech keys for Path B (Microsoft voice)
+3. Set up monitoring and alerting
+4. Review and tighten RLS policies for production traffic
 
 ## License
 
