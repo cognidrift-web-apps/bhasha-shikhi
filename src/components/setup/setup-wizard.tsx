@@ -152,14 +152,14 @@ export default function SetupWizard() {
         </div>
       </div>
 
-      <footer className="fixed bottom-0 inset-x-0 bg-white/40 backdrop-blur-xl border-t border-white/40 px-4 py-4">
+      <footer className="fixed bottom-0 inset-x-0 glass-bar border-t border-white/45 px-4 py-4">
         <div className="mx-auto max-w-lg flex items-center justify-between gap-3">
           {step > 0 ? (
             <button
               onClick={goBack}
-              className="flex items-center gap-1 text-sm text-slate-500 hover:text-slate-700 transition-colors duration-300 min-h-[44px] px-2"
+              className="flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-primary-600 transition-colors duration-200 min-h-[44px] px-2"
             >
-              <CaretLeft size={18} weight="duotone" />
+              <CaretLeft size={18} weight="fill" />
               <span className="font-bengali">পিছনে</span>
             </button>
           ) : (
@@ -170,9 +170,9 @@ export default function SetupWizard() {
             <button
               onClick={handleStart}
               disabled={!hasSelection}
-              className="btn-primary flex-1 max-w-xs rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 py-3.5 text-center font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 min-h-[56px]"
+              className="btn-primary flex-1 max-w-xs rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 py-3.5 text-center font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 min-h-[56px]"
             >
-              <span className="font-bengali">শুরু করো</span>
+              <span className="font-bengali">শুরু করুন</span>
               <span className="text-white/50 mx-2">|</span>
               <span>Start</span>
             </button>
@@ -180,10 +180,10 @@ export default function SetupWizard() {
             <button
               onClick={goNext}
               disabled={!hasSelection}
-              className="btn-primary flex items-center gap-1 rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] disabled:opacity-50 disabled:hover:translate-y-0 min-h-[44px]"
+              className="btn-primary flex items-center gap-1 rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:hover:translate-y-0 min-h-[44px]"
             >
-              <span className="font-bengali">পরেরটা</span>
-              <CaretRight size={18} weight="duotone" />
+              <span className="font-bengali">পরেরটায় যান</span>
+              <CaretRight size={18} weight="fill" />
             </button>
           )}
         </div>

@@ -119,7 +119,7 @@ const DIMENSIONS: { key: keyof ScoreResult; labelEn: string; labelBn: string }[]
 
 export function ScoreCard({ scores }: Props) {
   return (
-    <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/40 shadow-lg shadow-indigo-500/10 p-6 space-y-6">
+    <div className="glass-panel rounded-2xl p-6 space-y-6">
       <div className="flex justify-center">
         <CircleProgress score={scores.overall} />
       </div>

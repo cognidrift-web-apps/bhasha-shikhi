@@ -11,7 +11,7 @@ export const MODES = [
     name: "Word by Word",
     namebn: "একটা একটা শব্দ",
     description: "Learn one word at a time with meaning, pronunciation, and usage",
-    descriptionbn: "একটা একটা করে শব্দ শিখো -- মানে, উচ্চারণ আর ব্যবহার সহ",
+    descriptionbn: "একটা একটা করে শব্দ শিখুন -- মানে, উচ্চারণ আর ব্যবহার সহ",
     duration: "3-5 min",
   },
   {
@@ -19,7 +19,7 @@ export const MODES = [
     name: "Free Conversation",
     namebn: "আড্ডা",
     description: "Have a real conversation with your tutor on any topic",
-    descriptionbn: "যেকোনো টপিকে তোমার টিউটরের সাথে আড্ডা দাও",
+    descriptionbn: "যেকোনো টপিকে আপনার টিউটরের সাথে আড্ডা দিন",
     duration: "5-10 min",
   },
   {
@@ -27,7 +27,7 @@ export const MODES = [
     name: "Situation Roleplay",
     namebn: "সিচুয়েশন প্র্যাকটিস",
     description: "Practice real scenarios: job interview, doctor visit, airport, shopping",
-    descriptionbn: "রিয়েল লাইফ সিচুয়েশন প্র্যাকটিস করো -- ইন্টারভিউ, ডাক্তার, এয়ারপোর্ট",
+    descriptionbn: "রিয়েল লাইফ সিচুয়েশন প্র্যাকটিস করুন -- ইন্টারভিউ, ডাক্তার, এয়ারপোর্ট",
     duration: "5-7 min",
   },
   {
@@ -35,7 +35,7 @@ export const MODES = [
     name: "Pronunciation Clinic",
     namebn: "উচ্চারণ ফিক্স",
     description: "Fix the sounds Bengali speakers struggle with most",
-    descriptionbn: "যে সাউন্ডগুলো বাঙালিদের কঠিন লাগে, সেগুলো ঠিক করো",
+    descriptionbn: "যে সাউন্ডগুলো বাঙালিদের কঠিন লাগে, সেগুলো ঠিক করুন",
     duration: "5-7 min",
   },
   {
@@ -43,7 +43,7 @@ export const MODES = [
     name: "Grammar in Conversation",
     namebn: "গ্রামার ইন কথাবার্তা",
     description: "Learn grammar naturally through speaking, not rules",
-    descriptionbn: "কথা বলতে বলতে গ্রামার শিখো, রুল মুখস্থ না করে",
+    descriptionbn: "কথা বলতে বলতে গ্রামার শিখুন, রুল মুখস্থ না করে",
     duration: "5-7 min",
   },
   {
@@ -51,7 +51,7 @@ export const MODES = [
     name: "Listening Challenge",
     namebn: "লিসেনিং চ্যালেঞ্জ",
     description: "Listen to a passage and answer comprehension questions",
-    descriptionbn: "কিছু শোনো আর প্রশ্নের উত্তর দাও",
+    descriptionbn: "কিছু শুনুন আর প্রশ্নের উত্তর দিন",
     duration: "5-7 min",
   },
   {
@@ -59,7 +59,7 @@ export const MODES = [
     name: "Live Translation",
     namebn: "লাইভ ট্রান্সলেশন",
     description: "Speak in any language, get instant voice translation to any other language",
-    descriptionbn: "যেকোনো ভাষায় বলো, সাথে সাথে অন্য ভাষায় ট্রান্সলেশন পাও",
+    descriptionbn: "যেকোনো ভাষায় বলুন, সাথে সাথে অন্য ভাষায় ট্রান্সলেশন পান",
     duration: "Unlimited",
     isUtility: true,
   },

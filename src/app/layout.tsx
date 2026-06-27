@@ -30,7 +30,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-surface-page text-stone-900 antialiased font-sans">
+      <body className="bg-surface-page text-[#1E1B4B] antialiased font-sans">
         {children}
       </body>
     </html>

@@ -35,7 +35,7 @@ export function TranscriptPanel({ entries }: Props) {
             className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
               entry.role === "user"
                 ? "bg-primary-600 text-white rounded-br-sm"
-                : "bg-white/50 backdrop-blur-sm text-slate-800 border border-white/40 rounded-bl-sm"
+                : "glass-card text-slate-800 rounded-bl-sm"
             }`}
           >
             {entry.content}

@@ -171,7 +171,7 @@ const STATE_CONFIG: Record<
   speaking: { hue: 240, rotSpeed: 0.5, opacity: 1.0 },
 };
 
-const BG_COLOR: [number, number, number] = [0.933, 0.941, 0.973];
+const BG_COLOR: [number, number, number] = [0.910, 0.922, 0.965];
 
 function createShader(
   gl: WebGLRenderingContext,

@@ -14,7 +14,7 @@ function XpBadge({ xp }: { xp: number }) {
       <span className="font-mono text-xl font-bold text-primary-600 tabular-nums">
         +{xp} XP
       </span>
-      <span className="font-bengali text-sm text-primary-500">পেয়েছো</span>
+      <span className="font-bengali text-sm text-primary-500">পেয়েছেন</span>
     </div>
   );
 }
@@ -24,7 +24,7 @@ function BanglaFallbackBadge({ count }: { count: number }) {
 
   return (
     <p className="font-bengali text-sm text-amber-600">
-      {toBengaliNumerals(count)} বার বাংলায় চলে গেছো
+      {toBengaliNumerals(count)} বার বাংলায় চলে গেছেন
     </p>
   );
 }
@@ -46,9 +46,9 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.strengths.length > 0 && (
-        <div className="rounded-xl border-l-[3px] border-emerald-500 bg-white/50 backdrop-blur-sm pl-4 pr-3 py-3">
+        <div className="rounded-xl border-l-[3px] border-emerald-500 glass-card pl-4 pr-3 py-3">
           <h3 className="text-sm font-semibold text-emerald-700 mb-3">
-            <span className="font-bengali">ভালো করেছো</span>
+            <span className="font-bengali">ভালো করেছেন</span>
             <span className="text-emerald-500 ml-1.5">(Strengths)</span>
           </h3>
           <ul className="space-y-2">
@@ -63,9 +63,9 @@ export function FeedbackPanel({ scores }: Props) {
       )}
 
       {scores.improvements.length > 0 && (
-        <div className="rounded-xl border-l-[3px] border-amber-500 bg-white/50 backdrop-blur-sm pl-4 pr-3 py-3">
+        <div className="rounded-xl border-l-[3px] border-amber-500 glass-card pl-4 pr-3 py-3">
           <h3 className="text-sm font-semibold text-amber-700 mb-3">
-            <span className="font-bengali">আরো ভালো করতে পারো</span>
+            <span className="font-bengali">আরো ভালো করতে পারেন</span>
             <span className="text-amber-500 ml-1.5">(To Improve)</span>
           </h3>
           <ul className="space-y-2">

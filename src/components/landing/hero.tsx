@@ -38,7 +38,7 @@ export function Hero() {
             <h1 className="font-bengali text-3xl md:text-5xl font-bold text-white leading-tight">
               কথা বলে
               <br />
-              ভাষা শিখো
+              ভাষা শিখুন
             </h1>
             <p className="text-lg md:text-xl text-primary-200 max-w-lg mx-auto leading-relaxed">
               Learn Languages by Actually Talking
@@ -50,9 +50,9 @@ export function Hero() {
           </div>
           <Link
             href="/practice"
-            className="btn-primary inline-flex items-center gap-2 rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 px-8 py-4 text-lg font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.98] min-h-[44px]"
+            className="btn-primary inline-flex items-center gap-2 rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 px-8 py-4 text-lg font-semibold text-white transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 min-h-[44px]"
           >
-            <span className="font-bengali">শুরু করো</span>
+            <span className="font-bengali">শুরু করুন</span>
             <span className="text-white/50">|</span>
             <span>Start Now</span>
           </Link>

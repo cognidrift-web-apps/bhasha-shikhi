@@ -98,15 +98,15 @@ function SessionContent() {
   if (sessionStatus === "error") {
     return (
       <main className="flex min-h-screen items-center justify-center bg-page-mesh px-4">
-        <div className="rounded-2xl bg-white/50 backdrop-blur-xl border border-white/40 shadow-lg shadow-indigo-500/10 p-8 text-center">
+        <div className="glass-panel rounded-2xl p-8 text-center">
           <p className="font-bengali text-slate-600 mb-4">
-            কানেকশনে প্রবলেম হয়েছে
+            কানেকশনে সমস্যা হয়েছে
           </p>
           <button
             onClick={() => router.push("/practice")}
-            className="btn-primary rounded-2xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 min-h-[44px] text-sm font-medium text-white hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+            className="btn-primary rounded-xl bg-gradient-to-b from-primary-500 to-primary-600 px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
           >
-            <span className="font-bengali">আবার ট্রাই করো</span>
+            <span className="font-bengali">আবার ট্রাই করুন</span>
           </button>
         </div>
       </main>
@@ -115,7 +115,7 @@ function SessionContent() {
 
   return (
     <main className="flex min-h-dvh flex-col bg-page-mesh">
-      <header className="flex items-center justify-between bg-white/40 backdrop-blur-xl border-b border-white/40 px-4 py-3 shrink-0">
+      <header className="flex items-center justify-between glass-bar border-b border-white/45 px-4 py-3 shrink-0">
         <span className="font-bengali text-sm text-slate-600">
           {modeInfo?.namebn ?? config.mode}
         </span>
@@ -135,7 +135,7 @@ function SessionContent() {
         </p>
       </div>
 
-      <div className="flex-1 overflow-y-auto min-h-0 bg-white/50 backdrop-blur-xl rounded-t-3xl border-t border-white/40">
+      <div className="flex-1 overflow-y-auto min-h-0 glass-panel rounded-t-3xl !rounded-b-none">
         <TranscriptPanel entries={transcripts} />
       </div>
 
@@ -143,9 +143,9 @@ function SessionContent() {
         <button
           onClick={() => void handleEnd()}
           disabled={sessionStatus === "connecting"}
-          className="btn-danger rounded-2xl bg-gradient-to-b from-red-400 to-red-500 px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-danger rounded-xl bg-gradient-to-b from-red-500 to-red-600 px-6 py-2.5 min-h-[44px] text-sm font-semibold text-white transition-all duration-200 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="font-bengali">সেশন শেষ করো</span>
+          <span className="font-bengali">সেশন শেষ করুন</span>
         </button>
       </footer>
     </main>

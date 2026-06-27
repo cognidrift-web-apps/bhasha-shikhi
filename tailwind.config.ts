@@ -19,7 +19,7 @@ const config: Config = {
           950: "#0F172A",
         },
         surface: {
-          page: "#EEF0F8",
+          page: "#E8EBF6",
           card: "#FFFFFF",
           border: "#E2E8F0",
           divider: "#F1F5F9",
