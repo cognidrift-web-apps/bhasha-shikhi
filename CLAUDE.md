@@ -25,7 +25,7 @@ Two voice pipelines:
 | Supabase | -- | bhasha-shikhi-demo-v01 | ref: hstqzvhawnokvethhdla |
 | GitHub | cognidrift-web-apps | bhasha-shikhi | branch: feat/v2-rebuild |
 
-Admin panel: `/panel/bhasha-panel-x7k9m2`
+Admin panel: `/panel/<ADMIN_ROUTE_SLUG>` (slug is in env vars, not committed)
 
 ## Running Locally
 
@@ -73,7 +73,7 @@ Copy `.env.local.example` to `.env.local` and `relay/.env.example` to `relay/.en
 | Variable | Description |
 |----------|-------------|
 | `GEMINI_API_KEY` | Google Gemini API key |
-| `GEMINI_MODEL` | Model ID (gemini-3.1-flash-live-preview) |
+| `GEMINI_MODEL` | Model ID (gemini-3.1-flash-live) |
 | `GEMINI_VOICE` | Voice name (Kore) |
 | `SUPABASE_URL` | Supabase project URL |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |

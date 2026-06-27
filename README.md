@@ -88,7 +88,7 @@ See [docs/architecture.md](docs/architecture.md) for detailed diagrams.
 | What | URL |
 |------|-----|
 | Live App | https://bhasha-shikhi-demo.vercel.app |
-| Admin Panel | https://bhasha-shikhi-demo.vercel.app/panel/bhasha-panel-x7k9m2 |
+| Admin Panel | `https://bhasha-shikhi-demo.vercel.app/panel/<ADMIN_ROUTE_SLUG>` |
 | Relay Health | https://bhasha-shikhi-relay-demo-production.up.railway.app/health |
 | Supabase Dashboard | https://supabase.com/dashboard/project/hstqzvhawnokvethhdla |
 | Vercel Dashboard | https://vercel.com/ratulalahy/bhasha-shikhi-demo |
@@ -238,7 +238,7 @@ bhasha-shikhi/
 
 ## Admin Panel
 
-Access at: https://bhasha-shikhi-demo.vercel.app/panel/bhasha-panel-x7k9m2
+Access at: `https://bhasha-shikhi-demo.vercel.app/panel/<ADMIN_ROUTE_SLUG>`
 
 Features:
 - Total session count, today/this week stats
