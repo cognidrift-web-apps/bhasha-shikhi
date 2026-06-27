@@ -2,9 +2,11 @@
 
 > Replace the CSS-only voice orb with a WebGL shader-based fluid animated orb matching the cognidrift.com orb style.
 
-**Goal:** Make BhashaShikhi's voice orb visually identical in style to the cognidrift orb -- a fluid, organic, noise-distorted animated blob rendered via WebGL fragment shader with blue-purple palette.
+**Goal:** Make BhashaShikhi's voice orb visually identical to the cognidrift orb -- a fluid, organic, noise-distorted animated blob rendered via WebGL fragment shader with blue-purple palette.
 
-**Architecture:** Single React component (`voice-orb.tsx`) containing a WebGL canvas, GLSL shaders (vertex + fragment), a `requestAnimationFrame` render loop, and a CSS fallback. No external libraries. State changes drive shader uniforms via smooth interpolation.
+**Architecture:** Single React component (`voice-orb.tsx`) containing a WebGL canvas, GLSL shaders (vertex + fragment), a `requestAnimationFrame` render loop, and a CSS fallback. No external libraries. State changes drive the `hue` uniform via smooth interpolation.
+
+**Source reference:** The exact shader and WebGL setup come from `cognidrift_website/frontend/src/components/ui/Orb.jsx`. This spec ports that JSX component to TypeScript for BhashaShikhi's React 19 / Next.js 15 codebase.
 
 **Tech Stack:** WebGL 1.0 (browser-native), GLSL ES 1.0, React 19 refs
 
@@ -36,34 +38,24 @@ Same interface as current. No breaking changes to consumers.
 
 ### Internal Structure
 
-```
+```tsx
 <div className="relative flex items-center justify-center h-[200px] w-[200px] md:h-[240px] md:w-[240px]">
-  <canvas ref={canvasRef} className="absolute inset-0 w-full h-full rounded-full" />
-  {/* CSS fallback shown only if WebGL init fails */}
-  {!glReady && <div className="fallback css circle" />}
+  <div ref={containerRef} className="absolute inset-0 rounded-full overflow-hidden" />
+  {!glReady && <FallbackOrb />}
 </div>
 ```
 
-- Canvas fills the container div. `rounded-full` clips it to a circle.
-- Canvas internal resolution: 2x container size for retina (400x400 on desktop, 320x320 on mobile).
-- No icon overlay on top of the canvas (unlike cognidrift which has a mic icon -- BhashaShikhi shows the state label text below the orb instead).
+- Container div holds the WebGL canvas (created dynamically in useEffect, same pattern as cognidrift Orb.jsx).
+- `rounded-full overflow-hidden` clips the square canvas to a circle.
+- Canvas is created via `document.createElement('canvas')` and appended to the container (not a JSX element) -- matches cognidrift's approach for clean WebGL lifecycle management.
+- Canvas internal resolution: `clientWidth * devicePixelRatio` x `clientHeight * devicePixelRatio` for retina.
 
-### WebGL Setup (runs once in useEffect on mount)
+### Shaders (ported verbatim from cognidrift Orb.jsx)
 
-1. Get WebGL context from canvas (`canvas.getContext("webgl")`)
-2. If null, set `glReady = false` and show CSS fallback
-3. Compile vertex shader (fullscreen quad)
-4. Compile fragment shader (noise-based fluid blob)
-5. Link program
-6. Create fullscreen quad geometry (2 triangles covering clip space)
-7. Get uniform locations for all 6 uniforms
-8. Start rAF loop
-
-### Vertex Shader
-
-Trivial fullscreen quad. Passes UV coordinates to fragment shader.
+**Vertex shader:**
 
 ```glsl
+precision highp float;
 attribute vec2 position;
 varying vec2 vUv;
 void main() {
@@ -72,162 +64,102 @@ void main() {
 }
 ```
 
-### Fragment Shader
+**Fragment shader:**
 
-Noise-based SDF circle with animated distortion. Key elements:
+The exact cognidrift fragment shader. Key elements:
+- **YIQ color space rotation** via `rgb2yiq`/`yiq2rgb`/`adjustHue` for hue shifting
+- **3D simplex noise** (`snoise3` with `hash33`) for organic boundary distortion
+- **Light attenuation functions** (`light1`, `light2`) for ring glow
+- **Three base colors** shifted by hue uniform:
+  - `baseColor1`: `vec3(0.611765, 0.262745, 0.996078)` -- purple
+  - `baseColor2`: `vec3(0.298039, 0.760784, 0.913725)` -- cyan
+  - `baseColor3`: `vec3(0.062745, 0.078431, 0.600000)` -- deep blue
+- **Inner radius**: 0.6 with noise scale 0.65
+- **Rotation** via `rot` uniform
+- **Hover distortion** via `hover` and `hoverIntensity` uniforms
+- **Background-adaptive blending** via `backgroundColor` uniform (uses luminance to blend between dark/light rendering paths)
 
-1. **2D simplex noise** -- distorts the circle boundary for organic feel
-2. **Conic gradient** -- rotates around the ring for the gradient sweep effect
-3. **Ring SDF** -- renders a hollow ring (not a filled circle) with soft edges
-4. **Inner glow** -- lighter fill inside the ring, semi-transparent
-5. **Outer blur** -- soft falloff outside the ring edge
-6. **HSL color** -- uses `hue` uniform to shift palette per state
+**Uniforms:**
 
-```glsl
-precision mediump float;
+| Uniform | Type | Purpose |
+|---------|------|---------|
+| `iTime` | float | `performance.now() * 0.001` -- drives all animation |
+| `iResolution` | vec3 | `(canvas.width, canvas.height, aspect)` |
+| `hue` | float | Hue rotation in degrees. State-dependent. |
+| `hover` | float | 0-1, lerped. Always 0 for BhashaShikhi (no mouse hover on mobile voice orb). |
+| `rot` | float | Accumulated rotation angle. Increments each frame. |
+| `hoverIntensity` | float | Distortion strength. Fixed at 0.2. |
+| `backgroundColor` | vec3 | RGB of the page background. `#F8F9FC` = `(0.973, 0.976, 0.988)`. |
 
-uniform float iTime;
-uniform vec3 iResolution;
-uniform float hue;
-uniform float speed;
-uniform float intensity;
-uniform float opacity;
-varying vec2 vUv;
+### State Mapping
 
-// Simplex noise helpers
-vec3 mod289(vec3 x) { return x - floor(x / 289.0) * 289.0; }
-vec2 mod289(vec2 x) { return x - floor(x / 289.0) * 289.0; }
-vec3 permute(vec3 x) { return mod289((x * 34.0 + 1.0) * x); }
+Cognidrift uses `hue=0` for idle and `hue=240` for connected. BhashaShikhi maps 4 states:
 
-float snoise(vec2 v) {
-  const vec4 C = vec4(0.211324865405187, 0.366025403784439,
-                      -0.577350269189626, 0.024390243902439);
-  vec2 i = floor(v + dot(v, C.yy));
-  vec2 x0 = v - i + dot(i, C.xx);
-  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-  vec4 x12 = x0.xyxy + C.xxzz;
-  x12.xy -= i1;
-  i = mod289(i);
-  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-  m = m * m;
-  m = m * m;
-  vec3 x = 2.0 * fract(p * C.www) - 1.0;
-  vec3 h = abs(x) - 0.5;
-  vec3 ox = floor(x + 0.5);
-  vec3 a0 = x - ox;
-  m *= 1.79284291400159 - 0.85373472095314 * (a0*a0 + h*h);
-  vec3 g;
-  g.x = a0.x * x0.x + h.x * x0.y;
-  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-  return 130.0 * dot(m, g);
-}
+| State | hue | rot speed | opacity | Visual |
+|-------|-----|-----------|---------|--------|
+| idle | 0 | 0.0 (no rotation) | 1.0 | Default purple-cyan, still |
+| listening | 120 | 0.3 | 1.0 | Green-shifted, slowly rotating |
+| thinking | 0 | 0.0 | 0.6 | Same as idle, dimmed |
+| speaking | 240 | 0.5 | 1.0 | Blue-shifted, rotating faster |
 
-vec3 hsl2rgb(float h, float s, float l) {
-  vec3 rgb = clamp(abs(mod(h * 6.0 + vec3(0.0, 4.0, 2.0), 6.0) - 3.0) - 1.0, 0.0, 1.0);
-  return l + s * (rgb - 0.5) * (1.0 - abs(2.0 * l - 1.0));
-}
+The `hue` values are in degrees (matching cognidrift's `adjustHue` which takes degrees). Rotation accumulates: `currentRot += dt * rotSpeed`.
 
-void main() {
-  vec2 uv = vUv - 0.5;
-  float aspect = iResolution.x / iResolution.y;
-  uv.x *= aspect;
-
-  float dist = length(uv);
-  float angle = atan(uv.y, uv.x);
-
-  float t = iTime * speed;
-
-  // Noise-based distortion on the ring boundary
-  float noise1 = snoise(vec2(angle * 2.0, t * 0.5)) * intensity * 0.08;
-  float noise2 = snoise(vec2(angle * 3.0 + 100.0, t * 0.3)) * intensity * 0.04;
-  float distortion = noise1 + noise2;
-
-  // Ring parameters
-  float ringRadius = 0.38 + distortion;
-  float ringWidth = 0.06;
-  float ringDist = abs(dist - ringRadius);
-  float ring = smoothstep(ringWidth, 0.0, ringDist);
-
-  // Rotating conic gradient on the ring
-  float rotAngle = angle + t * 0.4;
-  float gradientT = (sin(rotAngle) * 0.5 + 0.5);
-
-  // Color: shift between two hues along the ring
-  float h1 = hue;
-  float h2 = hue + 0.12;
-  vec3 ringColor = hsl2rgb(mix(h1, h2, gradientT), 0.7, 0.55);
-
-  // Inner glow (lighter fill inside)
-  float innerGlow = smoothstep(ringRadius - 0.02, 0.0, dist) * 0.15;
-  vec3 innerColor = hsl2rgb(hue + 0.05, 0.4, 0.75);
-
-  // Outer glow (soft bloom outside)
-  float outerGlow = smoothstep(0.5, ringRadius, dist) * 0.3;
-  outerGlow = 0.0; // computed below
-  float bloom = exp(-pow((dist - ringRadius) * 6.0, 2.0)) * 0.4;
-  vec3 bloomColor = hsl2rgb(hue + 0.06, 0.6, 0.6);
-
-  // Composite
-  vec3 color = ringColor * ring + innerColor * innerGlow + bloomColor * bloom;
-  float alpha = (ring + innerGlow + bloom) * opacity;
-
-  gl_FragColor = vec4(color, alpha);
-}
-```
-
-### Uniforms & State Mapping
-
-| State | hue | speed | intensity | opacity | Visual |
-|-------|-----|-------|-----------|---------|--------|
-| idle | 0.65 | 0.3 | 0.4 | 1.0 | Blue, slow drift |
-| listening | 0.58 | 0.8 | 0.7 | 1.0 | Cyan-blue shift, faster |
-| thinking | 0.65 | 0.5 | 0.3 | 0.6 | Same as idle, dimmed |
-| speaking | 0.72 | 1.0 | 0.9 | 1.0 | Purple shift, energetic |
-
-### Animation Loop (rAF)
+### Animation Loop
 
 ```typescript
-const STATE_UNIFORMS: Record<AgentState, { hue: number; speed: number; intensity: number; opacity: number }> = {
-  idle:      { hue: 0.65, speed: 0.3, intensity: 0.4, opacity: 1.0 },
-  listening: { hue: 0.58, speed: 0.8, intensity: 0.7, opacity: 1.0 },
-  thinking:  { hue: 0.65, speed: 0.5, intensity: 0.3, opacity: 0.6 },
-  speaking:  { hue: 0.72, speed: 1.0, intensity: 0.9, opacity: 1.0 },
+const STATE_CONFIG: Record<AgentState, { hue: number; rotSpeed: number; opacity: number }> = {
+  idle:      { hue: 0,   rotSpeed: 0.0, opacity: 1.0 },
+  listening: { hue: 120, rotSpeed: 0.3, opacity: 1.0 },
+  thinking:  { hue: 0,   rotSpeed: 0.0, opacity: 0.6 },
+  speaking:  { hue: 240, rotSpeed: 0.5, opacity: 1.0 },
 };
 ```
 
-- Store current uniform values in a ref object
-- Store target uniform values (from `STATE_UNIFORMS[state]`) in another ref
-- Each frame: `current = lerp(current, target, 0.05)` for smooth transitions (~300ms at 60fps)
-- Update `iTime` each frame: `(performance.now() - startTime) / 1000`
-- Set uniforms via `gl.uniform1f` / `gl.uniform3f`
-- `gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)`
-- The React component renders ONCE. All animation happens via refs in the rAF callback.
+- `currentHue` lerps toward target: `currentHue += (targetHue - currentHue) * 0.05`
+- `currentOpacity` lerps toward target: `currentOpacity += (targetOpacity - currentOpacity) * 0.08`
+- `currentRot` accumulates: `currentRot += dt * currentRotSpeed`
+- `hover` is always 0 (no mouse interaction on the voice orb -- it's not a button)
+- Container div applies `style={{ opacity: currentOpacity }}` for the thinking dim effect (simpler than adding opacity to the shader)
+- React component renders ONCE. All animation via refs in rAF callback.
+
+### WebGL Setup (in useEffect)
+
+Follows cognidrift Orb.jsx pattern exactly:
+
+1. Create canvas element, append to container ref
+2. Get WebGL context with `{ alpha: true, premultipliedAlpha: false }`
+3. `gl.clearColor(0, 0, 0, 0)` for transparent background
+4. Compile vertex + fragment shaders
+5. Link program, get uniform locations
+6. Create single-triangle fullscreen geometry: `Float32Array([-1, -1, 3, -1, -1, 3])`
+7. `gl.drawArrays(gl.TRIANGLES, 0, 3)` (single oversized triangle, not triangle strip)
+8. Resize handler: `canvas.width = container.clientWidth * dpr`
 
 ### CSS Fallback
 
 If `canvas.getContext("webgl")` returns null:
 
 ```tsx
-<div
-  className="h-[160px] w-[160px] md:h-[200px] md:w-[200px] rounded-full animate-pulse"
-  style={{
-    background: "radial-gradient(circle at 35% 35%, #6366F1, #3B82F6)",
-    boxShadow: "0 0 40px 10px rgba(99,102,241,0.25)",
-  }}
-/>
+function FallbackOrb() {
+  return (
+    <div
+      className="absolute inset-0 rounded-full animate-pulse"
+      style={{
+        background: "radial-gradient(circle at 35% 35%, #6366F1, #3B82F6)",
+        boxShadow: "0 0 40px 10px rgba(99,102,241,0.25)",
+      }}
+    />
+  );
+}
 ```
-
-Simple purple-blue gradient circle with pulse animation. Functional but not fancy.
 
 ### Cleanup
 
-On unmount:
+On unmount (same as cognidrift):
 1. `cancelAnimationFrame(rafId)`
-2. `gl.deleteProgram(program)`
-3. `gl.deleteShader(vertexShader)`
-4. `gl.deleteShader(fragmentShader)`
-5. `gl.deleteBuffer(vertexBuffer)`
+2. `window.removeEventListener('resize', resize)`
+3. `container.removeChild(canvas)`
+4. `gl.getExtension('WEBGL_lose_context')?.loseContext()`
 
 ---
 
@@ -267,10 +199,10 @@ Update `STATE_LABELS` colors from red/green/amber to blue-purple matching the ne
 
 ```typescript
 const STATE_LABELS: Record<string, { text: string; color: string }> = {
-  idle:      { text: "অপেক্ষায়...", color: "text-blue-500" },
+  idle:      { text: "অপেক্ষায়...", color: "text-purple-500" },
   listening: { text: "শুনছি...",    color: "text-cyan-500" },
   thinking:  { text: "ভাবছি...",   color: "text-slate-400" },
-  speaking:  { text: "বলছি...",    color: "text-purple-500" },
+  speaking:  { text: "বলছি...",    color: "text-blue-500" },
 };
 ```
 
@@ -278,18 +210,16 @@ Update `STATE_GLOWS` to match:
 
 ```typescript
 const STATE_GLOWS: Record<string, string> = {
-  idle:      "0 0 12px rgba(99,102,241,0.3)",
+  idle:      "0 0 12px rgba(139,92,246,0.3)",
   listening: "0 0 12px rgba(6,182,212,0.3)",
   thinking:  "none",
-  speaking:  "0 0 12px rgba(168,85,247,0.3)",
+  speaking:  "0 0 12px rgba(59,130,246,0.3)",
 };
 ```
 
 ### `src/components/landing/hero.tsx`
 
-Update `DecorativeOrb` to use blue-purple CSS gradient instead of red:
-
-Note: The current hero uses `animate-orb-breathe` which is being removed. Replace with Tailwind's built-in `animate-pulse` (no custom keyframe needed).
+Update `DecorativeOrb` to use blue-purple CSS gradient instead of red. The current hero uses `animate-orb-breathe` which is being removed -- replace with Tailwind's built-in `animate-pulse`.
 
 ```tsx
 function DecorativeOrb() {
@@ -314,7 +244,7 @@ function DecorativeOrb() {
 }
 ```
 
-This is a simple CSS approximation for the landing page. The full WebGL orb only renders on the session page to avoid loading shader code on every page.
+CSS approximation for the landing page. Full WebGL orb only on session page.
 
 ---
 
