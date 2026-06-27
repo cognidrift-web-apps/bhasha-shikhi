@@ -1,7 +1,7 @@
 import type { ScoreResult } from "@/lib/prompts/scoring";
 
 function toBengaliNumerals(n: number): string {
-  const digits = ["০", "১", "२", "३", "४", "५", "६", "७", "८", "९"];
+  const digits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
   return String(n)
     .split("")
     .map((ch) => digits[parseInt(ch, 10)] ?? ch)
