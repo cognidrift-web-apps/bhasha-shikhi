@@ -127,4 +127,19 @@
     box-shadow: none;
     filter: brightness(0.95);
   }
+
+  .orb-exit {
+    animation: orb-exit 400ms ease-out forwards;
+  }
+
+  @keyframes orb-exit {
+    from {
+      transform: scale(1);
+      opacity: 1;
+    }
+    to {
+      transform: scale(0.8);
+      opacity: 0;
+    }
+  }
 }

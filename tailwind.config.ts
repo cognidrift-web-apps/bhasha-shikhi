@@ -33,6 +33,7 @@ const config: Config = {
       animation: {
         "slide-up": "slide-up 0.3s ease-out both",
         "step-slide": "step-slide 250ms ease-out both",
+        "orb-pulse": "orb-pulse 300ms ease-out",
       },
       keyframes: {
         "slide-up": {
@@ -42,6 +43,11 @@ const config: Config = {
         "step-slide": {
           from: { opacity: "0", transform: "translateX(20px)" },
           to: { opacity: "1", transform: "translateX(0)" },
+        },
+        "orb-pulse": {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.05)" },
+          "100%": { transform: "scale(1)" },
         },
       },
     },
