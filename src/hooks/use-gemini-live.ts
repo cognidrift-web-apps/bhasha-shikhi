@@ -7,6 +7,7 @@ import { encodePcmToBase64, decodeBase64ToFloat32 } from "@/lib/audio/pcm-workle
 export interface TranscriptEntry {
   role: "user" | "tutor";
   content: string;
+  bengaliText?: string;
   timestamp: number;
 }
 
@@ -191,5 +192,5 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
     setAgentState("idle");
   }, []);
 
-  return { connect, disconnect, status, agentState, transcripts };
+  return { connect, disconnect, status, agentState, transcripts, setTranscripts };
 }

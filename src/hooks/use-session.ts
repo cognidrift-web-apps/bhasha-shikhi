@@ -104,6 +104,7 @@ export function useSession(config: SessionConfig) {
     sessionId,
     sessionStatus,
     transcripts: voice.transcripts as TranscriptEntry[],
+    setTranscripts: isGemini ? gemini.setTranscripts : undefined,
     agentState: voice.agentState,
     startSession,
     endSession,
