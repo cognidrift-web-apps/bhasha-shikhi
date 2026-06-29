@@ -13,12 +13,18 @@ export function useTranscriptTranslation(
   const translatedContents = useRef(new Map<number, string>());
   const transcriptsRef = useRef(transcripts);
   transcriptsRef.current = transcripts;
+  const controllersRef = useRef(new Set<AbortController>());
+
+  useEffect(() => {
+    return () => {
+      controllersRef.current.forEach((c) => c.abort());
+    };
+  }, []);
 
   useEffect(() => {
     if (!setTranscripts || turnCompleteCount === 0) return;
 
     const current = transcriptsRef.current;
-    const controllers: AbortController[] = [];
 
     current.forEach((entry, index) => {
       if (entry.role !== "tutor") return;
@@ -27,7 +33,7 @@ export function useTranscriptTranslation(
       translatedContents.current.set(index, entry.content);
 
       const controller = new AbortController();
-      controllers.push(controller);
+      controllersRef.current.add(controller);
 
       fetch("/api/translate", {
         method: "POST",
@@ -37,6 +43,7 @@ export function useTranscriptTranslation(
       })
         .then((res) => res.json())
         .then((data: { translated: string | null }) => {
+          controllersRef.current.delete(controller);
           const translated = data.translated;
           if (!translated) return;
           setTranscripts((prev) => {
@@ -48,10 +55,9 @@ export function useTranscriptTranslation(
           });
         })
         .catch(() => {
+          controllersRef.current.delete(controller);
           translatedContents.current.delete(index);
         });
     });
-
-    return () => controllers.forEach((c) => c.abort());
   }, [turnCompleteCount, setTranscripts]);
 }

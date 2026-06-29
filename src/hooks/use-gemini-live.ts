@@ -28,8 +28,10 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
   const isPlayingRef = useRef(false);
   const pendingTutorTextRef = useRef<string[]>([]);
   const flushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const currentSourceRef = useRef<AudioBufferSourceNode | null>(null);
+  const connectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const suppressUntilRef = useRef(0);
 
-  // Keep statusRef in sync so closures can read the current status without staling
   useEffect(() => {
     statusRef.current = status;
   }, [status]);
@@ -38,16 +40,25 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
     const chunk = playBufferRef.current.shift();
     if (!chunk) {
       isPlayingRef.current = false;
+      currentSourceRef.current = null;
       setAgentState("listening");
       return;
     }
     const buffer = ctx.createBuffer(1, chunk.length, 24000);
     buffer.copyToChannel(chunk, 0);
     const source = ctx.createBufferSource();
+    currentSourceRef.current = source;
     source.buffer = buffer;
     source.connect(ctx.destination);
     source.onended = () => drainPlayBuffer(ctx);
     source.start();
+  }, []);
+
+  const stopPlayback = useCallback(() => {
+    playBufferRef.current = [];
+    try { currentSourceRef.current?.stop(); } catch {}
+    currentSourceRef.current = null;
+    isPlayingRef.current = false;
   }, []);
 
   const flushPendingTranscripts = useCallback(() => {
@@ -75,7 +86,7 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
 
   const playAudioChunk = useCallback(
     (base64: string) => {
-      if (!audioContextRef.current) return;
+      if (!audioContextRef.current || Date.now() < suppressUntilRef.current) return;
       const ctx = audioContextRef.current;
       const float32 = decodeBase64ToFloat32(base64);
       playBufferRef.current.push(float32);
@@ -93,6 +104,7 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
 
   const connect = useCallback(async () => {
     if (!sessionId) return;
+    if (wsRef.current && (wsRef.current.readyState === WebSocket.CONNECTING || wsRef.current.readyState === WebSocket.OPEN)) return;
     setStatus("connecting");
 
     try {
@@ -121,6 +133,21 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
       const ws = new WebSocket(wsUrl);
       wsRef.current = ws;
 
+      connectTimeoutRef.current = setTimeout(() => {
+        if (statusRef.current !== "connecting") return;
+        statusRef.current = "error";
+        wsRef.current?.close();
+        wsRef.current = null;
+        workletRef.current?.disconnect();
+        workletRef.current = null;
+        streamRef.current?.getTracks().forEach((t) => t.stop());
+        streamRef.current = null;
+        audioContextRef.current?.close();
+        audioContextRef.current = null;
+        setStatus("error");
+        setAgentState("idle");
+      }, 15000);
+
       ws.onopen = () => {
         ws.send(
           JSON.stringify({
@@ -137,6 +164,10 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
       ws.onmessage = (event) => {
         const msg = JSON.parse(event.data as string);
         if (msg.type === "ready") {
+          if (connectTimeoutRef.current) {
+            clearTimeout(connectTimeoutRef.current);
+            connectTimeoutRef.current = null;
+          }
           setStatus("connected");
           setAgentState("listening");
 
@@ -146,6 +177,11 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
           };
         } else if (msg.type === "audio") {
           playAudioChunk(msg.data as string);
+        } else if (msg.type === "interrupted") {
+          suppressUntilRef.current = Date.now() + 500;
+          stopPlayback();
+          flushPendingTranscripts();
+          setAgentState("listening");
         } else if (msg.type === "transcript") {
           const role = msg.role as "user" | "tutor";
           const content = msg.content as string;
@@ -154,6 +190,8 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
             if (flushTimerRef.current) clearTimeout(flushTimerRef.current);
             flushTimerRef.current = setTimeout(flushPendingTranscripts, 3000);
           } else {
+            suppressUntilRef.current = Date.now() + 500;
+            stopPlayback();
             setTranscripts((prev) => {
               const last = prev[prev.length - 1];
               if (last && last.role === "user" && Date.now() - last.timestamp < 5000) {
@@ -172,26 +210,39 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
           flushPendingTranscripts();
           setTurnCompleteCount((c) => c + 1);
         } else if (msg.type === "error") {
+          statusRef.current = "error";
           setStatus("error");
         }
       };
 
-      ws.onerror = () => setStatus("error");
+      ws.onerror = () => {
+        statusRef.current = "error";
+        setStatus("error");
+      };
       ws.onclose = () => {
-        if (statusRef.current !== "error") setStatus("disconnected");
+        if (statusRef.current === "connected" || statusRef.current === "connecting") {
+          setStatus("error");
+        }
       };
     } catch {
       setStatus("error");
     }
-  }, [sessionId, config, playAudioChunk]);
+  }, [sessionId, config, playAudioChunk, stopPlayback, flushPendingTranscripts]);
 
   const disconnect = useCallback(() => {
+    if (connectTimeoutRef.current) {
+      clearTimeout(connectTimeoutRef.current);
+      connectTimeoutRef.current = null;
+    }
     if (flushTimerRef.current) {
       clearTimeout(flushTimerRef.current);
       flushTimerRef.current = null;
     }
     playBufferRef.current = [];
+    try { currentSourceRef.current?.stop(); } catch {}
+    currentSourceRef.current = null;
     isPlayingRef.current = false;
+    statusRef.current = "disconnected";
     try { wsRef.current?.send(JSON.stringify({ type: "end" })); } catch {}
     wsRef.current?.close();
     wsRef.current = null;
@@ -207,6 +258,9 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
 
   useEffect(() => {
     return () => {
+      if (connectTimeoutRef.current) clearTimeout(connectTimeoutRef.current);
+      if (flushTimerRef.current) clearTimeout(flushTimerRef.current);
+      try { currentSourceRef.current?.stop(); } catch {}
       try { wsRef.current?.send(JSON.stringify({ type: "end" })); } catch {}
       wsRef.current?.close();
       workletRef.current?.disconnect();

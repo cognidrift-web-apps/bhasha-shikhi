@@ -99,6 +99,11 @@ wss.on("connection", (ws, req) => {
               ws.send(JSON.stringify({ type: "turn_complete" }));
             }
           },
+          onInterrupted: () => {
+            if (ws.readyState === WebSocket.OPEN) {
+              ws.send(JSON.stringify({ type: "interrupted" }));
+            }
+          },
           onError: (detail) => {
             console.error("[relay] session error:", detail);
             if (ws.readyState === WebSocket.OPEN) {

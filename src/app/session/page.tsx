@@ -83,6 +83,8 @@ function SessionContent() {
       } else {
         router.push("/practice");
       }
+    }).catch(() => {
+      router.push("/practice");
     });
   }, [endSession, router]);
 
@@ -109,14 +111,6 @@ function SessionContent() {
   const stateInfo = endConfirmPending
     ? END_CONFIRM_LABEL
     : STATE_LABELS[agentState] ?? STATE_LABELS.idle;
-
-  if (sessionStatus === "ending") {
-    return (
-      <main className="flex min-h-dvh items-center justify-center bg-page-mesh">
-        <p className="font-bengali text-slate-500">সেশন শেষ হচ্ছে...</p>
-      </main>
-    );
-  }
 
   if (sessionStatus === "error") {
     return (

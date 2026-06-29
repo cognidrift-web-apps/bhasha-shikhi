@@ -23,6 +23,12 @@ export function useSession(config: SessionConfig) {
   }, [sessionId, sessionStatus]);
 
   useEffect(() => {
+    if (gemini.status === "error" && sessionStatus === "active") {
+      setSessionStatus("error");
+    }
+  }, [gemini.status, sessionStatus]);
+
+  useEffect(() => {
     const handleBeforeUnload = () => {
       if (!disconnectedRef.current) {
         gemini.disconnect();

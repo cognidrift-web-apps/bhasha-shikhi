@@ -12,6 +12,7 @@ export interface GeminiSessionConfig {
   onAudio: (base64Audio: string) => void;
   onTranscript: (role: "user" | "tutor", text: string) => void;
   onTurnComplete: () => void;
+  onInterrupted: () => void;
   onError: (error: string) => void;
   onClose: () => void;
 }
@@ -120,6 +121,11 @@ export class GeminiLiveSession {
 
     if (serverContent.turnComplete) {
       this.config.onTurnComplete();
+      return;
+    }
+
+    if (serverContent.interrupted) {
+      this.config.onInterrupted();
       return;
     }
 
