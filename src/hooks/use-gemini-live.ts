@@ -19,6 +19,7 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
   const statusRef = useRef<ConnectionStatus>("disconnected");
   const [agentState, setAgentState] = useState<AgentState>("idle");
   const [transcripts, setTranscripts] = useState<TranscriptEntry[]>([]);
+  const [turnCompleteCount, setTurnCompleteCount] = useState(0);
   const wsRef = useRef<WebSocket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const workletRef = useRef<AudioWorkletNode | null>(null);
@@ -168,6 +169,7 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
           }
         } else if (msg.type === "turn_complete") {
           flushPendingTranscripts();
+          setTurnCompleteCount((c) => c + 1);
         } else if (msg.type === "error") {
           setStatus("error");
         }
@@ -192,5 +194,5 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
     setAgentState("idle");
   }, []);
 
-  return { connect, disconnect, status, agentState, transcripts, setTranscripts };
+  return { connect, disconnect, status, agentState, transcripts, setTranscripts, turnCompleteCount };
 }

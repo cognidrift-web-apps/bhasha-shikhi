@@ -61,10 +61,10 @@ function SessionContent() {
     voice: (searchParams.get("voice") ?? "priya") as VoiceType,
   };
 
-  const { sessionStatus, transcripts, setTranscripts, agentState, startSession, endSession } =
+  const { sessionStatus, transcripts, setTranscripts, turnCompleteCount, agentState, startSession, endSession } =
     useSession(config);
 
-  useTranscriptTranslation(transcripts, setTranscripts);
+  useTranscriptTranslation(transcripts, setTranscripts, turnCompleteCount);
 
   useEffect(() => {
     void startSession().then(() => {
