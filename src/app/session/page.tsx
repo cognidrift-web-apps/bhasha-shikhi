@@ -70,22 +70,20 @@ function SessionContent() {
     void startSession().then(() => {
       setStartTime(Date.now());
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
     return () => {
       if (endConfirmTimer.current) clearTimeout(endConfirmTimer.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleEnd = useCallback(async () => {
-    const result = await endSession();
-    if (result) {
-      router.push(`/results?sessionId=${result.sessionId}`);
-    } else {
-      router.push("/practice");
-    }
+  const handleEnd = useCallback(() => {
+    void endSession().then((result) => {
+      if (result) {
+        router.push(`/results?sessionId=${result.sessionId}`);
+      } else {
+        router.push("/practice");
+      }
+    });
   }, [endSession, router]);
 
   const handleOrbTap = useCallback(() => {

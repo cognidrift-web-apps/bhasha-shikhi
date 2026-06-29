@@ -11,13 +11,16 @@ export function useTranscriptTranslation(
   turnCompleteCount: number,
 ) {
   const translatedContents = useRef(new Map<number, string>());
+  const transcriptsRef = useRef(transcripts);
+  transcriptsRef.current = transcripts;
 
   useEffect(() => {
     if (!setTranscripts || turnCompleteCount === 0) return;
 
+    const current = transcriptsRef.current;
     const controllers: AbortController[] = [];
 
-    transcripts.forEach((entry, index) => {
+    current.forEach((entry, index) => {
       if (entry.role !== "tutor") return;
       if (translatedContents.current.get(index) === entry.content) return;
 
@@ -50,6 +53,5 @@ export function useTranscriptTranslation(
     });
 
     return () => controllers.forEach((c) => c.abort());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [turnCompleteCount]);
+  }, [turnCompleteCount, setTranscripts]);
 }

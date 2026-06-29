@@ -129,6 +129,7 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
             language: config.language,
             mode: config.mode,
             level: config.level,
+            voice: config.voice,
           }),
         );
       };
@@ -185,13 +186,33 @@ export function useGeminiLive(sessionId: string | null, config: SessionConfig) {
   }, [sessionId, config, playAudioChunk]);
 
   const disconnect = useCallback(() => {
-    wsRef.current?.send(JSON.stringify({ type: "end" }));
+    if (flushTimerRef.current) {
+      clearTimeout(flushTimerRef.current);
+      flushTimerRef.current = null;
+    }
+    playBufferRef.current = [];
+    isPlayingRef.current = false;
+    try { wsRef.current?.send(JSON.stringify({ type: "end" })); } catch {}
     wsRef.current?.close();
+    wsRef.current = null;
     workletRef.current?.disconnect();
+    workletRef.current = null;
     streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
     audioContextRef.current?.close();
+    audioContextRef.current = null;
     setStatus("disconnected");
     setAgentState("idle");
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      try { wsRef.current?.send(JSON.stringify({ type: "end" })); } catch {}
+      wsRef.current?.close();
+      workletRef.current?.disconnect();
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+      audioContextRef.current?.close();
+    };
   }, []);
 
   return { connect, disconnect, status, agentState, transcripts, setTranscripts, turnCompleteCount };

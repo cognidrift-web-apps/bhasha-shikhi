@@ -8,7 +8,11 @@ const PORT = parseInt(process.env.PORT || "8081", 10);
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || "http://localhost:3000").split(",");
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY!;
 const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-3.1-flash-live-preview";
-const GEMINI_VOICE = process.env.GEMINI_VOICE || "Kore";
+const GEMINI_VOICE_DEFAULT = process.env.GEMINI_VOICE || "Kore";
+const VOICE_MAP: Record<string, string> = {
+  priya: "Kore",
+  nabanita: "Aoede",
+};
 
 // Tutor prompts are duplicated here to keep the relay self-contained.
 // The relay deploys separately to Railway and cannot import from the Next.js app.
@@ -54,12 +58,13 @@ wss.on("connection", (ws, req) => {
         }
         sessionId = msg.sessionId;
         const prompt = buildTutorPrompt(msg.language, msg.mode, msg.level);
+        const voiceName = VOICE_MAP[msg.voice as string] || GEMINI_VOICE_DEFAULT;
 
         gemini = new GeminiLiveSession({
           apiKey: GEMINI_API_KEY,
           model: GEMINI_MODEL,
           systemPrompt: prompt,
-          voiceName: GEMINI_VOICE,
+          voiceName,
           onReady: () => {
             if (ws.readyState === WebSocket.OPEN) {
               ws.send(JSON.stringify({ type: "ready" }));

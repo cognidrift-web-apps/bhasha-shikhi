@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useGeminiLive, type TranscriptEntry } from "./use-gemini-live";
-import { useMicrosoftSpeech } from "./use-microsoft-speech";
 import { useAudioRecorder } from "./use-audio-recorder";
 import type { SessionConfig } from "@/lib/constants";
 
@@ -12,28 +11,38 @@ export function useSession(config: SessionConfig) {
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [sessionStatus, setSessionStatus] = useState<SessionStatus>("idle");
   const [startTime, setStartTime] = useState<number>(0);
+  const disconnectedRef = useRef(false);
 
   const gemini = useGeminiLive(sessionId, config);
-  const microsoft = useMicrosoftSpeech(sessionId, config);
   const recorder = useAudioRecorder();
 
-  const isGemini = config.voice === "priya";
-  const voice = isGemini ? gemini : microsoft;
-
-  // Auto-connect voice pipeline once sessionId is available and session is active.
-  // This avoids the race where the consumer calls connect before setState has flushed.
   useEffect(() => {
     if (!sessionId || sessionStatus !== "active") return;
-    if (isGemini) {
-      void gemini.connect();
-    } else {
-      void microsoft.start();
-    }
+    void gemini.connect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, sessionStatus]);
 
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      if (!disconnectedRef.current) {
+        gemini.disconnect();
+        disconnectedRef.current = true;
+      }
+    };
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      if (!disconnectedRef.current) {
+        gemini.disconnect();
+        disconnectedRef.current = true;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gemini.disconnect]);
+
   const startSession = useCallback(async () => {
     setSessionStatus("connecting");
+    disconnectedRef.current = false;
 
     try {
       const res = await fetch("/api/session", {
@@ -69,44 +78,45 @@ export function useSession(config: SessionConfig) {
     if (!sessionId) return;
     setSessionStatus("ending");
 
-    if (isGemini) {
+    if (!disconnectedRef.current) {
       gemini.disconnect();
-    } else {
-      microsoft.stop();
+      disconnectedRef.current = true;
     }
 
-    const audioBlob = await recorder.stopRecording();
     const durationSeconds = Math.floor((Date.now() - startTime) / 1000);
 
-    await fetch("/api/session", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sessionId,
-        status: "completed",
-        duration_seconds: durationSeconds,
-      }),
-    });
-
-    if (audioBlob.size > 0) {
-      const formData = new FormData();
-      formData.append("audio", audioBlob, "session.webm");
-      formData.append("sessionId", sessionId);
-      await fetch("/api/upload-audio", { method: "POST", body: formData });
-    }
+    void (async () => {
+      try {
+        const audioBlob = await recorder.stopRecording();
+        await fetch("/api/session", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId,
+            status: "completed",
+            duration_seconds: durationSeconds,
+          }),
+        });
+        if (audioBlob.size > 0) {
+          const formData = new FormData();
+          formData.append("audio", audioBlob, "session.webm");
+          formData.append("sessionId", sessionId);
+          await fetch("/api/upload-audio", { method: "POST", body: formData });
+        }
+      } catch {}
+    })();
 
     setSessionStatus("ended");
-
     return { sessionId, durationSeconds };
-  }, [sessionId, isGemini, gemini, microsoft, recorder, startTime]);
+  }, [sessionId, gemini, recorder, startTime]);
 
   return {
     sessionId,
     sessionStatus,
-    transcripts: voice.transcripts as TranscriptEntry[],
-    setTranscripts: isGemini ? gemini.setTranscripts : undefined,
-    turnCompleteCount: isGemini ? gemini.turnCompleteCount : 0,
-    agentState: voice.agentState,
+    transcripts: gemini.transcripts as TranscriptEntry[],
+    setTranscripts: gemini.setTranscripts,
+    turnCompleteCount: gemini.turnCompleteCount,
+    agentState: gemini.agentState,
     startSession,
     endSession,
   };
